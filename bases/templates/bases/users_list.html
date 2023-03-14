@@ -1,0 +1,62 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Listado de Usuarios</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Listado de Usuarios</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <!-- <h3 class="card-title">DataTable with default features</h3> -->
+              <a href="{% url 'config:user_add' %}" class="btn btn-app bg-info"><i class="fas fa-user-plus"></i></a>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="tbl" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>EMail</th>
+                  <th>Name</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for i in obj %}
+                <tr>
+                  <td>{{i.id}}</td>
+                  <td>{{i.email}}</td>
+                  <td>{{i.get_full_name}}</td>
+                  <td>
+                    {% if not i.is_staff %}
+                    <a href="{% url 'config:user_modify' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% elif user.is_staff %}
+                    <a href="{% url 'config:user_modify' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+    </div>
+</div>
+{% endblock%}

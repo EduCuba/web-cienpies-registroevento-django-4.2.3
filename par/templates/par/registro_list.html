@@ -1,0 +1,83 @@
+
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Registro participante</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Listado de participante</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <!-- <h3 class="card-title">DataTable with default features</h3> -->
+              <a href="{# url 'eve:evento_add' #}" class="btn btn-app bg-info"><i class="fas fa-user-plus"></i></a>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="tbl" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Apellidos(s)</th>
+                  <th>Nombre(s)</th>
+                  <th>Empresa</th>
+                  <th>Correo</th>
+                  <th>Tipo</th>
+                  <th>Modalidad</th>
+                  <th>Conf.Asist.</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for i in obj %}
+                <tr>
+                  <td>{{i.id}}</td>
+                  <td>{{i.apellido_participante}}</td>
+                  <td>{{i.nombre_participante}}</td>
+                  <td>{{i.empresa_participante}}</td>
+                  <td>{{i.email_participante}}</td>
+                  <td>{{i.tipo_participante}}</td>
+                  <td>{{i.modalidad_asistencia}}</td>
+                  <td>{{i.confirmo_asistencia}}</td>                  
+                  
+                  
+                  <td>
+                    {% if not i.is_staff %}
+                    <a href="{# url 'eve:evento_edit' i.id #}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% elif user.is_staff %}
+                    <a href="{# url 'eve:evento_edit' i.id #}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% endif %}
+
+                    {% if not i.is_staff %}
+                    <a href="{# url 'eve:evento_del' i.id #}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
+                    {% elif user.is_staff %}
+                    <a href="{# url 'eve:evento_del' i.id #}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
+                    {% endif %}
+
+                    
+                  </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+    </div>
+</div>
+{% endblock%}

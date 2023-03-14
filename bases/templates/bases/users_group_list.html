@@ -1,0 +1,59 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Listado de Grupos</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Listado de Grupos</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+              <!-- <h3 class="card-title">DataTable with default features</h3> -->
+              <a href="{% url 'config:user_groups_new' %}" class="btn btn-app bg-info"><i class="fas fa-plus-circle"></i></a>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="tbl" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in obj%}
+                    <tr>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>
+                            <a href="{% url 'config:user_groups_modify'  item.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn btn-sm text-danger"
+                            onclick='return abrir_borrar("{{item.name}}","{% url 'config:user_groups_delete' item.id%}")'><i class="far fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+    </div>
+</div>
+{% endblock%}

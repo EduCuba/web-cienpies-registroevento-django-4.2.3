@@ -37,9 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
+    'bases',
+    'eve',
+    'par',
+    'django_userforeignkey',
+    'django.contrib.postgres',
+    'registroevento',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_userforeignkey.middleware.UserForeignKeyMiddleware',
+    
+    
 ]
 
 ROOT_URLCONF = 'registroevento.urls'
@@ -84,7 +95,7 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_registro',
         'HOST': 'localhost',
         'USER': 'postgres',
@@ -116,10 +127,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-pe'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
@@ -129,13 +140,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS =[
-    BASE_DIR / "static"
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    '/var/www/static/'
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = {BASE_DIR /'media'}
 MEDIA_URL = '/media/'
+
+#LOGIN_REDIRECT_URL = '/'
+#LOGOUT_REDIRECT_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
@@ -143,3 +160,11 @@ LOGOUT_REDIRECT_URL = '/login/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#seteamos para que trabaje con la tabla usuario
+AUTH_USER_MODEL = 'bases.Usuario'
+
+
+INTERNAL_IPS = [
+    "127.0.0.1", 
+]

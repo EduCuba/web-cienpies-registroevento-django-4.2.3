@@ -1,0 +1,132 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        {% if obj %} Editar {% else %} Crear {% endif %} Grupo de Usuario
+      </div>
+      <div class="card-body">
+        <form method="POST" class="form-group">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleInputEmail1">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre Grupo"
+            value="{{obj.name}}">
+          </div>
+          <button type="submit" class="btn bg-danger btn-app"><i class="fas fa-save"></i> Guardar</button>
+          <button type="reset" class="btn bg-info btn-app"><i class="fas fa-window-close"></i> Cancelar</button>
+          <a href="{% url 'config:user_groups_list'%}" class="btn btn-app bg-warning"><i class="far fa-hand-point-left"></i> Regresar</a>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% if obj %}
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        Permisos del Grupo {{obj}}
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="tblGrp" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for item in permisos_grupo%}
+              <tr>
+                  <td>{{item.id}}</td>
+                  <td>{{item.name}}</td>
+                  <td>
+                      <a href="#" class="btn btn-sm text-success"
+                      onclick="permiso('{{item.id}}','DEL')"
+                      ><i class="far fa-trash-alt"></i></a>
+                  </td>
+              </tr>
+              {%endfor%}
+
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        Todos los Permisos
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="tbl" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for item in permisos%}
+              <tr>
+                  <td>{{item.id}}</td>
+                  <td>{{item.name}}</td>
+                  <td>
+                      <a href="#" class="btn btn-sm text-success"
+                      onclick="permiso('{{item.id}}','ADD')"
+                      ><i class="fas fa-plus"></i></a>
+                  </td>
+              </tr>
+              {%endfor%}
+
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+</div>
+{% endif %}
+{% endblock%}
+
+{% block js%}
+<script>
+  function permiso(id,accion){
+    var url = "/users/groups/permission/{{obj.id}}/" + id
+    var token = '{{csrf_token}}'
+    var data = {"accion":accion}
+
+    console.log(url,token,data)
+
+    $.ajax({
+      headers : {"X-CSRFToken": token},
+      type:"POST",
+      url:url,
+      data:data,
+      success: function(response){
+        if(response==="OK"){
+          location.reload(true)
+        }else{
+          Swal.fire(response,"","red")
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+  }
+</script>
+{% endblock %}

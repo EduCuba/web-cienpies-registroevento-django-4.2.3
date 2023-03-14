@@ -1,0 +1,564 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+
+
+
+<form method="POST" class="form-inline" id="frmbuscar">
+    {% csrf_token %}
+
+   
+   
+
+   
+
+    <div class="col-xl-12 col-md-12 mb-12">
+        {% if obj %}
+        <div class="card border-left-warning shadow h-100 py-2">
+        {% else %}    
+        <div class="card border-left-success shadow h-100 py-2">
+        {% endif %}    
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        
+                        <div class="dropdown-divider"></div>
+
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label for="lblEvento">Evento</label>
+                          </div>  
+                          <div class="form-group col-md-10">                            
+                            <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
+                            {{eve.evento}}
+                          </div>
+                        
+                        </div>
+
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label for="apellido_participante">Apellido</label>
+                          </div>  
+                          <div class="form-group col-md-4">                            
+                            
+                            <input id="apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
+                            
+                               <!-- {{eve.apellido_participante}}-->
+
+                                
+                                  
+                              
+
+                          </div>
+
+                          <div class="form-group col-md-2">
+                            <label for="lblNombre">Nombre</label>
+                          </div>  
+                          <div class="form-group col-md-4">                            
+                            <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
+                            {{eve.nombre_participante}}
+                          </div>
+                        
+                        </div>
+
+
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label for="lblEmpresa">Empresa</label>
+                          </div>  
+                          <div class="form-group col-md-10">                            
+                            <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
+                            {{eve.empresa_participante}}
+                          </div>
+                        
+                        </div>
+
+                     
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                                <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                                
+                                
+
+
+
+                            </div>    
+                        </div>    
+
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<button type="button" class="btn btn-warning btn-circle"
+                                onclick="participantesEncontrados()" ><i class="far fa-hand-pointer">hola</i></button>
+{% endblock content_wrapper %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+          <div class="dropdown-header">Acciones:</div>
+          <!--<a class="dropdown-item" onclick="return abrir_modal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+         <!-- compras_new esta devlarado en el archivo urls.py-->
+          <a class="dropdown-item" href="{# url 'cmp:compras_new' #}"><i class="far fa-calendar-plus"></i> Nuevo</a>        
+          <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+        </div>
+      </div>
+    </div>
+    <!-- Card Body -->
+    
+    <div id="rowdata" class="card-body">
+      {% if not lispar %}
+      <div class="alert alert-info">No existe coincidencias</div>
+      
+      {% endif %}
+      <table id="tableLista" class="table table-striped table-hover dt-responsive nowrap" style="width:100%"
+      data-toggle="table"
+        data-pagination="true"
+        data-search="true"
+      >
+      
+
+        <thead>
+          <th>Id</th>        
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Empresa</th>
+          <th>Modalidad</th>
+          <th>Asistio</th>
+          <th>Tipo</th>
+          <th class="all">Acciones</th>
+        </thead>
+        <tbody>
+        
+          
+          
+          {% for item in lispar%}
+          <tr>
+              <td>{{ item.id }}</td>
+              <td>{{ item.apellido_participante }}</td>
+              <td>{{ item.nombre_participante}}</td>
+              <td>{{ item.email_participante }}</td>
+              <td>{{ item.empresa_participante }}</td>
+              <td>{{ item.modalidad_asistencia }}</td>
+              <td>{{ item.asistio_evento }}</td>
+              <td>{{ item.tipo_participante }}</td>              
+              <td>
+                <a class="btn btn-warning btn-circle" href="#"><i class="far fa-edit"></i></a>
+                <a class="btn btn-success btn-circle" href="{# url 'cmp:compras_print_one' item.id #}" target="reportes"><i class="fas fa-print"></i></a>
+              
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+
+<script>
+  function participantesEncontrados(){
+    // alert(id)
+    // alert(accion)
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputApellido = form.get("apellido_participante")
+    var inputNombre = form.get("nombre_participante")
+    var inputEmpresa = form.get("empresa_participante")
+    var inputEvento = form.get("evento")
+
+
+    
+    console.log("apellido " +inputApellido);
+    console.log("nombre " +inputNombre);
+    console.log("empresa " +inputEmpresa);
+    console.log("evento " +inputEvento);
+
+    
+
+    alert("edu 1")
+    var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+    url = "buscar_participante"
+    url = "/par/buscar_participante"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {"apellido_participante":inputApellido,
+    "nombre_participante":inputNombre,
+    "empresa_participante":inputEmpresa,
+    "evento":inputEvento
+  }
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+          $("table > tbody").empty()  
+          {% if not r.lispar %}
+          console.log("no existe eduuuuuuuuuuuuuuuuu")
+          {% endif %}
+
+          {% for item in r.lispar%}
+            console.log("solo item"+{{ item.id }})
+          {% endfor %}
+          //creaTablaEncontrados(r.lispar);
+          
+          refrescaTablaEncontrados(r.lispar);
+          
+          Swal.fire("mostrara " +  r.lispar);
+          /*location.reload(true)*/
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+
+  function refrescaTablaEncontrados(datos){
+
+    $("table > tbody").empty()
+
+    var tabla= $("table")
+
+    var rows = $.map(datos,function(value,index){
+    return `<tr>
+    <td>${value.id}</td>
+    <td>${value.apellido_participante}</td>
+    <td>${value.nombre_participante}</td>
+    <td>${value.email_participante}</td>
+    <td>${value.empresa_participante}</td>
+    <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>
+    <td><input readonly  type=\"text\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" /></td>
+    
+    <td>${value.tipo_participante__descripcion_tipo_participante}</td>
+    <td><button type="button" class="btn btn-warning btn-circle"
+      onclick="participanteAsistencia(${value.id})" ><i class="far fa-hand-pointer">hola</i></button>
+</td>
+    </tr>`
+     })
+    $("table > tbody").html(rows.join(''))
+    creaFuncionDataTable()
+
+  
+
+  }
+
+  function creaFuncionDataTable(){
+
+    <!-- inicio -->
+    if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
+        $('.table').DataTable({
+          "searching": true,
+          "pageLength": 10,
+          "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Mostrar _MENU_ registros",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "Ningún dato disponible en esta tabla",
+          "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar en:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "<span class='fa fa-angle-double-left'></span>",
+              "sLast": "<span class='fa fa-angle-double-right'></span>",
+              "sNext": "<span class='fa fa-angle-right'></span>",
+              "sPrevious": "<span class='fa fa-angle-left'></span>"
+          },
+          "oAria": {
+              "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+          }
+        });
+    }
+    <!-- fin  -->
+
+  }
+  
+
+
+  function creaTablaEncontrados(lispar){
+    console.log("entro a generar"+lispar);
+    var arrayencontrados=lispar;
+    console.log("entro a generar b"+arrayencontrados);
+    var displayTable="";
+
+    {% if not lispar %}
+    displayTable +='<div class="alert alert-info">No existe coincidencias</div>'
+    {% endif %}
+    displayTable +='<table class="table table-striped table-hover dt-responsive nowrap" style="width:100%">'
+    displayTable +='<thead>'
+    displayTable +=' <th>Id</th>'        
+    displayTable +=' <th>Apellido</th>'
+    displayTable +=' <th>Nombre</th>'
+    displayTable +=' <th>Email otro</th>'
+    displayTable +=' <th>Empresa</th>'
+    displayTable +=' <th>Modalidad</th>'
+    displayTable +=' <th>Asistio</th>'
+    displayTable +=' <th>Tipo</th>'
+    displayTable +=' <th class="all">Acciones</th>'
+    displayTable +=' </thead>'
+    displayTable +=' <tbody>'
+    
+    
+    arrayencontrados.forEach(function(item, index) {
+
+    //arrayencontrados.forEach((ciudad)=>{
+    //for (ciudad of arrayencontrados) {  
+        
+        displayTable +='  <tr>'
+        //displayTable +='  <td>'+JSON.stringify(item.pk)+'</td>'
+        //displayTable +='  <td>'+JSON.stringify(item.fields['apellido_participante'])+'</td>'
+        displayTable +='  <td>'+item.id+'</td>'
+        displayTable +='  <td>'+item.apellido_participante+'</td>'
+
+        displayTable +='  <td>'+item.nombre_participante+'</td>'
+        displayTable +='  <td>'+item.email_participante+'</td>'
+        displayTable +='  <td>'+item.empresa_participante+'</td>'
+        displayTable +='  <td>'+item.modalidad_asistencia__descripcion_modalidad_asistencia+'</td>'
+        
+        displayTable +='  <td><input readonly  type="checkbox" id="up_asistio'+item.id+' value='+ item.asistio_evento+' class=\"form-control\" /></td>'
+        displayTable +='  <td>'+item.tipo_participante__descripcion_tipo_participante+'</td>'
+        displayTable +='  <td>'
+        displayTable +='    <button type="button" class="btn btn-warning btn-circle" onclick="participanteAsistencia('+item.id+')" ></button>'
+        
+        displayTable +='  </td>'
+        displayTable +='</tr>'
+        });
+
+
+        
+
+
+       
+      displayTable +='</tbody>'
+      displayTable +='</table>'
+      console.log(displayTable);
+      document.getElementById("rowdata").innerHTML = displayTable;
+
+      creaFuncionDataTable();
+
+  }
+
+
+  function participanteAsistencia(id){
+
+
+    //var url = "/users/groups/permission/{{obj.id}}/" + id
+    console.log("id " +id);
+
+    
+
+    alert("edu 1")
+    url = "/par/asistencia_participante/"+id
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {"id":id}
+    console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      type:"POST",      
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+
+          document.getElementById("up_asistio"+id).value=r.asistio_evento;
+          Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);
+          /*location.reload(true)*/
+          var tabla= $("table")
+
+          tabla.search( this.value ).draw();
+
+        }else{
+          Swal.fire("Error Inesperado tratando de altualizar asistencia" + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+
+</script>
+
+
+<script>
+    $(document).ready(function() {
+      
+      /*
+        $('.table').DataTable(
+          
+        );
+*/
+      });
+
+
+    
+
+
+
+    $(function () {
+      /*
+
+        $("#id_fecha_compra, #id_fecha_factura").datetimepicker({
+            format: 'Y-m-d',
+            timepicker:false
+        });
+        */
+        <!-- contrae el side bar-->
+        $("#sidebarToggle").click();
+
+
+        <!-- mostrara 2 registros por pagina -->
+        <!--creaFuncionDataTable()-->
+        
+      
+        $('#id_cantidad_detalle,#id_precio_detalle,#id_descuento_detalle').change(function(){
+            calcular_detalle();
+        });
+
+        /*Validar Envío de Detalle */
+        $("#frmCompras").submit(function(e){
+
+            var  no_fact = $("#id_no_factura").val();
+            console.log(no_fact);
+            
+            if(no_fact.trim()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar No. de Factura'
+                        });
+                return false;
+            }
+
+
+            if($("#id_fecha_compra").val()=="" || $("#id_fecha_factura").val()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar Fecha'
+                        });
+                return false;
+            }
+
+            if($('#id_total_detalle').val()==0 || $('#id_id_producto').val()==0 ){
+                e.preventDefault();
+                //alert("No ha agregado producto o está sin cantidades");
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'No ha agregado producto o está sin cantidades'
+                        })
+            }
+        });
+        /*Fin Validar Envío de Detalle */
+
+    });
+
+    function selectProducto(id,descripcion)
+    {
+        $("#id_cantidad_detalle").val(0);
+        $('#id_precio_detalle').val(0);
+        $('#id_descuento_detalle').val(0);
+
+        $('#id_sub_total_detalle').val(0);
+        $('#id_total_detalle').val(0);
+
+        $("#id_id_producto").val(+id);
+        $('#id_descripcion_producto').val(descripcion);
+        $('#id_cantidad_detalle').focus();
+        $('#id_cantidad_detalle').select();
+
+        $('.table').DataTable().search('').draw();
+    }
+
+    function calcular_detalle()
+    {
+        var cant,prec,desc,stotal,total;
+
+        cant = $("#id_cantidad_detalle").val();
+        cant = cant==="" ? 0 : +cant;
+        cant = cant<0 ? 0 : cant;
+
+        prec =$('#id_precio_detalle').val();
+        prec = prec==="" ? 0 : +prec;
+        prec = prec<0 ? 0 : prec;
+
+        desc = $('#id_descuento_detalle').val();
+        desc = desc==="" ? 0 : +desc;
+        desc = desc<0 ? 0 : desc;
+
+        desc = desc>(cant * prec) ? 0 : desc;
+
+        stotal = cant * prec;
+        total  = stotal - desc;
+
+        $('#id_cantidad_detalle').val(cant);
+        $('#id_precio_detalle').val(prec);
+        $('#id_descuento_detalle').val(desc);
+
+        $('#id_sub_total_detalle').val(stotal);
+        $('#id_total_detalle').val(total);
+
+    }
+
+    function clear_Detail(){
+        $('#id_cantidad_detalle').val(0);
+        $('#id_precio_detalle').val(0);
+        $('#id_descuento_detalle').val(0);
+
+        $('#id_sub_total_detalle').val(0);
+        $('#id_total_detalle').val(0);
+
+        $('#id_id_producto').val('');
+        $('#id_descripcion_producto').val('');
+
+        $('.table').DataTable().search('').draw();
+
+        $("#id_proveedor").focus();
+    }
+
+    $("#id_proveedor").focus();
+</script>
+
+{% endblock js %}
