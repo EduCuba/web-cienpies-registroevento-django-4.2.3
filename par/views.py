@@ -117,35 +117,35 @@ def buscarparticipante(request,participante_id=None):
             if(nombre_participante==""):
                 lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                 "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                 print('busqueda por apellido : caso 1')
             else:
                 if(apellido_participante==""):
                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                    print('busqueda por nombre : caso 2')
                 else:   
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                     print('busqueda por apellido y nombre : caso 3')
         else:
             if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                 lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                 "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                 print('busqueda por empresa, apellido y nombre : caso 4')
             else:    
                 if (nombre_participante == ""):
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                     print('busqueda por empresa y apellid : caso 5')
                 else:    
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante"))
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
                     print('caso empresa y nombre')
                 
                         
@@ -181,12 +181,32 @@ def participanteAsistencia(request, id):
             participante.save()
             contexto={'rpta':'OK',
                      'asistio_evento':participante.asistio_evento}  
+            print(contexto)
             return JsonResponse(contexto,safe=False)      
         print("edu 04")
         return JsonResponse(contexto)      
     print("edu 05")
     return JsonResponse(contexto)      
 
+
+
+
+#class ParticipanteEdit(SuccessMessageMixin, MixinFormInvalid, SinPrivilegios,\
+#                   generic.UpdateView):
+    
+class ParticipanteEdit(generic.UpdateView):        
+    model=Participante
+    template_name="par/participante_form.html"
+    context_object_name = 'obj'
+    form_class=ParticipanteForm
+    success_url= reverse_lazy("par:registro_list")
+    success_message="Participante Editado"
+    #permission_required="cmp.change_proveedor"
+
+    def form_valid(self, form):
+        form.instance.um = self.request.user.id
+        print(self.request.user.id)
+        return super().form_valid(form)
     
 
     

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from bases.views import *
-from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia
+from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia,ParticipanteEdit
 #app_name = 'eve'
 
 urlpatterns = [
@@ -10,6 +10,8 @@ urlpatterns = [
     path('par/participante_add',ParticipanteAdd.as_view(),name="participante_add"),
     path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
     path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
+    path('participante/edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
+    #path('proveedores/edit/<int:pk>',ProveedorEdit.as_view(), name='proveedor_edit'),
     #path('par/burcar_participante/<int:evento>/<str:apellido_participante>/<str:nombre_participante>/<str:empresa_participante>',buscarparticipante,name="participantes_encontrados"),
          
    # path('eve/modalidad_evento_list', ModalidadEventoList.as_view(),name="modalidad_evento_list"),
