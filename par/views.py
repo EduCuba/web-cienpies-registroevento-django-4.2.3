@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import *
 
-from .models import Participante
+from .models import Participante, Tipo_Participante, Modalidad_Asistencia
 #from eve.models import Evento
 from .forms import BuscarParticipanteForm,ParticipanteForm
 
@@ -24,7 +24,6 @@ from eve.models import Evento
 from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Q
 from django.http import JsonResponse
-
 
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -73,7 +72,9 @@ def buscarparticipante(request,participante_id=None):
     if request.method=='GET':
         print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
-        form_compras=BuscarParticipanteForm()
+        form_buscar=BuscarParticipanteForm()
+        lisEventos = Evento.objects.all()
+        
         #lispar = Participante.objects.filter(pk=participante_id).first()
         #lispar = Participante.objects.filter(evento_id=par_evento_id)
         #lisparb = Participante.objects.filter(nombre_participante__search=nombre) 
@@ -99,7 +100,8 @@ def buscarparticipante(request,participante_id=None):
         #print("lisparc")   
         #print(lispar)
         #En el contexto definimos que mandamos a la plantilla
-        contexto={'eve':form_compras,'lispar':lispar}
+        contexto={'eve':form_buscar,'lispar':lispar, 'liseventos':lisEventos}
+        print(contexto)
         return render(request, template_name, contexto)    
         
     if request.method=='POST':    
@@ -218,12 +220,13 @@ class ParticipanteEdit(generic.UpdateView):
 
 
 
-
+#SuccessMessageMixin, = necesario para enviar mensajes
 #class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
-class ParticipanteAdd(generic.CreateView):    
+class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):    
     #permission_required = 'eve.add_modalidad_evento'
     model = Participante
-    template_name="par/participante_add.html"    
+    #template_name="par/participante_add.html"    
+    template_name="par/participante_form.html"    
     context_object_name = "obj"
     form_class = ParticipanteForm
     success_url = reverse_lazy("par:buscar_participante")
@@ -232,7 +235,36 @@ class ParticipanteAdd(generic.CreateView):
     
     #se carga en el form el usuario logueado
     def form_valid(self, form):
-        form.instance.uc = self.request.user        
+        
+        print("es valido")
+        print("no es valido")    
+            
+        form.instance.uc = self.request.user   
+        form.save()     
         return super().form_valid(form)
     
+    def get_context_data(self, **kwargs):
+        context = super(ParticipanteAdd, self).get_context_data(**kwargs)
+        context["eventos"] = Evento.objects.all()
+        context["tipos"] = Tipo_Participante.objects.all()
+        context["modalidades"] = Modalidad_Asistencia.objects.all()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            mensaje=f'{self.model._name_} datos correctos'
+        else:
+            #mensaje=f'{self.model._modalidad_asistencia_} no se ha podido registrar'
+            print("salvaod https://www.youtube.com/watch?v=JpPUX9GIFL8")
+            mensaje=f'no se ha podido registrar'
+            error= form.errors 
+            response = JsonResponse({'mensaje':mensaje, 'error':error})
+            response.status_code = 400
+            print(response)
+            return response
+    
+        return redirect('par:buscar_participante')
+
+
 

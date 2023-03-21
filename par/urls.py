@@ -11,6 +11,7 @@ urlpatterns = [
     path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
     path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
     path('participante/edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
+    path('participante/new',ParticipanteAdd.as_view(), name='participante_new'),
     #path('proveedores/edit/<int:pk>',ProveedorEdit.as_view(), name='proveedor_edit'),
     #path('par/burcar_participante/<int:evento>/<str:apellido_participante>/<str:nombre_participante>/<str:empresa_participante>',buscarparticipante,name="participantes_encontrados"),
          
@@ -24,7 +25,7 @@ urlpatterns = [
    # path('eve/evento_edit/<int:pk>',EventoEdit.as_view(),name="evento_edit"),
    # path('eve/evento_del/<int:pk>',EventoDel.as_view(), name='evento_del'),   
     
-    
+  #  path('proveedores/new',ProveedorNew.as_view(), name='proveedor_new'),
     
     
 ]

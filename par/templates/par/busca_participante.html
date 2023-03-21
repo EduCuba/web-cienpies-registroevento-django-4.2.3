@@ -23,13 +23,31 @@
                             <div class="dropdown-divider"></div>
 
                             <div class="form-row">
+                              <!---
                               <div class="form-group col-md-2">
                                 <label for="lblEvento">Evento</label>
                               </div>  
                               <div class="form-group col-md-10">                            
-                                <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
+                                
                                 {{eve.evento}}
+                              </div>-->
+
+                              <div class="form-group col-md-2">
+                                <label for="id_evento">Evento:</label>
                               </div>
+                              <div class="form-group col-md-10">                              
+                                <select name="evento" class="form-control" required="" id="bus_id_evento">
+                                  <option value="0">Selecciona Modalidad b</option>
+                                        {% for item in liseventos %}    
+                                              
+                                              <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                              <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                        {% endfor%}
+                                </select>
+                              </div>  
+                                
+    
+                            
                             
                             </div>
 
@@ -39,7 +57,7 @@
                               </div>  
                               <div class="form-group col-md-4">                            
                                 
-                                <input id="apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
+                                <input id="bus_apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
                                 
                                   <!-- {{eve.apellido_participante}}-->
 
@@ -53,8 +71,9 @@
                                 <label for="lblNombre">Nombre</label>
                               </div>  
                               <div class="form-group col-md-4">                            
-                                <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
-                                {{eve.nombre_participante}}
+                                <input id="bus_nombre_participante" type="text" name="nombre_participante" value="{{nombre_participante }}">
+
+                                <!--{{eve.nombre_participante}}-->
                               </div>
                             
                             </div>
@@ -65,8 +84,8 @@
                                 <label for="lblEmpresa">Empresa</label>
                               </div>  
                               <div class="form-group col-md-10">                            
-                                <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Email">-->
-                                {{eve.empresa_participante}}
+                                <input id="bus_empresa_participante" type="text" name="apellido_participante" value="{{empresa_participante }}">
+                                <!--{{eve.empresa_participante}}-->
                               </div>
                             
                             </div>
@@ -76,11 +95,7 @@
                                 <div class="col">
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
-                                    
-                                    
-
-
-
+                                                                        
                                 </div>    
                             </div>    
 
@@ -107,8 +122,9 @@
               <div class="dropdown-header">Acciones:</div>
               <!--<a class="dropdown-item" onclick="return abrir_modal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
             <!-- compras_new esta devlarado en el archivo urls.py-->
-              <a class="dropdown-item" href="{# url 'cmp:compras_new' #}"><i class="far fa-calendar-plus"></i> Nuevo</a>        
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>a Nuevo</a>        
               <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+              
             </div>
           </div>
         </div>
@@ -278,7 +294,8 @@
       onclick="participanteAsistencia(${value.id})" ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
 </td>
     <td>
-      <button class="btn btn-warning btn-circle" onclick="abrir_modal('par:participante_edit')"><i class="far fa-edit">aa</i></button>      
+      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edit'  43  %}')"><i class="far fa-edit">aa</i></button>      
+      
     </td>  
 
     </tr>`

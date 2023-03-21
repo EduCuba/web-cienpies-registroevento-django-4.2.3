@@ -3,7 +3,7 @@
         {% if obj %}
         <form id="frmPrv" role="form" action="{# url 'cmp:proveedor_edit' obj.pk #}" method="post"  class="form-inline">
         {% else %}
-        <form id="frmPrv" role="form" action="{# url 'cmp:proveedor_new' #}" method="post"  class="form-inline">
+        <form id="frmPrv" role="form" action="{% url 'par:participante_new' %}" method="post"  class="form-inline">
         {% endif %}
             <div class="col-xl-12 col-md-12 mb-12">
                 {% if obj %}
@@ -11,17 +11,128 @@
                 {% else %}
                 <div class="card border-left-success shadow h-100 py-2">
                 {% endif %}
+                <div id="errores"></div>
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            {% if obj %} Editar {% else %} Nuevo {% endif %} Proveedor
+                            {% if obj %} Editar {% else %} Nuevo {% endif %} Participante
                         </div>
                         <div class="dropdown-divider"></div>
+                        {{ form.non_field_errors}}
+                        {{ form.errors }}
                         {% csrf_token %}
+                        <div class="row">
+                            <p>
+                                <label for="id_evento">Evento:</label>
+                                <select name="evento" class="form-control" required="" id="id_evento" disabled=true>
+                                    <option value="" selected="">Seleccione Evento</option>
+
+                                        {% for item in eventos %}
+                                            <option value="{{item.id}}">{{item.nombre_evento}}</option>
+                                        {% endfor%}
+                                </select>                                    
+                            </p>
+
+  
+                            <p>
+                                <label for="id_apellido_participante">Apellido:</label>
+                                <input type="text" name="apellido_participante" maxlength="50" class="form-control" required="" id="id_apellido_participante" placeholder="Apellido participante" value="{% if obj %} {{ obj.apellido_participante }} {% endif %}">
+                                
+                            </p>
+
+  
+                            <p>
+                                <label for="id_nombre_participante">Nombre:</label>
+                                <input type="text" name="nombre_participante" maxlength="50" class="form-control" required="" id="id_nombre_participante" placeholder="Nombre participante" value="{% if obj %} {{ obj.nombre_participante }} {% endif %}">    
+                            </p>
+
+  
+                            <p>
+                                <label for="id_empresa_participante">Empresa:</label>
+                                <input type="text" name="empresa_participante" maxlength="150" class="form-control" id="id_empresa_participante" placeholder="Empreda participante" value="{% if obj %} {{ obj.empresa_participante }} {% endif %}">        
+                            </p>
+
+  
+                            <p>
+                                <label for="id_email_participante">Cuenta correo:</label>
+                                <input type="email" name="email_participante" maxlength="100" class="form-control" required="" id="id_email_participante" placeholder="Cuenta de correo" value="{% if obj %} {{ obj.email_participante }} {% endif %}">>        
+                            </p>
+
+  
+                            <p>
+                                <label for="id_telefono_participante">Teléfono:</label>
+                                <input type="text" name="telefono_participante" maxlength="50" class="form-control" id="id_telefono_participante" placeholder="Número de celular" value="{% if obj %} {{ obj.telefono_participante }} {% endif %}">
+                                
+                                
+                            </p>
+
+                            
+                            <p>
+                                <label for="id_observaciones_participante">Observaciones:</label>
+                                <input type="text" name="observaciones_participante" maxlength="250" class="form-control" id="id_observaciones_participante" placeholder="Observaciones" value="{% if obj %} {{ obj.observaciones_participante }} {% endif %}">
+                                
+                                
+                            </p>
+
+                            
+                            <p>
+                                <label for="id_acompanante_de">Acompañante de:</label>
+                                <input type="text" name="acompanante_de" maxlength="100" class="form-control" id="id_acompanante_de" placeholder="Titular" value="{% if obj %} {{ obj.acompanante_de}} {% endif %}">
+                                
+                                
+                            </p>
+
+  
+                            <p>
+                                <label for="id_cargo_participante">Cargo:</label>
+                                <input type="text" name="cargo_participante" maxlength="150" class="form-control" id="id_cargo_participante" placeholder="Cargo" value="{% if obj %} {{ obj.cargo_participante }} {% endif %}">
+                            </p>
+
+                            
+                            <p>
+                                <label for="id_asistio_evento">Asistio:</label>
+                                <input type="checkbox" name="asistio_evento" class="form-control" id="id_asistio_evento" placeholder="Asistio a evento" {% if obj.asistio_evento %} checked {% endif %}>
+                            </p>
+
+  
+                            <p>
+                                <label for="id_confirmo_asistencia">Confirmo asistencia:</label>
+                                <input type="checkbox" name="confirmo_asistencia" class="form-control" id="id_confirmo_asistencia"  placeholder="Confirmo Asistencia" {% if obj.confirmo_asistencia %} checked {% endif %}>
+                            </p>
+
+  
+                            <p>
+                                <label for="id_tipo_participante">Tipo participante:</label>
+                                <select name="tipo_participante" class="form-control" required="" id="id_tipo_participante">
+                                    <option value="" selected="">Seleccione Tipo </option>
+
+                                    {% for item in tipos %}
+                                            <option value="{{item.id}}">{{item.descripcion_tipo_participante}}</option>
+                                    {% endfor%}
+
+                                </select>                                                                
+                            </p>
+
+  
+                            <p>
+                                <label for="id_modalidad_asistencia">Modalidad asistencia:</label>
+                                <select name="modalidad_asistencia" class="form-control" requiered="" id="id_modalidad_asistencia" >
+                                    <option value="" selected="">Selecciona Modalidad</option>
+                                    {% for item in modalidades %}
+                                    <option value="{{item.id}}">{{item.descripcion_modalidad_asistencia}}</option>
+                                    {% endfor%}
+                                </select>
+                                <div class="message-form">
+                                    <span id="msg_modalidad_asistencia" class="text-400"></span>
+                                </div>    
+                            </p>
+                        </div>
+                        <!---
                         <div class="row">
                             {{ form.as_p }}
                         </div>
+                        -->
                         <div class="dropdown-divider"></div>
                         <div class="row">
                             <div class="col">

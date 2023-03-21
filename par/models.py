@@ -54,9 +54,9 @@ class Modalidad_Asistencia(ClaseModelo2):
         
         
 class Participante(ClaseModelo2):
-    evento = models.ForeignKey(Evento, on_delete=models.PROTECT)
-    tipo_participante = models.ForeignKey(Tipo_Participante, on_delete=models.PROTECT)
-    modalidad_asistencia = models.ForeignKey(Modalidad_Asistencia, on_delete=models.PROTECT)
+    evento = models.ForeignKey(Evento, on_delete=models.PROTECT,null=False, blank=False)
+    tipo_participante = models.ForeignKey(Tipo_Participante, on_delete=models.PROTECT,null=False, blank=False)
+    modalidad_asistencia = models.ForeignKey(Modalidad_Asistencia, on_delete=models.PROTECT,null=False, blank=False)
     nombre_participante=models.CharField(('nombre'),
         max_length=50,
         null=False, blank=False)
