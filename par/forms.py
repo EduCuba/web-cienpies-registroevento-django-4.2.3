@@ -13,6 +13,17 @@ from django.core.exceptions import ValidationError
 
 
 class ParticipanteForm(forms.ModelForm):
+   
+    
+   # def clean(self):
+   #     cleaned_data = super().clean()
+   #     modalidad_asistencia = cleaned_data.get('modalidad_asistencia')
+   #     if(not modalidad_asistencia):
+   #         
+   #         raise ValidationError("Lo logramos")
+   #     return cleaned_data
+
+
     evento = forms.ModelChoiceField(
         queryset=Evento.objects.filter(estado=True)
         .order_by('nombre_evento')
@@ -56,22 +67,11 @@ class ParticipanteForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                      'class':'form-control'
                  })
-        self.fields['tipo_participante'].empty_label="Seleccione Tipo a"
+        self.fields['tipo_participante'].empty_label="Seleccione Tipo"
         self.fields['modalidad_asistencia'].empty_label="Seleccione Modalidad"
         self.fields['evento'].empty_label="Seleccione Evento"
    
    
-
-
- #def clean(self):
-  #      cleaned_data = super().clean()
-  #      cc_myself = cleaned_data.get("cc_myself")
-  #      subject = cleaned_data.get("subject")
-  #
-  #      if cc_myself and subject and "help" not in subject:
-  #          msg = "Must put 'help' in subject when cc'ing yourself."
-  #          self.add_error('cc_myself', msg)
-  #          self.add_error('subject', msg)
 
         
 class BuscarParticipanteForm(forms.ModelForm):

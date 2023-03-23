@@ -29,6 +29,7 @@ from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
 
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 #class ParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -251,18 +252,39 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
         return context
     
     def post(self, request, *args, **kwargs):
+        
+       
+        
         form = self.form_class(request.POST)
         if form.is_valid():
-            mensaje=f'{self.model._name_} datos correctos'
+                mensaje=f'{self.model._name_} datos correctos'
         else:
-            #mensaje=f'{self.model._modalidad_asistencia_} no se ha podido registrar'
-            print("salvaod https://www.youtube.com/watch?v=JpPUX9GIFL8")
-            mensaje=f'no se ha podido registrar'
-            error= form.errors 
-            response = JsonResponse({'mensaje':mensaje, 'error':error})
-            response.status_code = 400
-            print(response)
-            return response
+                #mensaje=f'{self.model._modalidad_asistencia_} no se ha podido registrar'
+                print("salvaod https://www.youtube.com/watch?v=JpPUX9GIFL8")
+                modalidad_asistencia=form.cleaned_data.get("modalidad_asistencia")
+                tipo_participante=form.cleaned_data.get("tipo_participante")
+                mensaje='Verifique ingrese de datos'
+                if(not modalidad_asistencia):
+                  mensaje=f'Error verifique'
+                  form.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
+                if(not tipo_participante):
+                  
+                  form.add_error("tipo_participante","seleccione tipo de participante")  
+                  
+                error= form.errors 
+               # error= form.errors.as_data()
+                print("form.errors")
+                print(form.errors.as_data())
+                print("solo error")
+                print(error)
+                contexto={'mensaje':mensaje,
+                             'error':error}  
+
+                #response = JsonResponse({'mensaje':mensaje, 'error':error})
+                response = JsonResponse(contexto)
+                response.status_code = 400
+                print(response)
+                return response
     
         return redirect('par:buscar_participante')
 

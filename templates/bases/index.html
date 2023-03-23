@@ -537,6 +537,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function mensaje(msg,tipo="info"){
     var tst = `toastr.${tipo}('${msg}')`
+    console.log(tst)
     eval(tst)
   }
 
@@ -582,8 +583,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
     return false;
   }
    /*-----------------*/        
+   function activarBoton(){
+    if($('#boton_creacion').prop('disabled')){
+       $('#boton_creacion').prop('disabled',false);
+    }else{
+       $('#boton_creacion').prop('disabled',true);
+    }
+ }
+ 
+ 
+ function mostrarErroresCrud(errores){
+   $('#divErrores').html("");
+   $('#message_modalidad_asistencia').html("");
+   $('#message_tipo_participante').html("");
+   
+   
+   let error="";
+   for(let item in errores.responseJSON.error){
+     nameDiv = item;
+     error +='<div class="alert alert-danger" <strong>' + errores.responseJSON.error[item] + '</strong></div>'
+     $('#message_'+nameDiv).append(error);
+     error="";
+   }
+   $('#divErrores').append(error);
 
+   for (var key in errores.responseJSON.error) {
   
+    console.log(key);
+ 
+  }
+ }
    
 </script>  
  
