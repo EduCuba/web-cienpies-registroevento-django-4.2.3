@@ -536,9 +536,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
   function mensaje(msg,tipo="info"){
+    msjPopup=""
+    for(let item in msg.responseJSON.mensaje){
+      msjPopup +=   msg.responseJSON.mensaje[item]
+            
+    }
+    //var tst = `toastr.${tipo}('${msg]}')`
+    var tst = `toastr.${tipo}('${msjPopup}')`
+    console.log(tst)
+    console.log("index.html linea 550")
+    eval(tst)
+  }
+
+
+  function mensajeServer(msg,tipo="warning"){
+    console.log ("salvame "+msg)
     var tst = `toastr.${tipo}('${msg}')`
     console.log(tst)
+    console.log("index.html linea 550")
     eval(tst)
+    
   }
 
   {% if messages %}
@@ -594,6 +611,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
  
  function mostrarErroresCrud(errores){
    $('#divErrores').html("");
+   $('#message_evento').html("");
    $('#message_modalidad_asistencia').html("");
    $('#message_tipo_participante').html("");
    

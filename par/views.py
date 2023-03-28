@@ -12,7 +12,7 @@ from django.views.generic import *
 
 from .models import Participante, Tipo_Participante, Modalidad_Asistencia
 #from eve.models import Evento
-from .forms import BuscarParticipanteForm,ParticipanteForm
+from .forms import BuscarParticipanteForm,ParticipanteForm,CreateForm
 
 
 from bases.views import SinPrivilegios
@@ -31,6 +31,8 @@ import json
 
 from django.core.exceptions import ValidationError
 # Create your views here.
+from django.forms.utils import ErrorList
+from django.utils.translation import gettext as _
 
 #class ParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ParticipanteList(ListView):
@@ -223,6 +225,125 @@ class ParticipanteEdit(generic.UpdateView):
 
 #SuccessMessageMixin, = necesario para enviar mensajes
 #class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):    
+    #permission_required = 'eve.add_modalidad_evento'
+    model = Participante
+    #template_name="par/participante_add.html"    
+    template_name="par/participante_form.html"    
+    context_object_name = "obj"
+    form_class = ParticipanteForm
+    success_url = reverse_lazy("par:buscar_participante")
+    #login_url ="bases:login"
+    success_message="Participante registrado satisfactoriamente"
+    
+    #se carga en el form el usuario logueado
+    def form_valid(self, form):
+        print("es valido")
+        print("no es valido")    
+        form.instance.uc = self.request.user   
+        form.save()     
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super(ParticipanteAdd, self).get_context_data(**kwargs)
+        context["eventos"] = Evento.objects.all()
+        context["tipos"] = Tipo_Participante.objects.all()
+        context["modalidades"] = Modalidad_Asistencia.objects.all()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        requestValido="OK"
+        response=""
+        
+        form = self.form_class(request.POST)
+        try: 
+            if (form.is_valid() | (not form.is_valid())):
+             #   mensaje=f'{self.model.nombre_participante} datos correctos'
+            #else:
+                #mensaje=f'{self.model._modalidad_asistencia_} no se ha podido registrar'
+                print("salvaod https://www.youtube.com/watch?v=JpPUX9GIFL8")
+                evento=form.cleaned_data.get("evento")
+                email_participante=form.cleaned_data.get("email_participante")
+                modalidad_asistencia=form.cleaned_data.get("modalidad_asistencia")
+                tipo_participante=form.cleaned_data.get("tipo_participante")
+                mensaje='Verifique ingrese de datos'
+                if(not evento):
+                    mensaje=f'Error verifique'
+                   # form.add_error("evento","seleccione evento")
+                    form.add_error("evento", ValidationError(_("Evento no valido")))
+                    
+                    requestValido="OFF"
+                    
+                if (not email_participante):
+                   raise ValueError(_("El correo es un campo obligatorio."))
+                    
+                        
+                if(not modalidad_asistencia):
+                    mensaje=f'Error verifique'
+                    #form.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
+
+                    #errors = form._errors.setdefault("modalidad_asistencia", ErrorList())
+                    #errors.append(u"Seleccione modalidad de asistencia")
+                    requestValido="OFF"
+                if(not tipo_participante):
+                    mensaje=f'Error verifique'
+                    #form.add_error("tipo_participante","seleccione tipo de participante")  
+                    requestValido="OFF"
+                        
+                error= form.errors 
+                # error= form.errors.as_data()
+                print("form.errors")
+                print(form.errors.as_data())
+                print("solo error")
+                print(error)
+                contexto={'mensaje':mensaje,
+                        'error':error,
+                        'rptaServer':'OFF'}  
+
+                            #response = JsonResponse({'mensaje':mensaje, 'error':error})
+                status_code = 400    
+                if(requestValido=="OK"):
+                    mensaje="Datos actualizados"
+                    contexto={'mensaje':mensaje,
+                            'error':'',
+                            'rptaServer':"OK"}  
+                    status_code = 200
+                    
+                    print(contexto)
+                    form.instance.uc = self.request.user   
+                    form.save() 
+                    print("grabo ")
+                else:    
+                    status_code = 400
+                            
+                        
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+                print (contexto)
+                print(response)
+            return response
+
+        except ValueError as e:
+            
+            mensaje=str(e)
+            mensaje=mensaje.replace('"','')
+            mensaje=mensaje.replace("'","\\'")
+            rptaServer="OFF"
+            contexto={'mensaje':mensaje,
+                            'error':'',
+                            'rptaServer':'OFF'}  
+            print ('mensaje except')
+            print (contexto)
+            response = JsonResponse(contexto)
+            print(response)
+            return response
+            
+        
+            
+        return redirect('par:buscar_participante')
+
+
+
 class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):    
     #permission_required = 'eve.add_modalidad_evento'
     model = Participante
@@ -236,10 +357,8 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
     
     #se carga en el form el usuario logueado
     def form_valid(self, form):
-        
         print("es valido")
         print("no es valido")    
-            
         form.instance.uc = self.request.user   
         form.save()     
         return super().form_valid(form)
@@ -252,41 +371,77 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        
-       
+        requestValido="OK"
+        response=""
         
         form = self.form_class(request.POST)
-        if form.is_valid():
-                mensaje=f'{self.model._name_} datos correctos'
-        else:
-                #mensaje=f'{self.model._modalidad_asistencia_} no se ha podido registrar'
-                print("salvaod https://www.youtube.com/watch?v=JpPUX9GIFL8")
-                modalidad_asistencia=form.cleaned_data.get("modalidad_asistencia")
-                tipo_participante=form.cleaned_data.get("tipo_participante")
-                mensaje='Verifique ingrese de datos'
-                if(not modalidad_asistencia):
-                  mensaje=f'Error verifique'
-                  form.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
-                if(not tipo_participante):
-                  
-                  form.add_error("tipo_participante","seleccione tipo de participante")  
-                  
-                error= form.errors 
-               # error= form.errors.as_data()
-                print("form.errors")
-                print(form.errors.as_data())
-                print("solo error")
-                print(error)
-                contexto={'mensaje':mensaje,
-                             'error':error}  
-
-                #response = JsonResponse({'mensaje':mensaje, 'error':error})
+        try: 
+            if (form.is_valid()):
+                
+                
+                contexto={'mensaje':"Datos actualizados",
+                            'error':'',
+                            'rptaServer':"OK"}  
+                status_code = 200
+                form.instance.uc = self.request.user   
+                form.save() 
+                print("grabo ")
                 response = JsonResponse(contexto)
-                response.status_code = 400
-                print(response)
-                return response
-    
+                response.status_code = status_code
+            else:
+                status_code = 400
+                error= form.errors 
+               # print("form.errors")
+               # print(form.errors.as_data())
+               # print("solo error")
+               # print(error)
+                contexto={'mensaje':"Verifique Datos",
+                        'error':error,
+                        'rptaServer':'OFF'} 
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+                
+                
+            print("debe de regresar")  
+            print(contexto)
+            print(response)
+            return response
+
+        except ValueError as e:
+            
+            mensaje=str(e)
+            mensaje=mensaje.replace('"','')
+            mensaje=mensaje.replace("'","\\'")
+            rptaServer="OFF"
+            contexto={'mensaje':'mensaje',
+                            'error':'',
+                            'rptaServer':'OFF'}  
+            print ('mensaje except')
+            print (contexto)
+            response = JsonResponse(contexto)
+            print(response)
+            return response
+            
+        
+            
         return redirect('par:buscar_participante')
 
 
 
+def DetailForm(request):
+    if request.method == "POST":  
+        form = CreateForm(request.POST)
+        print('Estoy aqui')
+        if form.is_valid():
+            print('First Name:', form.cleaned_data['apellido_participante'])
+            print('Last Name:', form.cleaned_data['nombre_participante'])
+            print('Email:', form.cleaned_data['Email'])
+    else:
+        print('salvame bb')
+        #context = CreateForm(request)
+        #context = super(Participante, self).get_context_data(**kwargs)
+        #context["eventos"] = Evento.objects.all()
+        #context["tipos"] = Tipo_Participante.objects.all()
+        #context["modalidades"] = Modalidad_Asistencia.objects.all()
+        #return context
+    return redirect('par/participante_form.html')

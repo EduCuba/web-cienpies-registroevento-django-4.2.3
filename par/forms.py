@@ -7,7 +7,7 @@ from django.forms.widgets import PasswordInput
 from .models import Participante,Modalidad_Asistencia,Tipo_Participante
 from eve.models import Evento
 from django.core.exceptions import ValidationError
-
+from django.utils.translation import gettext as _
 
 
 
@@ -15,13 +15,46 @@ from django.core.exceptions import ValidationError
 class ParticipanteForm(forms.ModelForm):
    
     
-   # def clean(self):
-   #     cleaned_data = super().clean()
-   #     modalidad_asistencia = cleaned_data.get('modalidad_asistencia')
-   #     if(not modalidad_asistencia):
-   #         
-   #         raise ValidationError("Lo logramos")
-   #     return cleaned_data
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        modalidad_asistencia = cleaned_data.get('modalidad_asistencia')
+        evento=cleaned_data.get("evento")
+        email_participante=cleaned_data.get("email_participante")
+        modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
+        tipo_participante=cleaned_data.get("tipo_participante")
+        mensaje='Verifique ingrese de datos'
+        print('uno')
+        if(not evento):
+            print('uno a')
+            mensaje=f'Error verifique'
+                # form.add_error("evento","seleccione evento")
+            cleaned_data.add_error("evento", ValidationError(_("Evento no valido")))
+            requestValido="OFF"
+                    
+        if (not email_participante):
+            print('uno b')
+            mensaje=f'Error verifique'
+            #raise ValueError(_("El correo es un campo obligatorio."))
+                    
+                        
+        if(not modalidad_asistencia):
+            print('uno c')
+            mensaje=f'Error verifique'
+            self.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
+            
+            print('uno cc')
+
+                    #errors = form._errors.setdefault("modalidad_asistencia", ErrorList())
+                    #errors.append(u"Seleccione modalidad de asistencia")
+            requestValido="OFF"
+        if(not tipo_participante):
+                mensaje=f'Error verifique'
+                    #form.add_error("tipo_participante","seleccione tipo de participante")  
+                requestValido="OFF"
+                
+        print (cleaned_data)       
+        return cleaned_data
 
 
     evento = forms.ModelChoiceField(
@@ -104,4 +137,27 @@ class BuscarParticipanteForm(forms.ModelForm):
                self.fields[field].required = False    
             
                 
+        
+
+class CreateForm(forms.ModelForm):
+    
+    def __init__(self, *args, user=None, **kwargs):
+        super(CreateForm, self).__init__(*args, **kwargs)
+        #if Participante is not None:
+            #self.fields['apellido_participante'].initial = "edu"
+
+    class Meta:
+        model=Participante
+        fields = ['evento','apellido_participante','nombre_participante','empresa_participante','email_participante','telefono_participante',
+                  'observaciones_participante','acompanante_de', 'cargo_participante','asistio_evento','confirmo_asistencia',
+                  'tipo_participante','modalidad_asistencia','evento']
+        
+    def clean(self):
+        print("form 1")
+        cleaned_data = super().clean()
+        print("form 2")
+        apellido_participante = cleaned_data('apellido_participante')
+        print("form 3")
+        nombre_participante = cleaned_data('nombre_participante')
+        print("form 4")
         

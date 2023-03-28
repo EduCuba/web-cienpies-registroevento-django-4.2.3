@@ -33,7 +33,10 @@
                                         {% for item in eventos %}
                                             <option value="{{item.id}}">{{item.nombre_evento}}</option>
                                         {% endfor%}
-                                </select>                                    
+                                </select>       
+                                <div id="message_evento">
+                                    
+                                </div>                              
                             </p>
 
   
@@ -185,15 +188,34 @@ $(function() {
             data: formData
         })
         .done(function(r,textStatus,xhr){
-            if(xhr.status=200){
-                location.reload(true);
+            if(xhr.status=200){                
+                //console.log("participante_form.html 189")
+                //console.log(r);
+                //console.log(r.rptaServer);
+                //console.log(textStatus);
+                //console.log(xhr);
+                if(r.rptaServer=='OK'){
+                    cerrar_modal()
+                }else{
+                    mensajeServer(r.mensaje)
+                }
+                console.log("participante_form.html 191")
+                // desactivamos para que no recargue la pagina   
+                //location.reload(true);
+            
             }
             else{
+                console.log("participante_form.html 197")
                 mensaje(textStatus);
+
+            
             }
         }).fail(function (error) {
-                mensaje(error.responseText);
+            //.fail( function( jqXHR, textStatus, errorThrown ) {
+            //mensaje(error.responseText);
+                mensaje(error);
                 mostrarErroresCrud(error);
+                console.log("participante_form.html 207")
         });
     });
 });
