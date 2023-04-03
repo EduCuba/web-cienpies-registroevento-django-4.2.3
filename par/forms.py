@@ -27,24 +27,23 @@ class ParticipanteForm(forms.ModelForm):
         print('uno')
         if(not evento):
             print('uno a')
-            mensaje=f'Error verifique'
-                # form.add_error("evento","seleccione evento")
-            cleaned_data.add_error("evento", ValidationError(_("Evento no valido")))
+            #mensaje=f'Error verifique f'
+            # form.add_error("evento","seleccione evento")
+            self.add_error("evento", ValidationError(_("Evento no valido")))
             requestValido="OFF"
                     
         if (not email_participante):
-            print('uno b')
-            mensaje=f'Error verifique'
+            #print('uno b')
+            #mensaje=f'Error verifique'
             #raise ValueError(_("El correo es un campo obligatorio."))
+            self.add_error("email_participante", ValidationError(_("Ingrese cuenta de correo")))
                     
                         
         if(not modalidad_asistencia):
-            print('uno c')
             mensaje=f'Error verifique'
             self.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
             
-            print('uno cc')
-
+            
                     #errors = form._errors.setdefault("modalidad_asistencia", ErrorList())
                     #errors.append(u"Seleccione modalidad de asistencia")
             requestValido="OFF"

@@ -549,6 +549,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
 
+  
+
+
   function mensajeServer(msg,tipo="warning"){
     console.log ("salvame "+msg)
     var tst = `toastr.${tipo}('${msg}')`
@@ -572,7 +575,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   var comboEvento = document.getElementById(evento);
   var selected = comboEvento.options[comboEvento.selectedIndex].text;
   var id_evento= comboEvento.value
-  alert(selected+"-"+id_evento);
+
+  if (id_evento.trim()==="" || id_evento === null || id_evento === "0"){
+    mensajeServer("Seleccione Evento");
+    return false
+  }
+
+  
+
+  
+  
 
     /*var id_evento = document.getElementById(evento).value;
     console.log("evento seleccionado - "+id_evento);*/
