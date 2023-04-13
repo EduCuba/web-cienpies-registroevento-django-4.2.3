@@ -172,26 +172,44 @@ def buscarparticipante(request,participante_id=None):
 
 def participanteAsistencia(request, id):
     idPar=request.POST.get("id")
+    tipo=request.POST.get("tipo")
     print("imprime id request")
     print(id)
+    print("imprime idpar")
+    print(idPar)
+    print(tipo)
     participante = Participante.objects.filter(pk=id).first()
     
     print("edu 01")
     contexto={'rpta':'OFF'}          
-    if request.method=="POST":
-        print("edu 02") 
-        if participante:
-            print("edu 03") 
-            participante.asistio_evento = not participante.asistio_evento
-            participante.save()
-            contexto={'rpta':'OK',
-                     'asistio_evento':participante.asistio_evento}  
-            print(contexto)
-            return JsonResponse(contexto,safe=False)      
+    try:
+        if request.method=="POST":
+           print("edu 02") 
+           if participante:
+               if tipo=="A":
+                   print("edu 03") 
+                   participante.asistio_evento = not participante.asistio_evento
+                   participante.save()
+                   contexto={'rpta':'OK',
+                             'asistio_evento':participante.asistio_evento}      
+                   print(contexto)
+                   return JsonResponse(contexto,safe=False)      
         print("edu 04")
         return JsonResponse(contexto)      
-    print("edu 05")
-    return JsonResponse(contexto)      
+        print("edu 05")
+        return JsonResponse(contexto)     
+    except ValueError as e:            
+        mensaje=str(e)
+        print("captura el error")
+        mensaje=mensaje.replace('"','')
+        mensaje=mensaje.replace("'","\\'")
+        rptaServer="OFF"
+        contexto={'rpta':'OFF',
+                  'mensaje':mensaje}      
+        return JsonResponse(contexto)     
+        
+        
+     
 
 
 
@@ -200,13 +218,17 @@ def participanteAsistencia(request, id):
 #                   generic.UpdateView):
     
 class ParticipanteEdit(generic.UpdateView):        
+    #permission_required="eve.change_modalidad_evento"
     model=Participante
     template_name="par/participante_form.html"
     context_object_name = 'obj'
     form_class=ParticipanteForm
-    success_url= reverse_lazy("par:registro_list")
+    success_url= reverse_lazy("par:buscar_participante")
     success_message="Participante Editado"
     #permission_required="cmp.change_proveedor"
+    
+    
+    
 
     def form_valid(self, form):
         form.instance.um = self.request.user.id
@@ -216,7 +238,7 @@ class ParticipanteEdit(generic.UpdateView):
 
     
     
-      
+
 
 
 

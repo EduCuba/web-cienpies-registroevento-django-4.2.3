@@ -93,9 +93,11 @@
                         
                             <div class="row">
                                 <div class="col">
+                                  <!---
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
-                                                                        
+                                -->
+                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
                                 </div>    
                             </div>    
 
@@ -106,7 +108,7 @@
             </div>
         </div>
     </form>
-    <button type="button" class="btn btn-warning btn-circle" onclick="participantesEncontrados()" ><i class="far fa-hand-pointer">hola</i></button>
+    
 {% endblock content_wrapper %}
 
 {% block content %}
@@ -170,8 +172,11 @@
                     <td>{{ item.asistio_evento }}</td>
                     <td>{{ item.tipo_participante }}</td>              
                     <td>
+                      
                       <a class="btn btn-warning btn-circle" href="#"><i class="far fa-edit"></i></a>
+                      
                       <a class="btn btn-success btn-circle" href="{# url 'cmp:compras_print_one' item.id #}" target="reportes"><i class="fas fa-print"></i></a>
+                      
                     
                     </td>
                     <td>
@@ -193,6 +198,10 @@
 {% block js %}
 
 <script>
+  function editarRegistro(id){
+
+    url = "/par/registro_edit"
+  }
   function participantesEncontrados(){
     // alert(id)
     // alert(accion)
@@ -274,6 +283,9 @@
       captionBoton="Control"
       styleRow=""
       classBoton="far fa-hand-pointer"
+      idParticipante=`${value.asistio_evento}`
+      rrr="43"
+    
       if(asistioEvento.toUpperCase()=="TRUE"){
         //styleBoton="style=background-color:#008f39"
         styleRow="#008f39"
@@ -293,11 +305,17 @@
     
     <td>${value.tipo_participante__descripcion_tipo_participante}</td>
     <td><button type="button" class="btn btn-warning btn-circle"
-      onclick="participanteAsistencia(${value.id})" ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
+      onclick="participanteAsistencia(${value.id},'A')" ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
 </td>
     <td>
-      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edit'  43  %}')"><i class="far fa-edit">aa</i></button>      
+      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edit' 432 %}')"><i class="far fa-edit">aa</i></button>      
       
+      <button type="button" class="btn btn-warning btn-circle"
+      onclick="cargaRegistro(${value.id},'bus_id_evento')" ><i id=\"i_edit${value.id}\" class="`+classBoton+`"></i></button>
+
+      
+
+
     </td>  
 
     </tr>`
@@ -392,7 +410,7 @@
         displayTable +='  <td><input readonly  type="checkbox" id="up_asistio'+item.id+' value='+ item.asistio_evento+' class=\"form-control\" /></td>'
         displayTable +='  <td>'+item.tipo_participante__descripcion_tipo_participante+'</td>'
         displayTable +='  <td>'
-        displayTable +='    <button type="button" class="btn btn-warning btn-circle" onclick="participanteAsistencia('+item.id+')" ></button>'
+        //displayTable +='    <button type="button" class="btn btn-warning btn-circle" onclick="participanteAsistencia('+item.id+')" ></button>'
         
         displayTable +='  </td>'
         displayTable +='</tr>'
@@ -413,7 +431,7 @@
   }
 
 
-  function participanteAsistencia(id){
+  function participanteAsistencia(id,tipo){
 
 
     //var url = "/users/groups/permission/{{obj.id}}/" + id
@@ -425,7 +443,8 @@
     url = "/par/asistencia_participante/"+id
     console.log(url);
     var token = '{{csrf_token}}'
-    var data = {"id":id}
+    var data = {"id":id,
+                "tipo":tipo}
     console.log("entra ajax");
     $.ajax({
       headers : {"X-CSRFToken": token,
@@ -454,12 +473,7 @@
           //  e_li.classList.remove("fa fa-user-check");
            }
           document.getElementById("up_asistio"+id).value=r.asistio_evento;
-          
-                
-             
-                
-                
-                
+                          
           Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);
           /*location.reload(true)*/
           //var tabla= $("table")
@@ -471,8 +485,9 @@
         }
       },
       error: function(jqXHR, textStatus, errorThrow){
+
         console.log(textStatus, errorThrow);
-        Swal.fire(errorThrow,"",'red');
+        Swal.fire(errorThrow,"",'error');
       }
     })
 

@@ -581,10 +581,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     return false
   }
 
-  
-
-  
-  
 
     /*var id_evento = document.getElementById(evento).value;
     console.log("evento seleccionado - "+id_evento);*/
@@ -644,6 +640,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
  }
    
+
+
+ function cargaRegistro(id,evento)
+  { console.log("lleg-"+id);
+    url = "/participante_edit/"+id
+    
+    var comboEvento = document.getElementById(evento);
+    var selected = comboEvento.options[comboEvento.selectedIndex].text;
+    var id_evento= comboEvento.value
+
+  if (id==="" || id === null || id === "0"){
+    mensajeServer("Seleccione Participante");
+    return false
+  }
+
+
+    /*var id_evento = document.getElementById(evento).value;
+    console.log("evento seleccionado - "+id_evento);*/
+
+    console.log(url);
+    $("#popup").load(url, function(){
+      console.log("llego 2");
+      $(this).modal({
+        
+        /* cambia propiedades de modal para que no se cierre */
+        backdrop:'static',
+        keyboard: false
+      })
+      /* muestra modal*/
+       document.getElementById("id_evento").value = id_evento;
+      $(this).modal('show');
+    });
+    /* se retorna false para que no refresque la pagina*/
+    return false;
+  }
 </script>  
  
 
