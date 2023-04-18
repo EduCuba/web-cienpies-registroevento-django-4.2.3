@@ -76,7 +76,7 @@ class ParticipanteForm(forms.ModelForm):
         model=Participante
         fields = ['evento','apellido_participante','nombre_participante','empresa_participante','email_participante','telefono_participante',
                   'observaciones_participante','acompanante_de', 'cargo_participante','asistio_evento','confirmo_asistencia',
-                  'tipo_participante','modalidad_asistencia','evento']
+                  'tipo_participante','modalidad_asistencia']
         labels = {'Apellido':"apellido_participante",
         'Nombre':"nombre_participante",
         'Email':"email_participante",

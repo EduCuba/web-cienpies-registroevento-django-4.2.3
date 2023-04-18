@@ -83,12 +83,13 @@ class Participante(ClaseModelo2):
         null=False, blank=True)
     
     def __str__(self):
-        return '{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
+        return '{}:{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
                                              self.nombre_participante,
                                              self.empresa_participante,
                                              self.email_participante,
                                              self.asistio_evento,
                                              self.tipo_participante.descripcion_tipo_participante,
+                                             self.tipo_participante.pk,
                                              self.modalidad_asistencia.descripcion_modalidad_asistencia,
                                              self.pk)
     

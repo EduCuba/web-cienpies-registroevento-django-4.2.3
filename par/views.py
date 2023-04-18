@@ -227,13 +227,27 @@ class ParticipanteEdit(generic.UpdateView):
     success_message="Participante Editado"
     #permission_required="cmp.change_proveedor"
     
-    
-    
-
     def form_valid(self, form):
-        form.instance.um = self.request.user.id
+       # form.instance.um = self.request.user.id
+        form.instance.um = self.request.user   
         print(self.request.user.id)
         return super().form_valid(form)
+    
+     
+    
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super(ParticipanteEdit, self).get_context_data(**kwargs)
+        context["eventos"] = Evento.objects.all()
+        context["tipos"] = Tipo_Participante.objects.all()
+        context["modalidades"] = Modalidad_Asistencia.objects.all()
+        print("eduuuuuuuuuuuuuuuu")
+        print(context)
+        
+        return context
+    
+    
     
 
     

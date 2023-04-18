@@ -155,7 +155,7 @@
                 <th>Asistio</th>
                 <th>Tipo</th>
                 <th class="all">Estado</th>
-                <th class="all">Acciones</th>
+                <th class="all">Acciones_X</th>
               </thead>
               <tbody>
               
@@ -278,7 +278,7 @@
 
     var rows = $.map(datos,function(value,index){
 
-      styleRow=`${value.tipo_participante__background_tipo_participante}`;    
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;    
       asistioEvento =`${value.asistio_evento}`
       captionBoton="Control"
       styleRow=""
@@ -288,13 +288,14 @@
     
       if(asistioEvento.toUpperCase()=="TRUE"){
         //styleBoton="style=background-color:#008f39"
-        styleRow="#008f39"
+        //styleRow="#008f39"
+        //styleRow="FFD700"
         captionBoton="Asistio"
         classBoton="fa fa-user-check"
       }
 
     
-    return `<tr style="background-color:${styleRow}">
+    return `<tr style="background-color:${value.tipo_participante__background_tipo_participante}">
     <td>${value.id}</td>
     <td>${value.apellido_participante}</td>
     <td>${value.nombre_participante}</td>
