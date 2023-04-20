@@ -117,6 +117,7 @@ def buscarparticipante(request,participante_id=None):
         print(nombre_participante)    
         print(empresa_participante)
         print(evento)  
+         
         
         if (len(empresa_participante)==0):  
             if(nombre_participante==""):
@@ -194,6 +195,8 @@ def participanteAsistencia(request, id):
                              'asistio_evento':participante.asistio_evento}      
                    print(contexto)
                    return JsonResponse(contexto,safe=False)      
+               
+                   
         print("edu 04")
         return JsonResponse(contexto)      
         print("edu 05")
@@ -216,7 +219,7 @@ def participanteAsistencia(request, id):
 
 #class ParticipanteEdit(SuccessMessageMixin, MixinFormInvalid, SinPrivilegios,\
 #                   generic.UpdateView):
-    
+
 class ParticipanteEdit(generic.UpdateView):        
     #permission_required="eve.change_modalidad_evento"
     model=Participante
@@ -227,35 +230,140 @@ class ParticipanteEdit(generic.UpdateView):
     success_message="Participante Editado"
     #permission_required="cmp.change_proveedor"
     
-    def form_valid(self, form):
-       # form.instance.um = self.request.user.id
-        form.instance.um = self.request.user   
-        print(self.request.user.id)
-        return super().form_valid(form)
-    
-     
-    
-    
-    
     def get_context_data(self, **kwargs):
         context = super(ParticipanteEdit, self).get_context_data(**kwargs)
         context["eventos"] = Evento.objects.all()
         context["tipos"] = Tipo_Participante.objects.all()
         context["modalidades"] = Modalidad_Asistencia.objects.all()
-        print("eduuuuuuuuuuuuuuuu")
-        print(context)
-        
+        print("eduuuuuuuuuuuuuuuu get_context_data 238")
+        print(context)        
         return context
-    
-    
+        
+    def form_valid(self, form):
+        print(form.instance.id)
+        print(form.instance.apellido_participante)
+        
+        print("es valido")
+        print("no es valido")    
+        print(form.instance.apellido_participante)
+        
+        
+        try: 
+            if (form.is_valid()):
+                                
+                status_code = 200
+                form.instance.um = self.request.user   
+                print(form.instance.id)
+                print(form.instance.apellido_participante)
+                form.save()                 
+                
+                ##return super().form_valid(form)                        
+                
+                contexto={'mensaje':"Datos actualizados",
+                         'error':'',
+                         'rptaServer':"OK"}  
+
+                print("grabo edit ")
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+            else:
+                status_code = 400
+                error= form.errors 
+               # print("form.errors")
+               # print(form.errors.as_data())
+               # print("solo error")
+               # print(error)
+                contexto={'mensaje':"Verifique Datos",
+                        'error':error,
+                        'rptaServer':'OFF'} 
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+                
+                
+            print("debe de regresar de edit")  
+            print(contexto)
+            print(response)
+            return response
+
+        except ValueError as e:
+            
+            mensaje=str(e)
+            mensaje=mensaje.replace('"','')
+            mensaje=mensaje.replace("'","\\'")
+            rptaServer="OFF"
+            contexto={'mensaje':'mensaje',
+                            'error':'',
+                            'rptaServer':'OFF'}  
+            print ('mensaje except')
+            print (contexto)
+            response = JsonResponse(contexto)
+            print(response)
+            return response
+         
     
 
+    def post(self, request, *args, **kwargs):
+        print("post")
+        requestValido="OK"
+        response=""
+        
+        #form = self.form_class(request.POST)
+        form = ParticipanteForm(request.POST)
+        try: 
+            if (form.is_valid()):
+                
+                
+                
+                form.instance.uc = self.request.user   
+                form.save() 
+                contexto={'mensaje':"Datos actualizados EDIT",
+                            'error':'',
+                            'rptaServer':"OK"}  
+                status_code = 200
+                print("grabo ")
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+            else:
+                status_code = 400
+                error= form.errors 
+                print("form.errors 491")
+               # print(form.errors.as_data())
+               # print("solo error")
+               # print(error)
+                contexto={'mensaje':"Verifique Datos",
+                        'error':error,
+                        'rptaServer':'OFF'} 
+                response = JsonResponse(contexto)
+                response.status_code = status_code
+                
+                
+            print("debe de regresar")  
+            print(contexto)
+            print(response)
+            return response
+
+        except ValueError as e:
+            
+            mensaje=str(e)
+            mensaje=mensaje.replace('"','')
+            mensaje=mensaje.replace("'","\\'")
+            rptaServer="OFF"
+            contexto={'mensaje':'mensaje',
+                            'error':'',
+                            'rptaServer':'OFF'}  
+            print ('mensaje except')
+            print (contexto)
+            response = JsonResponse(contexto)
+            print(response)
+            return response
+            
+        
+            
+        return redirect('par:buscar_participante')
+
+           
+     
     
-    
-
-
-
-
 
 
 
@@ -407,6 +515,7 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
         return context
     
     def post(self, request, *args, **kwargs):
+        print("post")
         requestValido="OK"
         response=""
         
@@ -415,19 +524,20 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
             if (form.is_valid()):
                 
                 
+                
+                form.instance.uc = self.request.user   
+                form.save() 
                 contexto={'mensaje':"Datos actualizados",
                             'error':'',
                             'rptaServer':"OK"}  
                 status_code = 200
-                form.instance.uc = self.request.user   
-                form.save() 
                 print("grabo ")
                 response = JsonResponse(contexto)
                 response.status_code = status_code
             else:
                 status_code = 400
                 error= form.errors 
-               # print("form.errors")
+                print("form.errors 491")
                # print(form.errors.as_data())
                # print("solo error")
                # print(error)
@@ -481,3 +591,8 @@ def DetailForm(request):
         #context["modalidades"] = Modalidad_Asistencia.objects.all()
         #return context
     return redirect('par/participante_form.html')
+
+
+    
+    
+

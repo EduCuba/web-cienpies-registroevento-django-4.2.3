@@ -1,7 +1,9 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         {% if obj %}
-        <form id="frmPrv" role="form" action="{% url 'par:participante_edit' obj.pk %}" method="post"  class="form-inline">
+        <form id="frmPrv" role="form" action="{% url 'par:participante_edicion' obj.pk %}" method="post"  class="form-inline">
+        <!--    <form id="frmPrv" role="form" method="post"  class="form-inline">-->
+        <!--<form id="frmPrv" role="form"  method="post" action="participanteAsistencia({{obj.id}},'E')" class="form-inline">    -->
         {% else %}
         <form id="frmPrv" role="form" action="{% url 'par:participante_new' %}" method="post"  class="form-inline">
         {% endif %}
@@ -27,7 +29,7 @@
                             <p>{{ form.fieldname.errors.as_text }}</p>
                             <p>
                                 <label for="id_evento">Evento:</label>
-                                <select name="evento" class="form-control" required="" id="id_evento" disabled=true>
+                                <select name="evento" class="form-control" required="" id="id_evento" >
                                     <option value="" selected="">Seleccione Evento</option>
 
                                         {% for item in eventos %}
@@ -43,6 +45,10 @@
                             <p>
                                 <label for="id_apellido_participante">Apellido:</label>
                                 <input type="text" name="apellido_participante" maxlength="50" class="form-control" required="" id="id_apellido_participante" placeholder="Apellido participante" value="{% if obj %} {{ obj.apellido_participante }} {% endif %}">
+                                <!---
+                                <input type="text" name="id" maxlength="50" class="form-control" required="" id="id"  value="{% if obj %} {{ obj.id }} {% endif %}">
+                                <input type="text" name="pk" maxlength="50" class="form-control" required="" id="pk"  value="{% if obj %} {{ obj.id }} {% endif %}">
+                                 -->
                                 
                             </p>
 
@@ -55,13 +61,13 @@
   
                             <p>
                                 <label for="id_empresa_participante">Empresa:</label>
-                                <input type="text" name="empresa_participante" maxlength="150" class="form-control" id="id_empresa_participante" placeholder="Empreda participante" value="{% if obj %} {{ obj.empresa_participante }} {% endif %}">        
+                                <input type="text" name="empresa_participante" maxlength="150" class="form-control" id="id_empresa_participante" placeholder="Empresa participante" value="{% if obj %} {{ obj.empresa_participante }} {% endif %}">        
                             </p>
 
   
                             <p>
                                 <label for="id_email_participante">Cuenta correo:</label>
-                                <input type="email" name="email_participante" maxlength="100" class="form-control" required="" id="id_email_participante" placeholder="Cuenta de correo" value="{% if obj %} {{ obj.email_participante }} {% endif %}">>        
+                                <input type="email" name="email_participante" maxlength="100" class="form-control"  id="id_email_participante" placeholder="Cuenta de correo" value="{% if obj %} {{ obj.email_participante }} {% endif %}">>        
                             </p>
 
   
@@ -91,7 +97,7 @@
   
                             <p>
                                 <label for="id_cargo_participante">Cargo:</label>
-                                <input type="text" name="cargo_participante" maxlength="150" class="form-control" id="id_cargo_participante" placeholder="Cargo" value="{% if obj %} {{ obj.tipo_participante }} {% endif %}">
+                                <input type="text" name="cargo_participante" maxlength="150" class="form-control" id="id_cargo_participante" placeholder="Cargo" value="{% if obj %} {{ obj.cargo_participante }} {% endif %}">
                             </p>
 
                             
@@ -136,7 +142,8 @@
                                 <select name="modalidad_asistencia" class="form-control"  id="id_modalidad_asistencia" >
                                     <option value="" selected="">Selecciona Modalidad</option>
                                     {% for item in modalidades %}
-                                    <option value="{{item.id}}">{{item.descripcion_modalidad_asistencia}}</option>
+                                    <option value="{{item.id}}" {% if obj.modalidad_asistencia == item %} selected {% endif %}>{{item.descripcion_modalidad_asistencia}}</option>
+                                    
                                     {% endfor%}
                                 </select>
                                 <div id="message_modalidad_asistencia">
@@ -205,6 +212,7 @@ $(function() {
                 if(r.rptaServer=='OK'){
                     cerrar_modal()
                 }else{
+                    console.log("linea 215"+r.rptaServer);
                     mensajeServer(r.mensaje)
                 }
                 console.log("participante_form.html 191")

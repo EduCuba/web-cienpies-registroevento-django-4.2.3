@@ -157,6 +157,8 @@ class EventoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
     #se carga en el form el usuario logueado
     def form_valid(self, form):
         form.instance.um_id = self.request.user.id
+        print ("form.instance.id")
+        print (form.instance.id)
         return super().form_valid(form)
 
 

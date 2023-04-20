@@ -181,6 +181,8 @@
                     </td>
                     <td>
                       <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{# url 'cmp:proveedor_edit' item.id #}')"><i class="far fa-edit"></i></button>
+
+                      
                     </td>  
                 </tr>
                 {% endfor %}
@@ -309,13 +311,15 @@
       onclick="participanteAsistencia(${value.id},'A')" ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
 </td>
     <td>
-      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edit' 432 %}')"><i class="far fa-edit">aa</i></button>      
+      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edicion' 432 %}')"><i class="far fa-edit">aa</i></button>      
       
       <button type="button" class="btn btn-warning btn-circle"
       onclick="cargaRegistro(${value.id},'bus_id_evento')" ><i id=\"i_edit${value.id}\" class="`+classBoton+`"></i></button>
 
-      
 
+
+      
+      <a href="{% url 'par:participante_edicion' 2 %}" class="btn btn-sm text-success"><i class="fa fa-edit">hols</i></a>
 
     </td>  
 
@@ -323,7 +327,7 @@
      })
     $("table > tbody").html(rows.join(''))
     creaFuncionDataTable()
-    //<button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edit' 43 %}')"><i class="far fa-edit">aa</i></button>      
+    //<button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'par:participante_edicion' 43 %}')"><i class="far fa-edit">aa</i></button>      
   //far fa-hand-pointer
   //fa fa-user-check
 
@@ -457,16 +461,14 @@
         if(r.rpta=="OK"){
           var e_li = document.getElementById("i_asistio"+id);
           var asistio = r.asistio_evento;
-
-           if(r.asistio_evento){
+          if(r.asistio_evento){
             e_li.classList.add("fa");
             e_li.classList.add("fa-user-check");
             e_li.classList.remove("fa-hand-pointer");
             e_li.classList.remove("far");
             e_li.classList.remove("fa-hand-pointer");
            // e_li.classList.add("fa fa-user-check");
-           }else{
-            
+          }else{            
             e_li.classList.add("far");
             e_li.classList.add("fa-hand-pointer");
             e_li.classList.remove("fa");

@@ -544,7 +544,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     //var tst = `toastr.${tipo}('${msg]}')`
     var tst = `toastr.${tipo}('${msjPopup}')`
     console.log(tst)
-    console.log("index.html linea 550")
+    console.log("index.html linea 547")
     eval(tst)
   }
 
@@ -553,10 +553,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   function mensajeServer(msg,tipo="warning"){
-    console.log ("salvame "+msg)
+    console.log ("salvame 556 "+msg)
     var tst = `toastr.${tipo}('${msg}')`
     console.log(tst)
-    console.log("index.html linea 550")
+    console.log("index.html linea 559")
     eval(tst)
     
   }
@@ -646,7 +646,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
  function cargaRegistro(id,evento)
   { console.log("lleg-"+id);
-    url = "/participante_edit/"+id
+    url = "participante_edit/"+id
     
     var comboEvento = document.getElementById(evento);
     var selected = comboEvento.options[comboEvento.selectedIndex].text;

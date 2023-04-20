@@ -13,7 +13,8 @@ from django.utils.translation import gettext as _
 
 
 class ParticipanteForm(forms.ModelForm):
-   
+    def __init__(self, *args, **kwargs):
+        super(ParticipanteForm, self).__init__(*args, **kwargs)
     
     def clean(self):
         cleaned_data = super().clean()
@@ -24,7 +25,9 @@ class ParticipanteForm(forms.ModelForm):
         modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         tipo_participante=cleaned_data.get("tipo_participante")
         mensaje='Verifique ingrese de datos'
-        print('uno')
+        print('uno ParticipanteForm')
+        print(id)
+        
         if(not evento):
             print('uno a')
             #mensaje=f'Error verifique f'
@@ -33,27 +36,32 @@ class ParticipanteForm(forms.ModelForm):
             requestValido="OFF"
                     
         if (not email_participante):
-            #print('uno b')
+            print('uno b')
             #mensaje=f'Error verifique'
             #raise ValueError(_("El correo es un campo obligatorio."))
             self.add_error("email_participante", ValidationError(_("Ingrese cuenta de correo")))
                     
                         
         if(not modalidad_asistencia):
+            print('uno c')
             mensaje=f'Error verifique'
-            self.add_error("modalidad_asistencia","seleccione modalidad de asistencia")
+            self.add_error("modalidad_asistencia",ValidationError(_("Seleccione modalidad de asistencia")))
             
             
                     #errors = form._errors.setdefault("modalidad_asistencia", ErrorList())
                     #errors.append(u"Seleccione modalidad de asistencia")
             requestValido="OFF"
+           
         if(not tipo_participante):
-                mensaje=f'Error verifique'
-                    #form.add_error("tipo_participante","seleccione tipo de participante")  
-                requestValido="OFF"
-                
-        print (cleaned_data)       
-        return cleaned_data
+            print('uno d')
+            mensaje=f'Error verifique'
+            #form.add_error("tipo_participante","seleccione tipo de participante")  
+            requestValido="OFF"
+        print ("cleaned_data 58")               
+             
+        return self.cleaned_data
+    
+    
 
 
     evento = forms.ModelChoiceField(

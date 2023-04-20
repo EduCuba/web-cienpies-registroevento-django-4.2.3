@@ -10,7 +10,7 @@ urlpatterns = [
     path('par/participante_add',ParticipanteAdd.as_view(),name="participante_add"),
     path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
     path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
-    path('participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
+    path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edicion'),
     
     path('participante/new',ParticipanteAdd.as_view(), name='participante_new'),
     path('participante/newb',DetailForm, name='participante_newb'),
