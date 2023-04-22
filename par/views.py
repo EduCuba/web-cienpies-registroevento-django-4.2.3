@@ -248,6 +248,7 @@ class ParticipanteEdit(generic.UpdateView):
         print(form.instance.apellido_participante)
         
         
+        
         try: 
             if (form.is_valid()):
                                 
@@ -303,19 +304,43 @@ class ParticipanteEdit(generic.UpdateView):
     
 
     def post(self, request, *args, **kwargs):
-        print("post")
+        print("post edi")
+        print(request.POST.get("apellido_participante"))
+        print(request.POST.get("id"))                
         requestValido="OK"
         response=""
         
         #form = self.form_class(request.POST)
-        form = ParticipanteForm(request.POST)
+        #form = ParticipanteForm(request.POST)
+        form = self.form_class(request.POST)
+        participante = Participante.objects.filter(pk=request.POST.get("id")).first()
+        if participante:
+            print('existe')
+        else:
+            print('no exite')
+            
         try: 
             if (form.is_valid()):
                 
+                participante.apellido_participante = form.instance.apellido_participante
+                participante.nombre_participante = form.instance.nombre_participante
+                participante.empresa_participante = form.instance.empresa_participante
+                participante.email_participante = form.instance.email_participante
+                participante.telefono_participante = form.instance.telefono_participante
+                participante.observaciones_participante = form.instance.observaciones_participante
+                participante.acompanante_de = form.instance.acompanante_de
+                participante.cargo_participante = form.instance.cargo_participante
+                participante.asistio_evento = form.instance.asistio_evento
+                participante.confirmo_asistencia = form.instance.confirmo_asistencia
+                participante.tipo_participante  = form.instance.tipo_participante
+                participante.modalidad_asistencia = form.instance.modalidad_asistencia
+
+                participante.uc = self.request.user   
                 
-                
-                form.instance.uc = self.request.user   
-                form.save() 
+                print("form.instance,id")
+                print(participante.id)
+                print(form.instance.apellido_participante)
+                participante.save() 
                 contexto={'mensaje':"Datos actualizados EDIT",
                             'error':'',
                             'rptaServer':"OK"}  
