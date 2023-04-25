@@ -46,7 +46,7 @@
                                 <label for="id_apellido_participante">Apellido:</label>
                                 <input type="text" name="apellido_participante" maxlength="50" class="form-control" required="" id="id_apellido_participante" placeholder="Apellido participante" value="{% if obj %} {{ obj.apellido_participante }} {% endif %}">
                                 
-                                <input type="text" name="id" maxlength="50" class="form-control" required="" id="id"  value="{% if obj %} {{ obj.id }} {% endif %}">
+                                <input type="hidden" name="id" maxlength="50" class="form-control"  id="id"  value="{% if obj %} {{ obj.id }} {% endif %}">
                                 <!---
                                 <input type="text" name="pk" maxlength="50" class="form-control" required="" id="pk"  value="{% if obj %} {{ obj.id }} {% endif %}">
                                  -->

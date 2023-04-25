@@ -314,40 +314,50 @@ class ParticipanteEdit(generic.UpdateView):
         #form = ParticipanteForm(request.POST)
         form = self.form_class(request.POST)
         participante = Participante.objects.filter(pk=request.POST.get("id")).first()
-        if participante:
-            print('existe')
-        else:
-            print('no exite')
+        
             
         try: 
             if (form.is_valid()):
+                if participante:
+            
                 
-                participante.apellido_participante = form.instance.apellido_participante
-                participante.nombre_participante = form.instance.nombre_participante
-                participante.empresa_participante = form.instance.empresa_participante
-                participante.email_participante = form.instance.email_participante
-                participante.telefono_participante = form.instance.telefono_participante
-                participante.observaciones_participante = form.instance.observaciones_participante
-                participante.acompanante_de = form.instance.acompanante_de
-                participante.cargo_participante = form.instance.cargo_participante
-                participante.asistio_evento = form.instance.asistio_evento
-                participante.confirmo_asistencia = form.instance.confirmo_asistencia
-                participante.tipo_participante  = form.instance.tipo_participante
-                participante.modalidad_asistencia = form.instance.modalidad_asistencia
+                    participante.apellido_participante = form.instance.apellido_participante
+                    participante.nombre_participante = form.instance.nombre_participante
+                    participante.empresa_participante = form.instance.empresa_participante
+                    participante.email_participante = form.instance.email_participante
+                    participante.telefono_participante = form.instance.telefono_participante
+                    participante.observaciones_participante = form.instance.observaciones_participante
+                    participante.acompanante_de = form.instance.acompanante_de
+                    participante.cargo_participante = form.instance.cargo_participante
+                    participante.asistio_evento = form.instance.asistio_evento
+                    participante.confirmo_asistencia = form.instance.confirmo_asistencia
+                    participante.tipo_participante  = form.instance.tipo_participante
+                    participante.modalidad_asistencia = form.instance.modalidad_asistencia
 
-                participante.uc = self.request.user   
-                
-                print("form.instance,id")
-                print(participante.id)
-                print(form.instance.apellido_participante)
-                participante.save() 
-                contexto={'mensaje':"Datos actualizados EDIT",
-                            'error':'',
-                            'rptaServer':"OK"}  
-                status_code = 200
-                print("grabo ")
-                response = JsonResponse(contexto)
-                response.status_code = status_code
+                    participante.uc = self.request.user   
+                    
+                    print("form.instance,id")
+                    print(participante.id)
+                    print(form.instance.apellido_participante)
+                    participante.save() 
+                    contexto={'mensaje':"Datos actualizados EDIT",
+                                'error':'',
+                                'rptaServer':"OK"}  
+                    status_code = 200
+                    print("grabo ")
+                    response = JsonResponse(contexto)
+                    response.status_code = status_code
+                else:
+                    contexto={'mensaje':"Participante no Existe",
+                                'error':'',
+                                'rptaServer':"OFF"}  
+                    status_code = 200
+                    print("grabo")
+                    response = JsonResponse(contexto)
+                    response.status_code = status_code
+                    
+                    
+                        
             else:
                 status_code = 400
                 error= form.errors 
@@ -616,8 +626,3 @@ def DetailForm(request):
         #context["modalidades"] = Modalidad_Asistencia.objects.all()
         #return context
     return redirect('par/participante_form.html')
-
-
-    
-    
-
