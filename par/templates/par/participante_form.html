@@ -69,6 +69,9 @@
                             <p>
                                 <label for="id_email_participante">Cuenta correo:</label>
                                 <input type="email" name="email_participante" maxlength="100" class="form-control"  id="id_email_participante" placeholder="Cuenta de correo" value="{% if obj %} {{ obj.email_participante }} {% endif %}">>        
+                                <div id="message_email_participante">
+                                    
+                                </div>    
                             </p>
 
   
@@ -211,7 +214,10 @@ $(function() {
                 //console.log(textStatus);
                 //console.log(xhr);
                 if(r.rptaServer=='OK'){
+                    console.log("aaaaaaaaa")
                     cerrar_modal()
+                    actualiza_RowTable(r.participante)
+                    console.log(r.participante.id)
                 }else{
                     console.log("linea 215"+r.rptaServer);
                     mensajeServer(r.mensaje)

@@ -457,6 +457,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 
+
+
+
 <script>
 
   $("#btnLogout").click(function(e){
@@ -677,6 +680,67 @@ scratch. This page gets rid of all links and provides the needed markup only.
     /* se retorna false para que no refresque la pagina*/
     return false;
   }
+
+  function x_mensajePopup(titulo,message) {
+    $('<div></div>').appendTo('body')
+      .html('<div style=width:250px;><h6>' + message + '?</h6></div>')
+      .dialog({
+        modal: true,
+        title: titulo,
+        zIndex: 10000,
+        autoOpen: true,
+        width: 'auto',
+        resizable: false,
+        buttons: {
+          Aceptar: function() {
+            
+            $(this).dialog("close");
+          },
+          
+        },
+        close: function(event, ui) {
+          $(this).remove();
+        }
+      })
+  }
+
+  function mensajePopup(desc,url){
+    Swal.fire({
+      title: desc,
+      text : `Se borrará ${url}`,
+      icon:"question",
+      showCancelButton: true,
+      confirmButtonText: `Si, Borrar`,
+      cancelButtonText: `No borrar`,
+      allowOutsideClick:false,
+      confirmButtonClass: 'btn btn-danger',
+    }).then((borrar) => {
+      console.log(borrar)
+      if(borrar.isConfirmed){
+        var token = "{{csrf_token}}"
+        $.ajax({
+          headers : {"X-CSRFToken": token},
+          type: "POST",
+          url:url,
+          success: function(r){
+            if(r==="OK"){
+              location.reload(true)
+            }else{
+              Swal.fire("Error Inesperado tratando de borrar registro "+ r)
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrow){
+            Swal.fire(errorThrow,"","red")
+          }
+        })
+      }else{
+        Swal.fire("Registro No fue borrado... ACCION CANCELADA","","info")
+      }
+    })
+  }
+
+
+  
 </script>  
  
 

@@ -34,6 +34,8 @@ from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
 from django.utils.translation import gettext as _
 
+from itertools import chain
+
 #class ParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ParticipanteList(ListView):
     #permission_required = 'eve.view_modalidad_evento'
@@ -115,27 +117,36 @@ def buscarparticipante(request,participante_id=None):
         evento = request.POST.get("evento")
         print(apellido_participante)    
         print(nombre_participante)    
+        print("empresa")
         print(empresa_participante)
         print(evento)  
          
         
         if (len(empresa_participante)==0):  
-            if(nombre_participante==""):
-                lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
-                "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
-                print('busqueda por apellido : caso 1')
-            else:
-                if(apellido_participante==""):
-                   lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+            
+            if (len(apellido_participante) == 0 and len(nombre_participante) == 0):    
+                   lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
-                   print('busqueda por nombre : caso 2')
-                else:   
-                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
+                   print('busqueda solo por evento')
+            else:    
+                if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
+                   lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
-                    print('busqueda por apellido y nombre : caso 3')
+                   print('busqueda por apellido y nombre : caso empresa vacio')
+                else:
+                    if (nombre_participante == ""):
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
+                        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                        print('busqueda por apellido :  empresa vacio')
+                    else:    
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+                        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                        print('busqueda por nombre caso empresa vacia')
+            
         else:
             if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                 lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
@@ -191,8 +202,10 @@ def participanteAsistencia(request, id):
                    print("edu 03") 
                    participante.asistio_evento = not participante.asistio_evento
                    participante.save()
-                   contexto={'rpta':'OK',
+                   contexto={"id": participante.id,
+                            'rpta':'OK',
                              'asistio_evento':participante.asistio_evento}      
+                    
                    print(contexto)
                    return JsonResponse(contexto,safe=False)      
                
@@ -307,6 +320,7 @@ class ParticipanteEdit(generic.UpdateView):
         print("post edi")
         print(request.POST.get("apellido_participante"))
         print(request.POST.get("id"))                
+        busca=request.POST.get("id")
         requestValido="OK"
         response=""
         
@@ -315,6 +329,13 @@ class ParticipanteEdit(generic.UpdateView):
         form = self.form_class(request.POST)
         participante = Participante.objects.filter(pk=request.POST.get("id")).first()
         
+        
+        #participante=Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(pk=busca)).values("id",
+        #           "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+        #           "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante")
+        
+        
+
             
         try: 
             if (form.is_valid()):
@@ -338,11 +359,26 @@ class ParticipanteEdit(generic.UpdateView):
                     
                     print("form.instance,id")
                     print(participante.id)
-                    print(form.instance.apellido_participante)
+                    print(to_dict(participante))
+                    
+                    
                     participante.save() 
+                    tipo_par= Tipo_Participante.objects.filter(pk=request.POST.get("tipo_participante")).first()
+                    
+                    data = {
+                           "id": participante.id,
+                           "asistio_evento": participante.asistio_evento,
+                           "tipo_participante" : tipo_par.descripcion_tipo_participante,
+                           "background_tipo_participante" : tipo_par.background_tipo_participante,
+                           "rpta":"OK"
+                           }
+
+
+                    
                     contexto={'mensaje':"Datos actualizados EDIT",
                                 'error':'',
-                                'rptaServer':"OK"}  
+                                'rptaServer':"OK",
+                               'participante' : data}  
                     status_code = 200
                     print("grabo ")
                     response = JsonResponse(contexto)
@@ -558,8 +594,6 @@ class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):
         try: 
             if (form.is_valid()):
                 
-                
-                
                 form.instance.uc = self.request.user   
                 form.save() 
                 contexto={'mensaje':"Datos actualizados",
@@ -626,3 +660,15 @@ def DetailForm(request):
         #context["modalidades"] = Modalidad_Asistencia.objects.all()
         #return context
     return redirect('par/participante_form.html')
+
+
+
+def to_dict(instance):
+    opts = instance._meta
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields):
+        data[f.name] = f.value_from_object(instance)
+    for f in opts.many_to_many:
+        data[f.name] = [i.id for i in f.value_from_object(instance)]
+    return data
+
