@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         {% if obj %}
-        <form id="frmPrv" role="form" action="{% url 'par:participante_edicion' obj.pk %}" method="post"  class="form-inline">
+        <form id="frmPrv" role="form" action="{% url 'par:participante_edit' obj.pk %}" method="post"  class="form-inline">
         <!--    <form id="frmPrv" role="form" method="post"  class="form-inline">-->
         <!--<form id="frmPrv" role="form"  method="post" action="participanteAsistencia({{obj.id}},'E')" class="form-inline">    -->
         {% else %}
