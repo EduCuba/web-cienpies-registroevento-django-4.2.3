@@ -9,12 +9,15 @@ urlpatterns = [
     path('par/buscar_participante',buscarparticipante,name="buscar_participante"),
     path('par/participante_add',ParticipanteAdd.as_view(),name="participante_add"),
     path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
-    path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
-    path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edicion'),
+    #path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
+    path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
     
     path('participante/new',ParticipanteAdd.as_view(), name='participante_new'),
     path('participante/newb',DetailForm, name='participante_newb'),
     
+ 
+ 
+    ##########path('sin_privilegios/',HomeSinPrivilegios.as_view(),name='sin_privilegios'),
     
     #path('proveedores/edit/<int:pk>',ProveedorEdit.as_view(), name='proveedor_edit'),
     #path('par/burcar_participante/<int:evento>/<str:apellido_participante>/<str:nombre_participante>/<str:empresa_participante>',buscarparticipante,name="participantes_encontrados"),

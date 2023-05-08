@@ -36,6 +36,10 @@ from django.utils.translation import gettext as _
 
 from itertools import chain
 
+
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
+
 #class ParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class ParticipanteList(ListView):
     #permission_required = 'eve.view_modalidad_evento'
@@ -61,9 +65,12 @@ class xx_buscarparticipante():
         form.instance.uc = self.request.user
         return super().form_valid(form)      
     
-    
-
+@login_required(login_url='config:login')
+@permission_required('par.view_participante', login_url='config:home')
 def buscarparticipante(request,participante_id=None):
+#    class ModalidadEventoList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_participante'
+
     template_name="par/busca_participante.html"
     #eve=Evento.objects.filter(estado=True)
     form_compras={}
@@ -182,19 +189,37 @@ def buscarparticipante(request,participante_id=None):
 
 
 
+
+
+#@login_required(login_url="/login/")
+#@permission_required("cmp.change_proveedor",login_url="bases:sin_privilegios")
+#def proveedorInactivar(request,id):
+
+
+
+@login_required(login_url='config:login')
+@permission_required('par.edit_participante', login_url='bases:sin_privilegios')
+#@permission_required('par.edit_participante', login_url='config:home')
+#@permission_required('par.edit_participante', raise_exception=True)
 def participanteAsistencia(request, id):
-    idPar=request.POST.get("id")
-    tipo=request.POST.get("tipo")
-    print("imprime id request")
-    print(id)
-    print("imprime idpar")
-    print(idPar)
-    print(tipo)
-    participante = Participante.objects.filter(pk=id).first()
     
-    print("edu 01")
-    contexto={'rpta':'OFF'}          
+    
+    
     try:
+        permission_required = 'par.edit_participante'
+    
+        idPar=request.POST.get("id")
+        tipo=request.POST.get("tipo")
+        print("imprime id request")
+        print(id)
+        print("imprime idpar")
+        print(idPar)
+        print(tipo)
+        participante = Participante.objects.filter(pk=id).first()
+        
+        print("edu 01")
+        contexto={'rpta':'OFF'}          
+    
         if request.method=="POST":
            print("edu 02") 
            if participante:
@@ -233,8 +258,8 @@ def participanteAsistencia(request, id):
 #class ParticipanteEdit(SuccessMessageMixin, MixinFormInvalid, SinPrivilegios,\
 #                   generic.UpdateView):
 
-class ParticipanteEdit(generic.UpdateView):        
-    #permission_required="eve.change_modalidad_evento"
+class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):        
+    permission_required="par.change_participante"
     model=Participante
     template_name="par/participante_form.html"
     context_object_name = 'obj'
@@ -559,8 +584,8 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
 
 
 
-class ParticipanteAdd(SuccessMessageMixin,generic.CreateView):    
-    #permission_required = 'eve.add_modalidad_evento'
+class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):    
+    permission_required = 'par.add_participante'
     model = Participante
     #template_name="par/participante_add.html"    
     template_name="par/participante_form.html"    

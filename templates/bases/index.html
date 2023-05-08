@@ -4,6 +4,7 @@
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
+<!-- no-acceso -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -281,10 +282,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <!--<a href="{% url 'par:registro_list' %}" class="nav-link">-->
+                  {% if perms.par.view_participante%}
                   <a href="{% url 'par:buscar_participante' %}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Registro</p>
                   </a>
+                  {% endif %}
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link">
@@ -540,15 +543,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function mensaje(msg,tipo="info"){
     msjPopup=""
-    for(let item in msg.responseJSON.mensaje){
-      msjPopup +=   msg.responseJSON.mensaje[item]
-            
-    }
-    //var tst = `toastr.${tipo}('${msg]}')`
-    var tst = `toastr.${tipo}('${msjPopup}')`
-    console.log(tst)
+    console.log("edu")
+    console.log(msg)
+    if (is_json(msg)){
+        for(let item in msg.responseJSON.mensaje){
+          msjPopup +=   msg.responseJSON.mensaje[item]
+                
+        }
+        //var tst = `toastr.${tipo}('${msg]}')`
+        var tst = `toastr.${tipo}('${msjPopup}')`
+        console.log(tst)
+    }        
     console.log("index.html linea 547")
     eval(tst)
+    
   }
 
 
@@ -573,7 +581,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   /*----------------------*/
   function abrir_modal(url,evento)
-  { console.log("lleg-"+evento);
+  { //console.log("lleg-"+evento);
 
   var comboEvento = document.getElementById(evento);
   var selected = comboEvento.options[comboEvento.selectedIndex].text;
@@ -588,18 +596,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
     /*var id_evento = document.getElementById(evento).value;
     console.log("evento seleccionado - "+id_evento);*/
 
-    console.log(url);
-    $("#popup").load(url, function(){
-      console.log("llego 2");
+    //console.log(url);
+    $("#popup").load(url, function(responseTxt, statusTxt, xhr){
+      //console.log("index 595");
+      let result = responseTxt.indexOf("no-acceso");
       $(this).modal({
         
         /* cambia propiedades de modal para que no se cierre */
         backdrop:'static',
         keyboard: false
       })
+
+      if(result < 0) {
+        document.getElementById("id_evento").value = id_evento;  
+      }
       /* muestra modal*/
-      document.getElementById("id_evento").value = id_evento;
-      /*document.getElementById("id_tipo_participante").value = id_evento;*/
       
       $(this).modal('show');
     });
@@ -648,35 +659,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
  function cargaRegistro(id,evento)
-  { console.log("lleg-"+id);
+  { 
     url = "participante_edit/"+id
     
     var comboEvento = document.getElementById(evento);
     var selected = comboEvento.options[comboEvento.selectedIndex].text;
     var id_evento= comboEvento.value
-
+    //console.log(id_evento);
   if (id==="" || id === null || id === "0"){
     mensajeServer("Seleccione Participante");
     return false
   }
 
-
+     abrir_modal(url,evento)
     /*var id_evento = document.getElementById(evento).value;
     console.log("evento seleccionado - "+id_evento);*/
 
-    console.log(url);
-    $("#popup").load(url, function(){
-      console.log("llego 2");
-      $(this).modal({
-        
-        /* cambia propiedades de modal para que no se cierre */
-        backdrop:'static',
-        keyboard: false
-      })
-      /* muestra modal*/
-       document.getElementById("id_evento").value = id_evento;
-      $(this).modal('show');
-    });
+    /*console.log(url);*/
+    /*var token = "{{csrf_token}}"*/
+    
+    /*responseTxt- contiene el contenido resultante si la llamada tiene éxito
+    statusTxt- contiene el estado de la llamada
+    xhr- contiene el objeto XMLHttpRequest*/
+
+    
     /* se retorna false para que no refresque la pagina*/
     return false;
   }
@@ -726,7 +732,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             if(r==="OK"){
               location.reload(true)
             }else{
-              Swal.fire("Error Inesperado tratando de borrar registro "+ r)
+              Swal.fire("Error Inesperado tratando de borrar registro ..."+ r)
             }
           },
           error: function(jqXHR, textStatus, errorThrow){
@@ -740,7 +746,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   }
 
 
-  
+
+  function is_json(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 </script>  
  
 

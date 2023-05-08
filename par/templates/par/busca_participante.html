@@ -124,9 +124,7 @@
               <div class="dropdown-header">Acciones:</div>
               <!--<a class="dropdown-item" onclick="return abrir_modal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
             <!-- compras_new esta devlarado en el archivo urls.py-->
-              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>a Nuevo</a>        
-              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>b Nuevo</a>        
-
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
               <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
               
             </div>
@@ -213,16 +211,12 @@
     var inputEmpresa = form.get("empresa_participante")
     var inputEvento = form.get("evento")
 
-
     
     console.log("apellido " +inputApellido);
     console.log("nombre " +inputNombre);
     console.log("empresa " +inputEmpresa);
     console.log("evento " +inputEvento);
 
-    
-
-    alert("edu 1")
     var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
     url = "buscar_participante"
     url = "/par/buscar_participante"
@@ -254,10 +248,9 @@
             console.log("solo item"+{{ item.id }})
           {% endfor %}
          
-          
           refrescaTablaEncontrados(r.lispar);
           
-          Swal.fire("mostrara " +  r.lispar);
+          /*Swal.fire("mostrara " +  r.lispar);*/
           /*location.reload(true)*/
         }else{
           Swal.fire("Error Inesperado tratando de borrar registro " + r);
@@ -370,7 +363,6 @@
 
   function dialogoAsistencia(id,tipo,obj){
     asistio_evento=document.getElementById(obj+id).value;
-    console.log(asistio_evento)
 
     if (asistio_evento.toLowerCase()=="true"){
     Swal.fire({
@@ -392,6 +384,7 @@
       }
     })  
     }else{
+      console.log("ddddddddddd 1")
       participanteAsistencia(id,tipo)
 
     }
@@ -400,8 +393,9 @@
 
 
  function participanteAsistencia(id,tipo){
-
-  url = "/par/asistencia_participante/"+id
+  console.log("ddddddddddd")
+  //url = "/par/asistencia_participante/"+id
+  url = "asistencia_participante/"+id
   var data = {"id":id,
               "tipo":tipo}
 
@@ -417,11 +411,25 @@
         Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
         
       }else{
-        Swal.fire("Error Inesperado tratando de borrar registro "+ r)
+        let result = r.indexOf("no-acceso");
+        
+        if (result>=0){
+          Swal.fire("No tiene acceso")
+        }else{
+          Swal.fire("Error Inesperado al procesar registro ")
+          
+        }
+        
+        
       }
     },
     error: function(jqXHR, textStatus, errorThrow){
-      Swal.fire(errorThrow,"","red")
+      console.log("buscar_participante 417")
+      console.log(textStatus)
+      console.log(jqXHR)
+      /*Swal.fire(errorThrow,"","info")*/
+      /*Swal.fire("errorThrow","","red")*/
+      
     }
   })
 
