@@ -1,13 +1,18 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from bases.views import *
-from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia,ParticipanteEdit,DetailForm
+from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia,ParticipanteEdit,DetailForm,VistaParticipanteImportar,subir_csv,xx_ImportarCsv
 #app_name = 'eve'
 
 urlpatterns = [
     path('par/registro_list', ParticipanteList.as_view(),name="registro_list"),
     path('par/buscar_participante',buscarparticipante,name="buscar_participante"),
     path('par/participante_add',ParticipanteAdd.as_view(),name="participante_add"),
+    #path('par/participante_import_add',VistaParticipanteImportar.as_view(),name="participante_import_add"),
+    path('par/participante_import_add',xx_ImportarCsv,name="participante_import_add"),
+    
+    path('par/subir_csv',subir_csv,name="subir_csv"),
+    
     path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
     #path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
     path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),

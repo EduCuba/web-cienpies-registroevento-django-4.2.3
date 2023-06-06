@@ -697,3 +697,123 @@ def to_dict(instance):
         data[f.name] = [i.id for i in f.value_from_object(instance)]
     return data
 
+
+
+
+
+#@login_required(login_url='config:login')
+#@permission_required('par.view_participante', login_url='config:home')
+def xx_ImportarCsv(request,participante_id=None):
+   # permission_required = 'par.view_participante'
+
+    template_name="par/participante_import_add.html"
+    form_compras={}
+    contexto={}
+    par_evento_id=0
+    nombre=''
+    apellido =''
+    evento=0,
+    lisparb=""
+    print('eduuuuuuuuuuuuuu')
+    if request.method=='GET':
+        print('es geeeeeeeeetttttttttttttt')
+        #Formulario creado en forms.py
+        #form_buscar=BuscarParticipanteForm()
+        lisEventos = Evento.objects.all()
+        
+
+        #lispar=Participante.objects.filter(Q(evento_id=par_evento_id))
+        
+        #En el contexto definimos que mandamos a la plantilla
+        contexto={'liseventos':lisEventos}
+        print(contexto)
+        return render(request, template_name, contexto)    
+        
+    if request.method=='POST':    
+        subir_csv(request)
+        print('es pooooooooooossssttt cargo csv')
+        evento = request.POST.get("evento")
+        print(evento)  
+      
+        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
+        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+        print('busqueda solo por evento')
+
+        print('json es') 
+        contexto={'rpta':'OK',
+                  'lispar':lispar}            
+        print(contexto)                    
+        response = JsonResponse(contexto)
+        print("devuelve response")
+        print(response)
+        return response
+        
+    ##return render(request, template_name, contexto)    
+
+
+
+class VistaParticipanteImportar(ListView):
+    template_name="par/participante_import_add.html"
+    model = Participante
+    context_object_name="obj"
+
+
+
+def subir_csv(request):
+#    template_name = "par/subir_csv.html"
+    
+    if request.method =="POST":
+        csv_file = request.FILES['csv_file']
+        evento = request.POST.get("evento")
+        
+        file_data = csv_file.read().decode("utf-8")
+        lines = file_data.split("\n")
+        
+        for line in lines:
+            fields = line.split(",")
+            if len(fields)>1:
+                try:
+                    data_dict = {}
+                    data_dict["evento"]=evento
+                    data_dict["apellido_participante"]=fields[0]                
+                    data_dict["nombre_participante"]=fields[1]                
+                    data_dict["email_participante"]=fields[2]
+                    data_dict["empresa_participante"]=fields[3]
+                    data_dict["cargo_participante"]=fields[4]
+                    data_dict["modalidad_asistencia"]=fields[5]
+                    data_dict["tipo_participante"]=fields[6]
+                    data_dict["confirmo_asistencia"]=fields[7]
+                    print("campos")
+                    print(evento)
+                    print(fields[0])
+                    print(fields[1])
+                    print(fields[2])
+                    print(fields[3])
+                    print(fields[4])
+                    print(fields[5])
+                    print(fields[6])
+                    print(fields[7])
+                    print("fin campos")
+                
+                
+                    form = ParticipanteForm(data_dict)
+                    if form.is_valid():
+                        form.save()
+                    else:
+                        print(form.errors.as_json())
+                        
+                except Exception as ex:
+                    print("ERROR STRUC")
+                    print(repr(ex))
+      ##  return redirect("par:participante_import_add")           
+    else:
+        print("es get de csv")
+        lisEventos = Evento.objects.all()
+        contexto={'liseventos':lisEventos}
+        print(contexto)
+##        return render(request, template_name, contexto)    
+        
+    
+    ##return render(request,template_name,{})
+                    
