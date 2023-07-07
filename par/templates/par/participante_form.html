@@ -218,6 +218,7 @@ $(function() {
                     cerrar_modal()
                     actualiza_RowTable(r.participante)
                     console.log(r.participante.id)
+                    Swal.fire("Datos actualizados")
                 }else{
                     console.log("linea 215"+r.rptaServer);
                     mensajeServer(r.mensaje)

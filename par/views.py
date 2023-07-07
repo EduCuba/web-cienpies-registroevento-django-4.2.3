@@ -198,7 +198,7 @@ def buscarparticipante(request,participante_id=None):
 
 
 @login_required(login_url='config:login')
-@permission_required('par.edit_participante', login_url='bases:sin_privilegios')
+@permission_required('par.change_participante', login_url='bases:sin_privilegios')
 #@permission_required('par.edit_participante', login_url='config:home')
 #@permission_required('par.edit_participante', raise_exception=True)
 def participanteAsistencia(request, id):
@@ -206,7 +206,7 @@ def participanteAsistencia(request, id):
     
     
     try:
-        permission_required = 'par.edit_participante'
+        permission_required = 'par.change_participante'
     
         idPar=request.POST.get("id")
         tipo=request.POST.get("tipo")
@@ -384,17 +384,24 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                     
                     print("form.instance,id")
                     print(participante.id)
+                    
                     print(to_dict(participante))
                     
                     
                     participante.save() 
                     tipo_par= Tipo_Participante.objects.filter(pk=request.POST.get("tipo_participante")).first()
-                    
+                    moda_asi= Modalidad_Asistencia.objects.filter(pk=request.POST.get("modalidad_asistencia")).first()
                     data = {
                            "id": participante.id,
                            "asistio_evento": participante.asistio_evento,
                            "tipo_participante" : tipo_par.descripcion_tipo_participante,
                            "background_tipo_participante" : tipo_par.background_tipo_participante,
+                            "apellido_participante" : participante.apellido_participante,
+                           "nombre_participante" : participante.nombre_participante,
+                           "email_participante" : participante.email_participante, 
+                           "empresa_participante": participante.empresa_participante, 
+                           "modalidad_asistencia": moda_asi.descripcion_modalidad_asistencia, 
+                           "tipo_participante": tipo_par.descripcion_tipo_participante,
                            "rpta":"OK"
                            }
 
@@ -433,7 +440,7 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                 response.status_code = status_code
                 
                 
-            print("debe de regresar")  
+            print("debe de regresar 436")  
             print(contexto)
             print(response)
             return response
@@ -642,7 +649,7 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
                 response.status_code = status_code
                 
                 
-            print("debe de regresar")  
+            print("debe de regresar 645")  
             print(contexto)
             print(response)
             return response

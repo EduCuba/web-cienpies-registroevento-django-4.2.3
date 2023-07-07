@@ -291,18 +291,21 @@
     
     return `<tr id=\"row_reg${value.id}"\" style="background-color:${value.tipo_participante__background_tipo_participante}">
     <td>${value.id}</td>
-    <td>${value.apellido_participante}</td>
-    <td>${value.nombre_participante}</td>
-    <td>${value.email_participante}</td>
-    <td>${value.empresa_participante}</td>
-    <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>
-    <td><input readonly  type=\"text\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" /></td>
-    <td><input readonly  type=\"text\" id=\"up_tipo${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" /></td>
-    <td><button type="button" class="btn btn-warning btn-circle"
-      onclick="dialogoAsistencia(${value.id},'A','up_asistio')" ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
-</td>
+    
+    <td><input readonly  type=\"text\" id=\"up_apellido${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" style="padding: 5px" /></td>
+    <td><input readonly  type=\"text\" id=\"up_nombre${value.id}\" value=\"${value.nombre_participante}\" class=\"form-control\" style="padding: 5px" /></td>
+    <td><input readonly  type=\"text\" id=\"up_email${value.id}\" value=\"${value.email_participante}\" class=\"form-control\" style="padding: 5px"/></td>
+    <td><input readonly  type=\"text\" id=\"up_empresa${value.id}\" value=\"${value.empresa_participante}\" class=\"form-control\" style="padding: 5px"/></td>
+    <td><input readonly  type=\"text\" id=\"up_modalidad${value.id}\" value=\"${value.modalidad_asistencia__descripcion_modalidad_asistencia}\" class=\"form-control\" style="padding: 5px"/></td>        
+    <td><input readonly  type=\"text\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" style="padding: 5px"/></td>
+    <td><input readonly  type=\"text\" id=\"up_tipo${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" style="padding: 5px"/></td>
     <td>
-      <button type="button" class="btn btn-warning btn-circle" onclick="cargaRegistro(${value.id},'bus_id_evento')"><i class="far fa-edit"></i></button>      
+            <button type="button" class="btn btn-warning btn-circle"
+            onclick="{% if perms.par.change_participante%} dialogoAsistencia(${value.id},'A','up_asistio'){% else %}''{%endif%}
+            " ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
+    </td>
+    <td>
+      <button type="button" class="btn btn-warning btn-circle" onclick="{% if perms.par.change_participante%} cargaRegistro(${value.id} {% else %}''{%endif%},'bus_id_evento')"><i class="far fa-edit"></i></button>      
       
       
     </td>  
@@ -393,7 +396,6 @@
 
 
  function participanteAsistencia(id,tipo){
-  console.log("ddddddddddd")
   //url = "/par/asistencia_participante/"+id
   url = "asistencia_participante/"+id
   var data = {"id":id,
@@ -581,8 +583,9 @@
 
 
    function actualiza_RowTable(r) {
-
+console.log("dato 1");
     if(r.rpta=="OK"){
+      console.log("dato 1b");
       var e_li = document.getElementById("i_asistio"+r.id);
       var row_reg=document.getElementById("row_reg"+r.id);
       row_reg.style.backgroundColor = r.background_tipo_participante
@@ -604,9 +607,21 @@
       //  e_li.classList.remove("fa fa-user-check");
        }
       document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
-      console.log("edudddddddddddddddddddddddddddd")
-      console.log(r.tipo_participante)
+      document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_nombre"+r.id).value=r.nombre_participante;
+      document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_email"+r.id).value=r.email_participante;
+      document.getElementById("up_empresa"+r.id).value=r.empresa_participante;
+      document.getElementById("up_modalidad"+r.id).value=r.modalidad_asistencia;
       document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
+      
+      
+      
+
+
+      //console.log("edudddddddddddddddddddddddddddd")
+      //console.log(r.tipo_participante)
+      //document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
     }
 
    }
