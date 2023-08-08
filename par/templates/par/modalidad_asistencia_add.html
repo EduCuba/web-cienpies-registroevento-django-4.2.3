@@ -1,0 +1,164 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Agregar Modalidad Asistencia</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active">Agregar Modalidad de Asistencia</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+{% endblock %}
+{% block content %}
+<!-- ./row -->
+<div class="row">
+    <div class="col-12 col-sm-12">
+      <div class="card card-primary card-tabs">
+        <div class="card-header p-0 pt-1">
+          <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                {% if obj %}Editar{%else%}Agregar{%endif%}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Grupos</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="custom-tabs-one-tabContent">
+            <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+              <form method="POST" class="form-group">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn bg-danger btn-app"><i class="fas fa-save"></i> Guardar </button>
+                <button type="reset" class="btn bg-info btn-app"><i class="fas fa-window-close"></i> Cancelar</button>
+                <a href="{% url 'par:modalidad_asistencia_list'%}" class="btn btn-app bg-warning"><i class="far fa-hand-point-left"></i> Regresar</a>
+            </form>
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+               <!-- Grupos:{{grupos}} <br> Grupos de usuario: {{grupos_usuarios}} -->
+               {% if obj %}
+               <div class="row">
+                 <div class="col-6">
+                  <div class="card">
+                    <div class="card-header">
+                    Grupos del Usuario {{obj}}
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                    <table id="tblGrp" class="table table-bordered table-striped">
+                      <thead>
+                      <tr>
+                      <th>Id</th>
+                      <th>Tipo</th>
+                      
+                      <th>Acciones</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in grupos_usuario%}
+                        <tr>
+                          <td>{{item.id}}</td>
+                          <td>{{item.name}}</td>
+                          <td>
+                            <a href="#" class="btn btn-sm text-success"
+                            onclick="permiso('{{item.id}}','DEL')"
+                            ><i class="far fa-trash-alt"></i></a>
+                          </td>
+                        </tr>
+                        {%endfor%}
+                
+                      </tbody>
+                    </table>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+                 </div>
+                 <div class="col-6">
+                  <div class="card">
+                    <div class="card-header">
+                      Todos los Grupos
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                      <table class="table table-bordered table-striped">
+                      <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in grupos%}
+                        <tr>
+                          <td>{{item.id}}</td>
+                          <td>{{item.name}}</td>
+                          <td>
+                            <a href="#" class="btn btn-sm text-success"
+                            onclick="permiso('{{item.id}}','ADD')"
+                            ><i class="fas fa-plus"></i></a>
+                          </td>
+                        </tr>
+                        {%endfor%}
+                  
+                      </tbody>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                 </div>
+               </div>
+               {% endif %}
+
+            </div>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+{% endblock%}
+
+{% block js %}
+<script>
+  function permiso(id,accion){
+    // alert(id)
+    // alert(accion)
+    var url = "/users/groups/admin/{{obj.id}}/" + id
+    var token = '{{csrf_token}}'
+    var data = {"accion":accion}
+    $.ajax({
+      headers : {"X-CSRFToken": token},
+      type:"POST",
+      url:url,
+      data:data,
+      success: function(r){
+        if(r=="OK"){
+          //refresca la página
+          location.reload(true)
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+</script>
+{% endblock js%}
