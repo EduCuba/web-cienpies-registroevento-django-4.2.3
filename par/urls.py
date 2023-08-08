@@ -2,6 +2,9 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from bases.views import *
 from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia,ParticipanteEdit,DetailForm,VistaParticipanteImportar,subir_csv,xx_ImportarCsv
+from par.views import TipoParticipanteList,TipoParticipanteAdd,TipoParticipanteEdit,TipoParticipanteDel,ModalidadAsistenciaAdd,ModalidadAsistenciaEdit,ModalidadAsistenciaDel,ModalidadAsistenciaList
+
+
 #app_name = 'eve'
 
 urlpatterns = [
@@ -21,6 +24,16 @@ urlpatterns = [
     path('participante/newb',DetailForm, name='participante_newb'),
     
  
+    path('par/tipo_participante_list', TipoParticipanteList.as_view(),name="tipo_participante_list"),
+    path('par/tipo_participante_add',TipoParticipanteAdd.as_view(),name="tipo_participante_add"),
+    path('par/tipo_participante_edit/<int:pk>',TipoParticipanteEdit.as_view(),name="tipo_participante_edit"),
+    path('par/tipo_participante_del/<int:pk>',TipoParticipanteDel.as_view(), name='tipo_participante_del'),  
+    
+    
+    path('par/modalidad_asistencia_list', ModalidadAsistenciaList.as_view(),name="modalidad_asistencia_list"),
+    path('par/modalidad_asistencia_add',ModalidadAsistenciaAdd.as_view(),name="modalidad_asistencia_add"),
+    path('par/modalidad_asistencia_edit/<int:pk>',ModalidadAsistenciaEdit.as_view(),name="modalidad_asistencia_edit"),
+    path('par/modalidad_asistencia_del/<int:pk>',ModalidadAsistenciaDel.as_view(), name='modalidad_asistencia_del'),  
  
     ##########path('sin_privilegios/',HomeSinPrivilegios.as_view(),name='sin_privilegios'),
     

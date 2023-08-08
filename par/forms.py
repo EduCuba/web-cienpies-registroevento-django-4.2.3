@@ -166,3 +166,48 @@ class CreateForm(forms.ModelForm):
         nombre_participante = cleaned_data('nombre_participante')
         print("form 4")
         
+        
+        
+class TipoParticipanteForm(forms.ModelForm):
+    #password = forms.CharField(widget=PasswordInput)
+    
+    class Meta:
+        model = Tipo_Participante
+        fields = ['descripcion_tipo_participante','background_tipo_participante']
+        labels = {'descripcion_tipo_participante':"Tipo Participante",
+                  'background_tipo_participante':"Background"}
+        widget = {'descripcion_tipo_participante': forms.TextInput,
+                  'background_tipo_participante': forms.TextInput
+                  }
+        
+
+    # a cada elemento del form le agrega : class : form-control
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class':'form-control'
+            })        
+        
+        
+        
+class ModalidadAsistenciaForm(forms.ModelForm):
+    #password = forms.CharField(widget=PasswordInput)
+    
+    class Meta:
+        model = Modalidad_Asistencia
+        fields = ['descripcion_modalidad_asistencia','color_modalidad_asistencia']
+        labels = {'descripcion_modalidad_asistencia':"Modalidad Asistencia",
+                  'color_modalidad_asistencia':"Color Letra"}
+        widget = {'descripcion_modalidad_asistencia': forms.TextInput,
+                  'color_modalidad_asistencia': forms.TextInput
+                  }
+        
+    # a cada elemento del form le agrega : class : form-control
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class':'form-control'
+            })        
+                

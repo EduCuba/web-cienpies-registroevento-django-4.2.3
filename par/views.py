@@ -12,7 +12,7 @@ from django.views.generic import *
 
 from .models import Participante, Tipo_Participante, Modalidad_Asistencia
 #from eve.models import Evento
-from .forms import BuscarParticipanteForm,ParticipanteForm,CreateForm
+from .forms import BuscarParticipanteForm,ParticipanteForm,CreateForm,TipoParticipanteForm,ModalidadAsistenciaForm
 
 
 from bases.views import SinPrivilegios
@@ -790,7 +790,18 @@ def subir_csv(request):
                     data_dict["cargo_participante"]=fields[4]
                     data_dict["modalidad_asistencia"]=fields[5]
                     data_dict["tipo_participante"]=fields[6]
-                    data_dict["confirmo_asistencia"]=fields[7]
+                    confirmo = fields[7]
+                    confirmo = confirmo.strip()
+                    confirmo = confirmo.lower()
+                    
+                    if confirmo == "si":
+                        data_dict["confirmo_asistencia"]=True
+                        print("campos verdad")
+                    else:    
+                        data_dict["confirmo_asistencia"]=False
+                        print("campos falso")
+                    
+                    #data_dict["confirmo_asistencia"]=fields[7]
                     print("campos")
                     print(evento)
                     print(fields[0])
@@ -801,6 +812,7 @@ def subir_csv(request):
                     print(fields[5])
                     print(fields[6])
                     print(fields[7])
+                    print(confirmo)
                     print("fin campos")
                 
                 
@@ -818,9 +830,120 @@ def subir_csv(request):
         print("es get de csv")
         lisEventos = Evento.objects.all()
         contexto={'liseventos':lisEventos}
-        print(contexto)
+        ##print(contexto)
 ##        return render(request, template_name, contexto)    
         
     
     ##return render(request,template_name,{})
                     
+
+
+##edu
+
+class TipoParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_tipo_participante'
+    template_name = "eve/tipo_participante_list.html"
+    login_url = 'config:login'
+    model = Tipo_Participante
+    
+    context_object_name = 'obj'    
+
+
+
+
+
+class TipoParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+    permission_required = 'par.add_tipo_participante'
+    model = Tipo_Participante
+    template_name="par/tipo_participante_add.html"    
+    context_object_name = "obj"
+    form_class = TipoParticipanteForm
+    success_url = reverse_lazy("par:tipo_participante_list")
+    #login_url ="bases:login"
+    success_message="Tipo de participante creado satisfactoriamente"
+    
+    #se carga en el form el usuario logueado
+    def form_valid(self, form):
+        form.instance.uc = self.request.user        
+        return super().form_valid(form)
+    
+    
+class TipoParticipanteEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
+    permission_required="par.change_tipo_participante"
+    model=Tipo_Participante
+    template_name = "par/tipo_participante_add.html"    
+    context_object_name = "obj"
+    form_class = TipoParticipanteForm
+    success_url = reverse_lazy("par:tipo_participante_list")
+    #login_url ="bases:login"
+    success_message="Tipo participante actualizado satisfactoriamente"
+    
+    #se carga en el form el usuario logueado
+    def form_valid(self, form):
+        form.instance.um_id = self.request.user.id
+        return super().form_valid(form)    
+    
+    
+    
+class TipoParticipanteDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
+# agregado para controlar acceso de usuario
+    permission_required="par.delete_tipo_participante"
+    model=Tipo_Participante
+    template_name = "par/tipo_participante_del.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy("par:tipo_participante_list")
+    success_message="Tipo Participante eliminado Satisfactoriamente"     
+
+
+
+ 
+class ModalidadAsistenciaList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_modalidad_asisitencia'
+    template_name = "eve/modalidad_asistencia_list.html"
+    login_url = 'config:login'
+    model = Modalidad_Asistencia    
+    context_object_name = 'obj'    
+
+
+
+
+
+class ModalidadAsistenciaAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+    permission_required = 'par.add_modalidad_asistencia'
+    model = Tipo_Participante
+    template_name="par/modalidad_asistencia_add.html"    
+    context_object_name = "obj"
+    form_class = ModalidadAsistenciaForm
+    success_url = reverse_lazy("par:modalidad_asistencia_list")
+    #login_url ="bases:login"
+    success_message="Modalidad de asistencia creada satisfactoriamente"
+    
+    #se carga en el form el usuario logueado
+    def form_valid(self, form):
+        form.instance.uc = self.request.user        
+        return super().form_valid(form)
+    
+    
+class ModalidadAsistenciaEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
+    permission_required="par.change_modalidad_asistencia"
+    model=Modalidad_Asistencia
+    template_name = "par/modalidad_asistencia_add.html"    
+    context_object_name = "obj"
+    form_class = ModalidadAsistenciaForm
+    success_url = reverse_lazy("par:modalidad_asistencia_list")
+    #login_url ="bases:login"
+    success_message="Modalidad de asistencia actualizado satisfactoriamente"
+    
+    #se carga en el form el usuario logueado
+    def form_valid(self, form):
+        form.instance.um_id = self.request.user.id
+        return super().form_valid(form)    
+    
+class ModalidadAsistenciaDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
+# agregado para controlar acceso de usuario
+    permission_required="par.delete_modalidad_asistencia"
+    model=Modalidad_Asistencia
+    template_name = "par/modalidad_asistencia_del.html"
+    context_object_name = "obj"
+    success_url = reverse_lazy("par:modalidad_asistencia_list")
+    success_message="Modalidad asistencia eliminado Satisfactoriamente"     
