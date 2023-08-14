@@ -92,13 +92,18 @@
 
                         
                             <div class="row">
-                                <div class="col">
+                                <div class="col-3">
                                   <!---
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
                                 -->
                                     <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
                                 </div>    
+                                <div class="col-3">
+                                  
+                                    <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
+                                </div>    
+
                             </div>    
 
                         </div>
@@ -252,6 +257,46 @@
           
           /*Swal.fire("mostrara " +  r.lispar);*/
           /*location.reload(true)*/
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+
+  function contarAsistencia(){
+    // alert(id)
+    // alert(accion)
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento")
+    console.log("evento " +inputEvento);
+
+    var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+    url = "buscar_participante"
+    url = "/par/contar_asistencia"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {"evento":inputEvento}
+    
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+          Swal.fire("Total Asistencia :"+r.lispar);
         }else{
           Swal.fire("Error Inesperado tratando de borrar registro " + r);
         }

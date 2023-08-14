@@ -227,9 +227,25 @@ def participanteAsistencia(request, id):
                    print("edu 03") 
                    participante.asistio_evento = not participante.asistio_evento
                    participante.save()
+                   print("nose")
+                   print(participante.tipo_participante)
+                   print(participante)
+                   
+                   tipo_participante=participante.tipo_participante.descripcion_tipo_participante
+                   modalidad_asistencia=participante.modalidad_asistencia.descripcion_modalidad_asistencia
+                   
+                  
+                  
                    contexto={"id": participante.id,
-                            'rpta':'OK',
-                             'asistio_evento':participante.asistio_evento}      
+                             'asistio_evento':participante.asistio_evento,
+                             "apellido_participante" : participante.apellido_participante,
+                             "nombre_participante" : participante.nombre_participante,
+                             "email_participante" : participante.email_participante, 
+                             "empresa_participante": participante.empresa_participante, 
+                             "modalidad_asistencia": participante.modalidad_asistencia.descripcion_modalidad_asistencia,
+                             "tipo_participante": tipo_participante,
+                             "rpta":'OK'
+                             }      
                     
                    print(contexto)
                    return JsonResponse(contexto,safe=False)      
@@ -947,3 +963,34 @@ class ModalidadAsistenciaDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteV
     context_object_name = "obj"
     success_url = reverse_lazy("par:modalidad_asistencia_list")
     success_message="Modalidad asistencia eliminado Satisfactoriamente"     
+
+
+
+
+@login_required(login_url='config:login')
+@permission_required('par.view_participante', login_url='config:home')
+def contarasistencia(request,participante_id=None):
+#    class ModalidadEventoList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_participante'
+
+    template_name="par/busca_participante.html"
+    #eve=Evento.objects.filter(estado=True)
+    form_compras={}
+    contexto={}
+    par_evento_id=0
+    nombre=''
+    apellido =''
+    evento=0,
+    asistencia=Participante.objects.filter(Q(evento_id=par_evento_id) & Q(asistio_evento=True)).count()
+    print('eduuuuuuuuuuuuuu')
+    
+        
+    if request.method=='POST':    
+        print('es pooooooooooossssttt')
+        
+        contexto={'rpta':'OK',
+                  'asistencia':asistencia}            
+        print(contexto)                    
+        return JsonResponse(contexto)
+        
+    return render(request, template_name, contexto)    
