@@ -34,6 +34,7 @@
                   <th>Id</th>
                   <th>Tipo Part.</th>
                   <th>Background</th>
+                  <th>Tipo Identificación</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
@@ -43,6 +44,7 @@
                   <td>{{i.id}}</td>
                   <td>{{i.descripcion_tipo_participante}}</td>
                   <td>{{i.background_tipo_participante}}</td>
+                  <td>{{i.tipo_identificacion_participante}}</td>
                   <td>
                     {% if not i.is_staff %}
                     <a href="{% url 'par:tipo_participante_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>

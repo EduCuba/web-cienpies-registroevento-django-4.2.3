@@ -22,13 +22,19 @@ class Tipo_Participante(ClaseModelo2):
         blank=False
     )
     
+    tipo_identificacion_participante=models.CharField(
+        max_length=30,
+        blank=True,     
+    )
     
+                   
     background_tipo_participante=models.CharField(
         max_length=10,     
     )
     
+   
     def __str__(self):
-        return '{}'.format(self.descripcion_tipo_participante)
+        return '{}:{}'.format(self.descripcion_tipo_participante,self.tipo_identificacion_participante)
     
     class Meta:
         verbose_name_plural = "Tipo de participantes"

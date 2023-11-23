@@ -173,10 +173,13 @@ class TipoParticipanteForm(forms.ModelForm):
     
     class Meta:
         model = Tipo_Participante
-        fields = ['descripcion_tipo_participante','background_tipo_participante']
+        fields = ['descripcion_tipo_participante','tipo_identificacion_participante','background_tipo_participante']
         labels = {'descripcion_tipo_participante':"Tipo Participante",
-                  'background_tipo_participante':"Background"}
+                  'tipo_identificacion_participante':"Tipo Identificación",
+                  'background_tipo_participante':"Background"
+                  }
         widget = {'descripcion_tipo_participante': forms.TextInput,
+                  'tipo_identificacion_participante': forms.TextInput,
                   'background_tipo_participante': forms.TextInput
                   }
         

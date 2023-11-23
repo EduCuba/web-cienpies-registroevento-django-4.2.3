@@ -134,42 +134,42 @@ def buscarparticipante(request,participante_id=None):
             if (len(apellido_participante) == 0 and len(nombre_participante) == 0):    
                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                    print('busqueda solo por evento')
             else:    
                 if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                   "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                    print('busqueda por apellido y nombre : caso empresa vacio')
                 else:
                     if (nombre_participante == ""):
                         lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                         "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                         print('busqueda por apellido :  empresa vacio')
                     else:    
                         lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                         "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                         print('busqueda por nombre caso empresa vacia')
             
         else:
             if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                 lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                 "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                 print('busqueda por empresa, apellido y nombre : caso 4')
             else:    
                 if (nombre_participante == ""):
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                     print('busqueda por empresa y apellid : caso 5')
                 else:    
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
-                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                     print('caso empresa y nombre')
                 
                         
@@ -232,6 +232,7 @@ def participanteAsistencia(request, id):
                    print(participante)
                    
                    tipo_participante=participante.tipo_participante.descripcion_tipo_participante
+                   tipo_identificacion_participante=participante.tipo_participante.tipo_identificacion_participante
                    modalidad_asistencia=participante.modalidad_asistencia.descripcion_modalidad_asistencia
                    
                   
@@ -244,6 +245,7 @@ def participanteAsistencia(request, id):
                              "empresa_participante": participante.empresa_participante, 
                              "modalidad_asistencia": participante.modalidad_asistencia.descripcion_modalidad_asistencia,
                              "tipo_participante": tipo_participante,
+                             "tipo_identificacion_participante": tipo_identificacion_participante,
                              "rpta":'OK'
                              }      
                     
@@ -418,6 +420,7 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                            "empresa_participante": participante.empresa_participante, 
                            "modalidad_asistencia": moda_asi.descripcion_modalidad_asistencia, 
                            "tipo_participante": tipo_par.descripcion_tipo_participante,
+                           "tipo_identificacion_participante": tipo_par.tipo_identificacion_participante,
                            "rpta":"OK"
                            }
 

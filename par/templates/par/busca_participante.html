@@ -4,12 +4,7 @@
 
     <form method="POST" class="form-inline" id="frmbuscar">
         {% csrf_token %}
-
-      
-      
-
-      
-
+  
         <div class="col-xl-12 col-md-12 mb-12">
             {% if obj %}
             <div class="card border-left-warning shadow h-100 py-2">
@@ -127,7 +122,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
               <div class="dropdown-header">Acciones:</div>
-              <!--<a class="dropdown-item" onclick="return abrir_modal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+              <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
             <!-- compras_new esta devlarado en el archivo urls.py-->
               <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
               <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
@@ -142,37 +137,35 @@
           <div class="alert alert-info">No existe coincidencias</div>
           {% endif %}   
             <table id="tableLista" class="table table-striped table-hover dt-responsive nowrap" style="width:100%"
-            data-toggle="table"
-              data-pagination="true"
-              data-search="true"
-            >
-            
-
+                data-toggle="table" data-pagination="true" data-search="true">
               <thead>
-                <th>Id</th>        
+                
+                <th>Idx</th>        
                 <th>Apellido</th>
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Empresa</th>
                 <th>Modalidad</th>
-                <th>Asistio</th>
-                <th>Tipo</th>
-                <th class="all">Estado</th>
-                <th class="all">Acciones_X</th>
+                <th>Tipo Par.</th>
+                <th>Tipo Ide.</th>
+                <th class="all">Asistio</th>
+                <th class="all">Acciones</th>
               </thead>
               <tbody>
               
-                
+    <!--<td>{{ item.asistio_evento }}</td>-->
                 
                 {% for item in lispar%}
                 <tr>
+                    
                     <td>{{ item.id }}</td>
                     <td>{{ item.apellido_participante }}</td>
                     <td>{{ item.nombre_participante}}</td>
                     <td>{{ item.email_participante }}</td>
                     <td>{{ item.empresa_participante }}</td>
                     <td>{{ item.modalidad_asistencia }}</td>
-                    <td>{{ item.asistio_evento }}</td>
+                   
+                    <td>{{ item.tipo_participante }}</td> 
                     <td>{{ item.tipo_participante }}</td>              
                     <td>
                       
@@ -311,7 +304,7 @@
 
 
   function refrescaTablaEncontrados(datos){
-    $("#tableLista").dataTable().fnDestroy();
+    <!--$("#tableLista").dataTable().fnDestroy();-->
     $("table > tbody").empty()
     
     var tabla= $("table")
@@ -332,20 +325,46 @@
         captionBoton="Asistio"
         classBoton="fa fa-user-check"
       }
+      console.log("index")
+    console.log(index)
+    nfila=index+1;
 
     
-    return `<tr id=\"row_reg${value.id}"\" style="background-color:${value.tipo_participante__background_tipo_participante}">
-    <td>${value.id}</td>
-    
-    <td><input readonly  type=\"text\" id=\"up_apellido${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" style="padding: 5px" /></td>
+    //item	Idx	xApellido	xNombre	xEmail	xEmpresa	xModalidad	xAsistio	xTipo	xEstado	xAcciones_X
+    //item	Idx	xApellido	xNombre	xEmail	xEmpresa	xModalidad	xTipo	xAsistio	xAcciones_X
+    //<td><input readonly  type=\"text\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" style="padding: 5px"/></td>
+      
+/*
+    <td>${value.apellido_participante}<input readonly  type=\"text\" id=\"up_apellido${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" style="padding: 5px" /></td>
     <td><input readonly  type=\"text\" id=\"up_nombre${value.id}\" value=\"${value.nombre_participante}\" class=\"form-control\" style="padding: 5px" /></td>
     <td><input readonly  type=\"text\" id=\"up_email${value.id}\" value=\"${value.email_participante}\" class=\"form-control\" style="padding: 5px"/></td>
     <td><input readonly  type=\"text\" id=\"up_empresa${value.id}\" value=\"${value.empresa_participante}\" class=\"form-control\" style="padding: 5px"/></td>
     <td><input readonly  type=\"text\" id=\"up_modalidad${value.id}\" value=\"${value.modalidad_asistencia__descripcion_modalidad_asistencia}\" class=\"form-control\" style="padding: 5px"/></td>        
     <td><input readonly  type=\"text\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" style="padding: 5px"/></td>
     <td><input readonly  type=\"text\" id=\"up_tipo${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" style="padding: 5px"/></td>
+ <td><input readonly  type=\"text\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /></td>  
+     
+    */
+
+    return `<tr id=\"row_reg${value.id}"\" style="background-color:${value.tipo_participante__background_tipo_participante}">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /> 
+     
+        ${value.id}</td>
+
+
+      <td>${value.apellido_participante}</td>
+      <td>${value.nombre_participante}</td>
+      <td>${value.email_participante}</td>
+      <td>${value.empresa_participante}</td>
+      <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>  
+      <td>${value.tipo_participante__descripcion_tipo_participante}</td>
+      <td>${value.tipo_participante__tipo_identificacion_participante}</td>     
+      
+   
     <td>
-            <button type="button" class="btn btn-warning btn-circle"
+      
+      <input readonly  type=\"hidden\" id=\"up_asistio${value.id}\" value=\"${value.asistio_evento}\" class=\"form-control\" style="padding: 5px"/>
+            <button id=\"button_asist"${value.id}\" type="button" class="btn btn-warning btn-circle"
             onclick="{% if perms.par.change_participante%} dialogoAsistencia(${value.id},'A','up_asistio'){% else %}''{%endif%}
             " ><i id=\"i_asistio${value.id}\" class="`+classBoton+`"></i></button>
     </td>
@@ -365,9 +384,9 @@
   }
 
   function creaFuncionDataTable(){
-     console.log("crea funcion cabecera 1")
+     console.log("crea funcion cabecera 1 busca_participante.html 363")
     <!-- inicio -->
-    <!--$("#tableLista").dataTable().fnDestroy();-->
+   
     if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
       console.log("crea funcion cabecera 2")
         $('.table').DataTable({
@@ -399,7 +418,8 @@
           }
           }
         });
-    }
+        console.log("crea funcion cabecera 3")
+       }
     <!-- fin  -->
 
   }
@@ -410,9 +430,10 @@
 
 
   function dialogoAsistencia(id,tipo,obj){
-    asistio_evento=document.getElementById(obj+id).value;
-
-    if (asistio_evento.toLowerCase()=="true"){
+   asistio_evento=document.getElementById(obj+id).value;
+//console.log(obj);
+   if (asistio_evento.toLowerCase()=="true"){
+    //if (obj){
     Swal.fire({
       title: "¿Borrar?",
       text : "Anular Asistencia",
@@ -628,7 +649,7 @@
 
 
    function actualiza_RowTable(r) {
-console.log("dato 1");
+    console.log("dato 1");
     if(r.rpta=="OK"){
       console.log("dato 1b");
       var e_li = document.getElementById("i_asistio"+r.id);
@@ -641,6 +662,8 @@ console.log("dato 1");
         e_li.classList.remove("fa-hand-pointer");
         e_li.classList.remove("far");
         e_li.classList.remove("fa-hand-pointer");
+
+        
        // e_li.classList.add("fa fa-user-check");
        
       }else{            
@@ -651,25 +674,50 @@ console.log("dato 1");
         
       //  e_li.classList.remove("fa fa-user-check");
        }
-      document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
-      document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+     
+    document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
+   /*   document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
       document.getElementById("up_nombre"+r.id).value=r.nombre_participante;
       document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
       document.getElementById("up_email"+r.id).value=r.email_participante;
       document.getElementById("up_empresa"+r.id).value=r.empresa_participante;
       document.getElementById("up_modalidad"+r.id).value=r.modalidad_asistencia;
-      document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
+      document.getElementById("up_tipo"+r.id).value=r.tipo_participante;*/
+     
+      nfila = document.getElementById("item"+r.id).value;
+      console.log("modi 1")
+       //#tableLista.Rows[0][1] = "Victoriano Huerta";
       
-      
-      
+     //  console.log(document.getElementById("tableLista")tableLista.Rows);
 
+     const table = $('#tableLista').DataTable();
+    //  table_filtered=table.rows({page:'current'})
+ 
+///console.log({data: table_filtered.data()});
 
-      //console.log("edudddddddddddddddddddddddddddd")
+           // Create table with data set
+
+var rows = table.rows( 0 ).data();
+console.log(rows);
+      console.log("modi 2")
+      table.cell(nfila-1, 1 ).data( r.apellido_participante ).draw();
+      table.cell(nfila-1, 2 ).data( r.nombre_participante ).draw();
+      table.cell(nfila-1, 3 ).data( r.email_participante).draw();
+      table.cell(nfila-1, 4 ).data( r.empresa_participante).draw();
+      table.cell(nfila-1, 5 ).data( r.modalidad_asistencia).draw();
+      table.cell(nfila-1, 6 ).data( r.tipo_participante).draw();
+      table.cell(nfila-1, 7 ).data( r.tipo_identificacion_participante).draw();
+
       //console.log(r.tipo_participante)
       //document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
     }
 
    }
+
+
+  
+
+
 </script>
 
  
