@@ -57,6 +57,27 @@ class Modalidad_Asistencia(ClaseModelo2):
     class Meta:
         verbose_name_plural = "Modalidad de asistencia"
         
+ 
+ 
+ 
+class Participante_Csv(ClaseModelo2):
+    evento = models.ForeignKey(Evento, on_delete=models.PROTECT,null=False, blank=False)
+    archivo_csv = models.CharField(('Archivo'),
+    help_text='Archivo csv',
+        max_length=260,
+        null=False, blank=False)
+    cantidad = models.IntegerField(null=False,blank=False)
+    
+    def __str__(self):
+        return '{}:{}'.format(self.archivo_csv,
+                                             self.cantidad,
+                                            )
+    
+    
+     
+    
+    class Meta:
+        verbose_name_plural = "Archivos"
         
         
 class Participante(ClaseModelo2):
@@ -87,6 +108,7 @@ class Participante(ClaseModelo2):
     acompanante_de=models.CharField(('acompañante de'),
         max_length=100,
         null=False, blank=True)
+    participante_csv = models.ForeignKey(Participante_Csv, on_delete=models.PROTECT,null=True, blank=True)
     
     def __str__(self):
         return '{}:{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
@@ -102,6 +124,18 @@ class Participante(ClaseModelo2):
     
     class Meta:
         verbose_name_plural = "Participantes"
+              
+
+
+
+
+   
+#class Meta:
+#       indexes = [
+#            models.Index(fields=['evento',]),
+#            models.Index(fields=['last_name',]),
+#            models.Index(fields=['-date_of_birth',]),
+#]        
 
 
 

@@ -206,15 +206,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            
-
-            {% if request.user.is_authenticated %}
-            <a href="#" class="d-block">{{ request.user.nombre}} Alexander</a>
-            {% else %}
-            <p>User is not logged in :(</p>
-            {% endif %}
-
-         
+            <a href="#" class="d-block">Alexander Pierce</a>
           </div>
         </div>
 
@@ -338,13 +330,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <a href="{% url 'par:participante_import_add' %}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Importar Participantes</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <a href="{% url 'par:participante_import_delete' %}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Eliminar Participantes</p>
                     </a>
                   </li>
 
@@ -714,6 +699,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
  function cargaRegistro(id,evento)
   { 
     url = "participante_edit/"+id
+    
     var comboEvento = document.getElementById(evento);
     var selected = comboEvento.options[comboEvento.selectedIndex].text;
     var id_evento= comboEvento.value
@@ -808,18 +794,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     return true;
 }
 <!-- funcion enumera fila datatable-->
-
-
-function ocultaMuestraObj(obj,opc) {
-  var x = document.getElementById(obj);
-  //if (x.style.display === "none") {
-  //0=oculta  1=muestra  
-  if (opc === 1 ) {  
-      x.style.display = "block";
-  } else {
-      x.style.display = "none";
-  }
-}
 
 </script>  
  

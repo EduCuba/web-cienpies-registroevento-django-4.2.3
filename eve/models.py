@@ -1,6 +1,6 @@
 from django.db import models
 
-from bases.models import ClaseModelo2
+from bases.models import ClaseModelo2,Usuario
 # Create your models here.
 
 
@@ -45,3 +45,29 @@ class Evento(ClaseModelo2):
         
       
 
+class Usuario_Evento(ClaseModelo2):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    evento =  models.ForeignKey(Evento, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return '{}:{}'.format(self.usuario,self.evento)
+    
+    class Meta:
+        verbose_name_plural = "Usuario Eventos"
+
+
+#class Meta:
+#       indexes = [
+#            models.Index(fields=['first_name',]),
+#            models.Index(fields=['last_name',]),
+#            models.Index(fields=['-date_of_birth',]),
+#]
+
+#class Meta:
+#       indexes = [
+#           models.Index(fields=['last_name', 'first_name',]),
+#           models.Index(fields=['-date_of_birth',]),
+#]
+
+ #class Meta:
+  #      unique_together= (('content', 'ip'),)

@@ -4,7 +4,7 @@ from django.db import models
 from django.forms import fields
 from django import forms
 from django.forms.widgets import PasswordInput
-from .models import Participante,Modalidad_Asistencia,Tipo_Participante
+from .models import Participante,Modalidad_Asistencia,Tipo_Participante,Participante_Csv
 from eve.models import Evento
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -22,6 +22,7 @@ class ParticipanteForm(forms.ModelForm):
         modalidad_asistencia = cleaned_data.get('modalidad_asistencia')
         evento=cleaned_data.get("evento")
         email_participante=cleaned_data.get("email_participante")
+        #modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         tipo_participante=cleaned_data.get("tipo_participante")
         mensaje='Verifique ingrese de datos'
@@ -29,7 +30,8 @@ class ParticipanteForm(forms.ModelForm):
         print(id)
         
         if(not evento):
-            print('uno a')
+            print('no existe evento: ')
+            print(evento)
             #mensaje=f'Error verifique f'
             # form.add_error("evento","seleccione evento")
             self.add_error("evento", ValidationError(_("Evento no valido")))
@@ -42,6 +44,7 @@ class ParticipanteForm(forms.ModelForm):
                         
         if(not modalidad_asistencia):
             print('uno c')
+            print(modalidad_asistencia)
             mensaje=f'Error verifique'
             self.add_error("modalidad_asistencia",ValidationError(_("Seleccione modalidad de asistencia")))
             
@@ -82,7 +85,7 @@ class ParticipanteForm(forms.ModelForm):
         model=Participante
         fields = ['evento','apellido_participante','nombre_participante','empresa_participante','email_participante','telefono_participante',
                   'observaciones_participante','acompanante_de', 'cargo_participante','asistio_evento','confirmo_asistencia',
-                  'tipo_participante','modalidad_asistencia']
+                  'tipo_participante','modalidad_asistencia','participante_csv']
         labels = {'Apellido':"apellido_participante",
         'Nombre':"nombre_participante",
         'Email':"email_participante",
@@ -214,3 +217,25 @@ class ModalidadAsistenciaForm(forms.ModelForm):
                 'class':'form-control'
             })        
                 
+                
+class ParticipanteCsvForm(forms.ModelForm):
+    class Meta:
+        model=Participante_Csv
+        fields = ['archivo_csv','evento','cantidad']
+        labels = {'Evento':"nombre_evento",
+        'Archivo':"archivo_csv",
+        'Cantidad':"cantidad"}
+        widget={'archivo_csv':forms.TextInput,
+                'id':forms.TextInput}
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        #super(ParticipanteCsvForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                     'class':'form-control'
+                 })
+        self.fields['evento'].empty_label="Seleccione Evento form"
+        
+        
+      

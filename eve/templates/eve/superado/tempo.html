@@ -1,0 +1,767 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+
+<form method="POST" class="form-inline" id="frmbuscar">
+  {% csrf_token %}
+
+  <div class="col-xl-12 col-md-12 mb-12">
+      {% if obj %}
+      <div class="card border-left-warning shadow h-100 py-2">
+      {% else %}    
+      <div class="card border-left-success shadow h-100 py-2">
+      {% endif %}    
+          <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                      
+                      <div class="dropdown-divider"></div>
+
+                      <div class="form-row">
+                        <!---
+                        <div class="form-group col-md-2">
+                          <label for="lblEvento">Evento</label>
+                        </div>  
+                        <div class="form-group col-md-10">                            
+                          
+                          {{eve.evento}}
+                        </div>-->
+
+                        <div class="form-group col-md-2">
+                          <label for="id_evento">Evento:</label>
+                        </div>
+                        <div class="form-group col-md-10">                              
+                          <select name="evento" class="form-control" required="" id="bus_id_evento">
+                            <option value="0">Selecciona Evento</option>
+                                  {% for item in liseventos %}    
+                                        
+                                        <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                        <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                  {% endfor%}
+                          </select>
+                        </div>  
+                          
+
+                      
+                      
+                      </div>
+
+      
+                  
+                      <div class="row">
+                          <div class="col-3">
+                            <!---
+                              <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                              <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                          -->
+                              <button type="button" class="btn btn-info" onclick="listaUsuarioEvento()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
+                          </div>    
+                          
+
+                      </div>    
+
+                  </div>
+              
+              </div>
+          </div>
+      </div>
+  </div>
+</form>
+    
+{% endblock content_wrapper %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
+    <div class="dropdown no-arrow">
+      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-header">Acciones:</div>
+        <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+        <!--compras_new esta devlarado en el archivo urls.py-->
+        <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
+        <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+        
+      </div>
+    </div>
+  </div>
+
+<!-- Card Boby 2 columnas (inicio)-->
+<div class="row">
+<div class="col-6">
+  <div class="card">
+    <div class="card-header">
+      Usuarios autorizados {{obj}}
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="tableUsuEve" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in listaUsuariosEvento%}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.apellido}}</td>
+                <td>{{item.nombre}}</td>
+                <td>
+                    <a href="#" class="btn btn-sm text-success"
+                    onclick="permiso('{{item.id}}','DEL')"
+                    ><i class="far fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<div class="col-6">
+  <div class="card">
+    <div class="card-header">
+      Lista de Usuarios
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="tableUsu" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in permisos%}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.apellido}}</td>
+                <td>{{item.nombre}}</td>
+                <td>
+                    <a href="#" class="btn btn-sm text-success"
+                    onclick="permiso('{{item.id}}','ADD')"
+                    ><i class="fas fa-plus"></i></a>
+                </td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+
+
+<!-- Card Body 2 columnas (fin)-->
+
+
+  <!-- Card Body -->
+
+  <div id="rowdata" class="card-body">
+    {% if not lisUsuariosEvento %}
+    <div class="alert alert-info">No existe usuarios asignados</div>
+    {% endif %}   
+      <table id="tableLista" class="table table-striped table-hover dt-responsive nowrap" style="width:100%"
+          data-toggle="table" data-pagination="true" data-search="true">
+        <thead>               
+          <th>Idx</th>        
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th class="all">Asistio</th>
+          <th class="all">Acciones</th>
+        </thead>
+        <tbody>
+        
+
+          
+          {% for item in lispar%}
+          <tr>
+              
+              <td>{{ item.id }}</td>
+              <td>{{ item.apellido}}</td>
+              <td>{{ item.nombre}}</td>
+                        
+              <td>
+                
+                <a class="btn btn-warning btn-circle" href="#"><i class="far fa-edit"></i></a>
+                
+                <a class="btn btn-success btn-circle" href="{# url 'cmp:compras_print_one' item.id #}" target="reportes"><i class="fas fa-print"></i></a>
+                
+              
+              </td>
+              <td>
+                <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{# url 'cmp:proveedor_edit' item.id #}')"><i class="far fa-edit"></i></button>
+
+                
+              </td>  
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+        
+{% endblock content %}
+
+
+{% block js %}
+
+<script>
+  function editarRegistro(id){
+
+    url = "/par/registro_edit"
+  }
+  function listaUsuarioEvento(){
+    // alert(id)
+    // alert(accion)
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento") 
+   
+    //var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+    //url = "buscar_participante"
+    var url = "/eve/usuario_evento"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {
+    "evento":inputEvento
+  }
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+          $("table > tbody").empty()  
+          {% if not r.lisUsuariosEvento %}
+          console.log("no existe usuarios en evento")
+          {% endif %}
+
+          {% for item in r.lisUsuariosEvento%}
+            console.log("solo item"+{{ item.id }})
+          {% endfor %}
+         
+        /*  refrescaTablaUsuarioEvento(r.lisUsuariosEvento);*/
+          refrescaTablaUsuEve(r.lisUsuariosEvento);
+          refrescaTablaUsuario(r.lisUsuarios);
+          /*Swal.fire("mostrara " +  r.lispar);*/
+          /*location.reload(true)*/
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+
+  
+
+
+  function refrescaTablaUsuarioEvento(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("table > tbody").empty()
+    
+    var tabla= $("table")
+
+    var rows = $.map(datos,function(value,index){
+
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;               
+      console.log("index")
+      console.log(index)
+      nfila=index+1;
+
+    
+      
+
+
+    return `<tr id=\"row_reg${value.id}"\">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" />     
+        ${value.id}</td>
+      <td>${value.apellido}</td>
+      <td>${value.nombre}</td>
+      
+   
+    <td>
+      
+        <button id=\"button_asist"${value.id}\" type="button" class="btn btn-warning btn-circle"
+        onclick="{% if perms.par.change_participante%} dialogoAsistencia(${value.id},'A','up_asistio'){% else %}''{%endif%}
+        " ><i id=\"i_asistio${value.id}\"></i></button>
+    </td>
+    <td>
+      <button type="button" class="btn btn-warning btn-circle" onclick="{% if perms.par.change_participante%} cargaRegistro(${value.id} {% else %}''{%endif%},'bus_id_evento')"><i class="far fa-edit"></i></button>      
+      
+      
+    </td>  
+
+    </tr>`
+     })
+     
+    $("table > tbody").html(rows.join(''))
+    creaFuncionDataTable()
+    
+
+
+  }
+
+ 
+
+  function refrescaTablaUsuEve(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("tableUsuEve > tbody").empty()
+    
+    var tabla= $("tableUsuEve")
+
+    var rows = $.map(datos,function(value,index){
+
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;               
+      console.log("index")
+      console.log(index)
+      nfila=index+1;
+
+
+    return `<tr id=\"row_reg${value.id}"\">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" />     
+        ${value.id}</td>
+      <td>${value.apellido}</td>
+      <td>${value.nombre}</td>
+        
+    <td>
+      
+        <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
+        onclick="{% if perms.par.change_participante%} dialogoAsistencia(${value.id},'A','up_asistio'){% else %}''{%endif%}
+        " ><i class="far fa-trash-alt"  id=\"i_asistio${value.id}\"></i></button>
+        onclick="permiso('{{item.id}}','ADD')"
+       
+    </td>
+  
+    </tr>`
+     })
+     
+    $("tableUsuEve > tbody").html(rows.join(''))
+   /* creaFuncionDataTable()*/
+    
+
+
+  }
+
+
+  function refrescaTablaUsuario(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("#tableUsu > tbody").empty()
+    
+    var tabla= $("tableUsu")
+
+    var rows = $.map(datos,function(value,index){
+
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;               
+      console.log("index")
+      console.log(index)
+      nfila=index+1;
+
+
+    return `<tr id=\"row_reg${value.id}"\">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" />     
+        ${value.id}</td>
+      <td>${value.apellido}</td>
+      <td>${value.nombre}</td>
+        
+    <td>
+      
+        <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
+        onclick="{% if perms.par.change_participante%} crudAccesoEvento(${value.id},'ADD'){% else %}''{%endif%}
+        " ><i class="fas fa-plus" id=\"i_asistio${value.id}\"></i></button>
+
+        
+    </td>
+  
+    </tr>`
+     })
+     
+    $("#tableUsu > tbody").html(rows.join(''))
+    /*$("table > tbody").html(rows.join(''))*/
+   /* creaFuncionDataTable()*/
+    
+
+
+  }
+
+
+  function creaFuncionDataTable(){
+     console.log("crea funcion cabecera 1 busca_participante.html 363")
+    <!-- inicio -->
+   
+    if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
+      console.log("crea funcion cabecera 2")
+        $('.table').DataTable({
+          
+          "searching": true,
+          "pageLength": 10,
+          "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Mostrar _MENU_ registros_",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "Ningún dato disponible en esta tabla",
+          "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar en:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "<span class='fa fa-angle-double-left'></span>",
+              "sLast": "<span class='fa fa-angle-double-right'></span>",
+              "sNext": "<span class='fa fa-angle-right'></span>",
+              "sPrevious": "<span class='fa fa-angle-left'></span>"
+          },
+          "oAria": {
+              "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+          }
+        });
+        console.log("crea funcion cabecera 3")
+       }
+    <!-- fin  -->
+
+  }
+  
+
+
+  
+
+
+  function dialogoAsistencia(id,tipo,obj){
+   asistio_evento=document.getElementById(obj+id).value;
+//console.log(obj);
+   if (asistio_evento.toLowerCase()=="true"){
+    //if (obj){
+    Swal.fire({
+      title: "¿Borrar?",
+      text : "Anular Asistencia",
+      icon:"question",
+      showCancelButton: true,
+      confirmButtonText: `Si, Borrar`,
+      cancelButtonText: `No borrar`,
+      allowOutsideClick:false,
+      confirmButtonClass: 'btn btn-danger',
+    }).then((borrar) => {
+      console.log(borrar)
+      if(borrar.isConfirmed){
+           participanteAsistencia(id,tipo)
+  
+      }else{
+        Swal.fire("Registro No fue borrado... ACCION CANCELADA","","info")
+      }
+    })  
+    }else{
+      console.log("ddddddddddd 1")
+      participanteAsistencia(id,tipo)
+
+    }
+  }
+
+
+
+  function actualizaRowTableEDu(dato,opc){
+    // alert(id)
+    // alert(accion)
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento") 
+   
+    //var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+    //url = "buscar_participante"
+    var url = "/eve/usuario_evento"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {
+    "evento":inputEvento
+    "usuario":dato
+  }
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+          $("table > tbody").empty()  
+          {% if not r.lisUsuariosEvento %}
+          console.log("no existe usuarios en evento")
+          {% endif %}
+
+          {% for item in r.lisUsuariosEvento%}
+            console.log("solo item"+{{ item.id }})
+          {% endfor %}
+         
+        /*  refrescaTablaUsuarioEvento(r.lisUsuariosEvento);*/
+          refrescaTablaUsuEve(r.lisUsuariosEvento);
+          refrescaTablaUsuario(r.lisUsuarios);
+          /*Swal.fire("mostrara " +  r.lispar);*/
+          /*location.reload(true)*/
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+</script>
+
+
+<script>
+    $(document).ready(function() {
+      
+      /*
+        $('.table').DataTable(
+          
+        );
+*/
+      });
+
+
+    
+
+
+
+    $(function () {
+      /*
+
+        $("#id_fecha_compra, #id_fecha_factura").datetimepicker({
+            format: 'Y-m-d',
+            timepicker:false
+        });
+        */
+        <!-- contrae el side bar-->
+        $("#sidebarToggle").click();
+
+
+        <!-- mostrara 2 registros por pagina -->
+        <!--creaFuncionDataTable()-->
+        
+      
+        $('#id_cantidad_detalle,#id_precio_detalle,#id_descuento_detalle').change(function(){
+            calcular_detalle();
+        });
+
+        /*Validar Envío de Detalle */
+        $("#frmCompras").submit(function(e){
+
+            var  no_fact = $("#id_no_factura").val();
+            console.log(no_fact);
+            
+            if(no_fact.trim()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar No. de Factura'
+                        });
+                return false;
+            }
+
+
+            if($("#id_fecha_compra").val()=="" || $("#id_fecha_factura").val()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar Fecha'
+                        });
+                return false;
+            }
+
+            if($('#id_total_detalle').val()==0 || $('#id_id_producto').val()==0 ){
+                e.preventDefault();
+                //alert("No ha agregado producto o está sin cantidades");
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'No ha agregado producto o está sin cantidades'
+                        })
+            }
+        });
+        /*Fin Validar Envío de Detalle */
+
+    });
+
+    function selectProducto(id,descripcion)
+    {
+        $("#id_cantidad_detalle").val(0);
+        $('#id_precio_detalle').val(0);
+        $('#id_descuento_detalle').val(0);
+
+        $('#id_sub_total_detalle').val(0);
+        $('#id_total_detalle').val(0);
+
+        $("#id_id_producto").val(+id);
+        $('#id_descripcion_producto').val(descripcion);
+        $('#id_cantidad_detalle').focus();
+        $('#id_cantidad_detalle').select();
+
+        $('.table').DataTable().search('').draw();
+    }
+
+    function calcular_detalle()
+    {
+        var cant,prec,desc,stotal,total;
+
+        cant = $("#id_cantidad_detalle").val();
+        cant = cant==="" ? 0 : +cant;
+        cant = cant<0 ? 0 : cant;
+
+        prec =$('#id_precio_detalle').val();
+        prec = prec==="" ? 0 : +prec;
+        prec = prec<0 ? 0 : prec;
+
+        desc = $('#id_descuento_detalle').val();
+        desc = desc==="" ? 0 : +desc;
+        desc = desc<0 ? 0 : desc;
+
+        desc = desc>(cant * prec) ? 0 : desc;
+
+        stotal = cant * prec;
+        total  = stotal - desc;
+
+        $('#id_cantidad_detalle').val(cant);
+        $('#id_precio_detalle').val(prec);
+        $('#id_descuento_detalle').val(desc);
+
+        $('#id_sub_total_detalle').val(stotal);
+        $('#id_total_detalle').val(total);
+
+    }
+
+    function clear_Detail(){
+        $('#id_cantidad_detalle').val(0);
+        $('#id_precio_detalle').val(0);
+        $('#id_descuento_detalle').val(0);
+
+        $('#id_sub_total_detalle').val(0);
+        $('#id_total_detalle').val(0);
+
+        $('#id_id_producto').val('');
+        $('#id_descripcion_producto').val('');
+
+        $('.table').DataTable().search('').draw();
+
+        $("#id_proveedor").focus();
+    }
+
+    $("#id_proveedor").focus();
+
+
+   function actualiza_RowTable(r) {
+    console.log("dato 1");
+    if(r.rpta=="OK"){
+      console.log("dato 1b");
+      var e_li = document.getElementById("i_asistio"+r.id);
+      var row_reg=document.getElementById("row_reg"+r.id);
+      row_reg.style.backgroundColor = r.background_tipo_participante
+      var asistio = r.asistio_evento;
+      if(r.asistio_evento){
+        e_li.classList.add("fa");
+        e_li.classList.add("fa-user-check");
+        e_li.classList.remove("fa-hand-pointer");
+        e_li.classList.remove("far");
+        e_li.classList.remove("fa-hand-pointer");
+
+        
+       // e_li.classList.add("fa fa-user-check");
+       
+      }else{            
+        e_li.classList.add("far");
+        e_li.classList.add("fa-hand-pointer");
+        e_li.classList.remove("fa");
+        e_li.classList.remove("fa-user-check");
+        
+      //  e_li.classList.remove("fa fa-user-check");
+       }
+     
+    document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
+   /*   document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_nombre"+r.id).value=r.nombre_participante;
+      document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_email"+r.id).value=r.email_participante;
+      document.getElementById("up_empresa"+r.id).value=r.empresa_participante;
+      document.getElementById("up_modalidad"+r.id).value=r.modalidad_asistencia;
+      document.getElementById("up_tipo"+r.id).value=r.tipo_participante;*/
+     
+      nfila = document.getElementById("item"+r.id).value;
+      console.log("modi 1")
+       //#tableLista.Rows[0][1] = "Victoriano Huerta";
+      
+     //  console.log(document.getElementById("tableLista")tableLista.Rows);
+
+     const table = $('#tableLista').DataTable();
+    //  table_filtered=table.rows({page:'current'})
+ 
+///console.log({data: table_filtered.data()});
+
+           // Create table with data set
+
+var rows = table.rows( 0 ).data();
+console.log(rows);
+      console.log("modi 2")
+      table.cell(nfila-1, 1 ).data( r.apellido_participante ).draw();
+      table.cell(nfila-1, 2 ).data( r.nombre_participante ).draw();
+      table.cell(nfila-1, 3 ).data( r.email_participante).draw();
+      table.cell(nfila-1, 4 ).data( r.empresa_participante).draw();
+      table.cell(nfila-1, 5 ).data( r.modalidad_asistencia).draw();
+      table.cell(nfila-1, 6 ).data( r.tipo_participante).draw();
+      table.cell(nfila-1, 7 ).data( r.tipo_identificacion_participante).draw();
+
+      //console.log(r.tipo_participante)
+      //document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
+    }
+
+   }
+
+
+  
+
+
+</script>
+
+ 
+{% endblock js %}

@@ -1,7 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from bases.views import *
-from eve.views import ModalidadEventoList,ModalidadEventoAdd,ModalidadEventoEdit,ModalidadEventoDel,EventoList,EventoAdd,EventoEdit,EventoDel
+from eve.views import ModalidadEventoList,ModalidadEventoAdd,ModalidadEventoEdit,ModalidadEventoDel,EventoList,EventoAdd,EventoEdit,EventoDel\
+                      ,buscarusuarioevento,UsuarioEventoAdd,usuarioAccesoEvento
 #app_name = 'eve'
 
 urlpatterns = [
@@ -17,7 +18,8 @@ urlpatterns = [
     path('eve/evento_del/<int:pk>',EventoDel.as_view(), name='evento_del'),   
     
     
-    
- 
+    path('eve/usuario_evento',buscarusuarioevento,name="usuario_evento"),
+    path('eve/usuario_evento_add',UsuarioEventoAdd.as_view(),name="usuario_evento_add"),
+    path('eve/usuario_evento_del',usuarioAccesoEvento, name='usuario_evento_del'),   
     
 ]

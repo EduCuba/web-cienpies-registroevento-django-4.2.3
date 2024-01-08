@@ -1,0 +1,588 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+
+<form method="POST" class="form-inline" id="frmbuscar">
+  {% csrf_token %}
+
+  <div class="col-xl-12 col-md-12 mb-12">
+      {% if obj %}
+      <div class="card border-left-warning shadow h-100 py-2">
+      {% else %}    
+      <div class="card border-left-success shadow h-100 py-2">
+      {% endif %}    
+          <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                      
+                      <div class="dropdown-divider"></div>
+
+                      <div class="form-row">
+                        <!---
+                        <div class="form-group col-md-2">
+                          <label for="lblEvento">Evento</label>
+                        </div>  
+                        <div class="form-group col-md-10">                            
+                          
+                          {{eve.evento}}
+                        </div>-->
+
+                        <div class="form-group col-md-2">
+                          <label for="id_evento">Evento:</label>
+                        </div>
+                        <div class="form-group col-md-10">                              
+                          <select id="evento" name="evento" class="form-control" required="" id="bus_id_evento">
+                            <option value="0">Selecciona Evento</option>
+                                  {% for item in liseventos %}    
+                                        
+                                        <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                        
+                                  {% endfor%}
+                          </select>
+                        </div>  
+                          
+
+                      
+                      
+                      </div>
+
+      
+                  
+                      <div class="row">
+                          <div class="col-3">
+                            <!---
+                              <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                              <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                          
+                            -->
+                              <button type="button" class="btn btn-info" onclick="listaUsuarioEvento()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
+                          </div>    
+                          
+
+                      </div>    
+
+                  </div>
+              
+              </div>
+          </div>
+      </div>
+  </div>
+</form>
+    
+{% endblock content_wrapper %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+  <!-- Card Header - Dropdown -->
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
+    <div class="dropdown no-arrow">
+      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-header">Acciones:</div>
+        <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+        <!--compras_new esta devlarado en el archivo urls.py-->
+        <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
+        <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+        
+      </div>
+    </div>
+  </div>
+
+<!-- Card Boby 2 columnas (inicio)-->
+<div class="row">
+<div class="col-6">
+  <div class="card">
+    <div class="card-header">
+      Usuarios autorizados 
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="tableUsuEve" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in listaUsuariosEvento%}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.apellido}}</td>
+                <td>{{item.nombre}}</td>
+                <td>
+                   
+                </td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<div class="col-6">
+  <div class="card">
+    <div class="card-header">
+      Lista de Usuarios
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <table id="tableUsu" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in permisos%}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.apellido}}</td>
+                <td>{{item.nombre}}</td>
+                <td>
+                   
+                </td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+</div>
+
+
+<!-- Card Body 2 columnas (fin)-->
+
+
+  <!-- Card Body -->
+
+  <div id="rowdata" class="card-body">
+   
+    </div>
+  </div>
+
+        
+{% endblock content %}
+
+
+{% block js %}
+
+<script>
+
+
+  function listaUsuarioEvento(){
+    // alert(id)
+    // alert(accion)
+    $("#tableUsuEve > tbody").empty()
+    $("#tableUsu > tbody").empty()
+
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento") 
+    if (inputEvento==0 || inputEvento.length == 0 || inputEvento == null ){
+      return
+    } 
+   
+    //var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+    //url = "buscar_participante"
+    var url = "/eve/usuario_evento"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {
+    "evento":inputEvento
+  }
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta=="OK"){
+          $("table > tbody").empty()  
+          {% if not r.lisUsuariosEvento %}
+          console.log("no existe usuarios en evento")
+          {% endif %}
+
+          {% if not r.lisUsuarios %}
+          console.log("no existe usuarios ")
+          {% endif %}
+
+          {% for item in r.lisUsuariosEvento%}
+            console.log("solo item lisusuarioEvento "+{{ item.id }})
+          {% endfor %}
+         
+        
+          refrescaTablaUsuEve(r.lisUsuariosEvento);
+          refrescaTablaUsuario(r.lisUsuarios);
+          /*Swal.fire("mostrara " +  r.lispar);*/
+          /*location.reload(true)*/
+        }else{
+          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+       
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'warning');
+      }
+    })
+
+  }
+
+ 
+  function refrescaTablaUsuEve(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("#tableUsuEve > tbody").empty()
+    
+    var tabla= $("tableUsuEve")
+
+    var rows = $.map(datos,function(value,index){
+
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;               
+      console.log("index")
+      console.log(index)
+      nfila=index+1;
+
+
+    return `<tr id=\"row_reg${value.id}"\">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" />     
+        ${value.id}</td>
+      <td>${value.usuario__apellido}</td>
+      <td>${value.usuario__nombre}</td>
+        
+    <td>   
+        <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
+        onclick="{% if perms.eve.change_usuario_evento%} addAccesoEvento(${value.usuario_id},'DEL'){% else %}''{%endif%}
+        " ><i class="far fa-trash-alt" id=\"i_asistio${value.id}\"></i></button>        
+    </td>
+  
+    </tr>`
+     })
+     
+    $("#tableUsuEve> tbody").html(rows.join(''))
+    /*$("table > tbody").html(rows.join(''))*/
+   /* creaFuncionDataTable()*/
+    
+
+
+  }
+
+
+  function refrescaTablaUsuario(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("#tableUsu > tbody").empty()
+    
+    var tabla= $("tableUsu")
+
+    var rows = $.map(datos,function(value,index){
+
+      //styleRow=`${value.tipo_participante__background_tipo_participante}`;               
+      console.log("index")
+      console.log(index)
+      nfila=index+1;
+
+
+    return `<tr id=\"row_reg${value.id}"\">
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" />     
+        ${value.id}</td>
+      <td>${value.apellido}</td>
+      <td>${value.nombre}</td>
+        
+    <td>
+      
+        <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
+        onclick="{% if perms.eve.change_usuario_evento%} addAccesoEvento(${value.id},'ADD'){% else %}''{%endif%}
+        " ><i class="fas fa-plus" id=\"i_asistio${value.id}\"></i></button>
+
+        
+    </td>
+  
+    </tr>`
+     })
+     
+    $("#tableUsu > tbody").html(rows.join(''))
+
+  }
+
+
+  function creaFuncionDataTable(){
+     console.log("crea funcion cabecera 1 busca_participante.html 363")
+    <!-- inicio -->
+   
+    if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
+      console.log("crea funcion cabecera 2")
+        $('.table').DataTable({
+          
+          "searching": true,
+          "pageLength": 10,
+          "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Mostrar _MENU_ registros_",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "Ningún dato disponible en esta tabla",
+          "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar en:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "<span class='fa fa-angle-double-left'></span>",
+              "sLast": "<span class='fa fa-angle-double-right'></span>",
+              "sNext": "<span class='fa fa-angle-right'></span>",
+              "sPrevious": "<span class='fa fa-angle-left'></span>"
+          },
+          "oAria": {
+              "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+          }
+        });
+        console.log("crea funcion cabecera 3")
+       }
+    <!-- fin  -->
+
+  }
+  
+
+
+  
+
+
+  function dialogoAsistencia(id,tipo,obj){
+   asistio_evento=document.getElementById(obj+id).value;
+//console.log(obj);
+   if (asistio_evento.toLowerCase()=="true"){
+    //if (obj){
+    Swal.fire({
+      title: "¿Borrar?",
+      text : "Anular Asistencia",
+      icon:"question",
+      showCancelButton: true,
+      confirmButtonText: `Si, Borrar`,
+      cancelButtonText: `No borrar`,
+      allowOutsideClick:false,
+      confirmButtonClass: 'btn btn-danger',
+    }).then((borrar) => {
+      console.log(borrar)
+      if(borrar.isConfirmed){
+           participanteAsistencia(id,tipo)
+  
+      }else{
+        Swal.fire("Registro No fue borrado... ACCION CANCELADA","","info")
+      }
+    })  
+    }else{
+      console.log("ddddddddddd 1")
+      participanteAsistencia(id,tipo)
+
+    }
+  }
+
+//function actualizaRowTableEDu(dato,opc){
+
+
+ 
+
+</script>
+
+
+<script>
+    $(document).ready(function() {
+      
+      /*
+        $('.table').DataTable(
+          
+        );
+*/
+      });
+
+
+    
+
+
+
+    $(function () {
+      /*
+
+        $("#id_fecha_compra, #id_fecha_factura").datetimepicker({
+            format: 'Y-m-d',
+            timepicker:false
+        });
+        */
+        $('#evento').on('change', function() {
+         
+          listaUsuarioEvento();
+        });
+
+
+        <!-- contrae el side bar-->
+        $("#sidebarToggle").click();
+
+
+        <!-- mostrara 2 registros por pagina -->
+        <!--creaFuncionDataTable()-->
+        
+      
+        $('#id_cantidad_detalle,#id_precio_detalle,#id_descuento_detalle').change(function(){
+            calcular_detalle();
+        });
+
+        /*Validar Envío de Detalle */
+        $("#frmCompras").submit(function(e){
+
+            var  no_fact = $("#id_no_factura").val();
+            console.log(no_fact);
+            
+            if(no_fact.trim()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar No. de Factura'
+                        });
+                return false;
+            }
+
+
+            if($("#id_fecha_compra").val()=="" || $("#id_fecha_factura").val()==""){
+                e.preventDefault()
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'Debe Especificar Fecha'
+                        });
+                return false;
+            }
+
+            if($('#id_total_detalle').val()==0 || $('#id_id_producto').val()==0 ){
+                e.preventDefault();
+                //alert("No ha agregado producto o está sin cantidades");
+                $.alert({
+                        type:'red',
+                        title:'',
+                        content:'No ha agregado producto o está sin cantidades'
+                        })
+            }
+        });
+        /*Fin Validar Envío de Detalle */
+
+    });
+
+
+   function addAccesoEvento(dato,opc){
+   
+    console.log(dato);
+
+    var url=""
+    if (opc=='ADD'){
+      url = "/eve/usuario_evento_add"}
+
+    else{
+      
+      if(opc=='DEL'){
+        console.log("aaaaaaaaa")
+        url = "/eve/usuario_evento_del" 
+        
+      }else
+        {Swal.fire("Opción desconocida")
+        return
+      } 
+      
+
+    }
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento") 
+    console.log("inputEvento")
+    console.log(inputEvento)
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {
+    "evento":inputEvento,
+    "usuario":dato,
+    "opc":opc
+    
+  }
+  //body:form,
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      type:"POST",
+      url:url,
+      data:data
+    })
+    .done(function(r,textStatus,xhr){
+      console.log(xhr.status)
+        if(xhr.status=200){                
+           
+            if(r.rptaServer=='OK'){
+                console.log("aaaaaaaaa")
+               
+              
+              //  console.log(r.participante.id)
+                refrescaTablaUsuEve(r.lisUsuariosEvento)
+                refrescaTablaUsuario(r.lisUsuarios)
+                Swal.fire(r.mensaje)
+                mensajeServer(r.mensaje)
+               
+            }else{
+                console.log("linea 688"+r.rptaServer);
+                mensajeServer(r.mensaje)
+                Swal.fire(r.mensaje)
+            }
+            console.log("participante_form.html 191")
+            // desactivamos para que no recargue la pagina   
+            //location.reload(true);
+        
+        }
+        else{
+            console.log("usuario_evento.html 697")
+            mensaje(textStatus);
+
+        
+        }
+    }).fail(function (error) {
+        //.fail( function( jqXHR, textStatus, errorThrown ) {
+        //mensaje(error.responseText);
+           // mensaje(error);
+          
+            mensajeServer("Error desconocifo fail");
+            Swal.fire("Error desconocido fail")
+            console.log("usuario_evento.html 707")
+    });
+    
+    
+ 
+
+	
+  }
+  
+
+
+</script>
+
+ 
+{% endblock js %}

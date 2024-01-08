@@ -3,10 +3,9 @@
 {% block content_wrapper %}
 
     <!--<form method="POST" class="form-inline" id="frmbuscar">-->
-    <form method="POST" enctype="multipart/form-data" class="form-horizontal" id="frmimportar">  
+    <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
-
-
+  
         <div class="col-xl-12 col-md-12 mb-12">
             {% if obj %}
             <div class="card border-left-warning shadow h-100 py-2">
@@ -17,7 +16,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             
-                          <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider"></div>
 
                             <div class="form-row">
                               <!---
@@ -29,41 +28,36 @@
                                 {{eve.evento}}
                               </div>-->
 
-                                <div class="form-group col-md-2">
-                                  <label for="id_evento">Evento:jk</label>
-                                </div>
-                                <div class="form-group col-md-4">                              
-                                  <select name="evento" class="form-control" required="" id="bus_id_evento">
-                                     <option value="0">Selecciona Evento</option>
-                                          {% for item in liseventos %}    
+                              <div class="form-group col-md-2">
+                                <label for="id_evento">Evento:</label>
+                              </div>
+                              <div class="form-group col-md-3">                              
+                                <select name="evento" class="form-control" required="" id="bus_id_evento">
+                                  <option value="0">Selecciona Evento</option>
+                                  {% for item in liseventos %}    
                                               
-                                             <option value={{item.id}}>{{item.nombre_evento}}</option>
-                                              <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
-                                          {% endfor%}
+                                  <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                  <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                 {% endfor%}
                                 </select>
                               </div>  
-                            
+                                                         
                             </div>
-                            <div class="form-row">
 
-                              <div class="form-group">
-                               
-                                <label for="name" class="">Estructura:(apellido,nombre,email,empresa,cargo,modalidad asis.#,tipo part.#,confirmo)</label>
-                                <div class="col-md-8">
-                                    <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-row">
-                            
-                            <div class="form-group">
-                             
-                              <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
-                                <button type="button" class="btn btn-info" onclick="importarInvitados()" ><i class="fa fa-search" aria-hidden="true">Importar</i></button>
-                              </div>
-                            </div> 
+    
 
-                            </div>  
+                        
+                            <div class="row">
+                                <div class="col-3">
+                                  <!---
+                                    <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                                    <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                                -->
+                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
+                                </div>    
+                              
+
+                            </div>    
 
                         </div>
                     
@@ -71,51 +65,65 @@
                 </div>
             </div>
         </div>
-
     </form>
+
+ 
     
 {% endblock content_wrapper %}
 
 {% block content %}
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
-        
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
-         
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Acciones:</div>
+              <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+            <!-- compras_new esta devlarado en el archivo urls.py-->
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
+              <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+              
+            </div>
+          </div>
         </div>
     <!-- Card Body -->
     
-        <div id="rowdata" class="card-body" style="display:none" >
+        <div id="rowdata" class="card-body">
           {% if not lispar %}
-          <div class="alert alert-info">Verifique datos y vuelva a importar</div>
+          <div class="alert alert-info">No existe coincidencias</div>
           {% endif %}   
             <table id="tableLista" class="table table-striped table-hover dt-responsive nowrap" style="width:100%"
-            data-toggle="table"
-              data-pagination="true"
-              data-search="true"
-            >
-            
-
+                data-toggle="table" data-pagination="true" data-search="true">
               <thead>
-                <th>Item</th>        
-                <th>Apellido</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Otros</th>
+                
+                <th>Id</th>        
+                <th>Archivo</th>
+                <th>Cantidad</th>
+                <th>Fecha/Hora</th>
+                <th class="all">Acciones</th>
               </thead>
               <tbody>
               
-                
+    <!--<td>{{ item.asistio_evento }}</td>-->
                 
                 {% for item in lispar%}
                 <tr>
+                    
                     <td>{{ item.id }}</td>
-                    <td>{{ item.apellido}}</td>
-                    <td>{{ item.nombre}}</td>
-                    <td>{{ item.email}}</td>
-                    <td></td>
+                    <td>{{ item.archivo_csv }}</td>
+                    <td>{{ item.cantidad}}</td>
                    
+                    <td>{{ item.fc}}</td>     
+                   
+                    <td>
+                      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{# url 'cmp:proveedor_edit' item.id #}')"><i class="far fa-edit"></i></button>
+
+                      
+                    </td>  
                 </tr>
                 {% endfor %}
               </tbody>
@@ -136,148 +144,112 @@
 
     url = "/par/registro_edit"
   }
-
-
-  
-
-
- 
-
-
-  function importarInvitados(files){
+  function participantesEncontrados(){
     // alert(id)
     // alert(accion)
-   
-   
-    ocultaMuestraObj("rowdata",0)
-    var form = new FormData(document.getElementById('frmimportar'));
-    console.log("edu 1")
-    var inputCsv = form.get("csv_file")
-    console.log("edu 2")
+    var form = new FormData(document.getElementById('frmbuscar'));
     var inputEvento = form.get("evento")
-    console.log("edu 3")
-   
-   console.log("x"+inputCsv.name+"x")
-   console.log(inputEvento)
+  
+    if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+      mensajeServer("Seleccione Evento (cl)");
+      return false
+    }
 
-   if(inputCsv.name === '' ){
-      console.log("Seleccione archivo")
-   }
-   if(inputEvento === 0 ){
-    console.log("Seleccione Evento")
-   }
+    console.log("evento " +inputEvento);
 
-    var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
-    
-    url = "/par/participante_import_add"
-    console.log("edu 4")
+    var url = "/par/participante_import_delete"
     console.log(url);
     var token = '{{csrf_token}}'
-    var data = {"csv_file":inputCsv,
-    "evento":inputEvento,
-  
-     }
-
-  var formData = new FormData(document.getElementById("frmimportar"));
-  document.getElementById("")
+    var data = {
+    "evento":inputEvento
+  }
   console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
 
-  // dataType: "html",
-  $.ajax({
-    headers : {"X-CSRFToken": token,
-    "X-Requested-With": "XMLHttpRequest"},      
-    type:"POST",
-   
-    body:form,
-    url:url,
-    data:formData,
-    cache: false,
-    contentType: false,
-    processData: false, 
-    success: function(r){
-      console.log("respuesta")
-      console.log(r.rptaServer)
-
-      if(r.rptaServer=="OK"){
-        console.log('edu')
-        console.log(r.mensaje)
-        $("table > tbody").empty()  
-       /* {% if not r.lispar %}
-        console.log("no existe eduuuuuuuuuuuuuuuuu")
-        {% endif %}*/
-        mensajeServer(r.mensaje)
-        mensajeServer(r.mensaje)
-        Swal.fire(r.mensaje,"Importación de participantes","success")
-        
-
-        ///////////////refrescaTablaEncontrados(r.lispar);
-        
-        /*Swal.fire("mostrara " +  r.lispar);*/
-        /*location.reload(true)*/
-      }else{
-        console.log(r.rptaServer);
-        if(r.errorData == null || r.errorData==''){
-          console.log("El valor de EmpName " + r.mensaje); //Nulo
-          mensajeServer(r.mensaje)
-          Swal.fire(r.mensaje,"","info")
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rptaServer=="OK"){
+          $("table > tbody").empty()  
          
-        } else {
-          mensajeServer(r.mensaje)
-          Swal.fire(r.mensaje)
-          refrescaTablaError(r.errorData);
-           //Cualquier otro
+
+         
+         
+          refrescaTablaEncontrados(r.liscsv);
+          
+          /*Swal.fire("mostrara " +  r.lispar);*/
+          /*location.reload(true)*/
+        }else{
+          if (typeof r.mensaje === 'undefined') {
+           Swal.fire("Error Inesperado tratando de borrar registro " + r);
+          }else{
+            Swal.fire(r.mensaje);
+          } 
         }
-       // Swal.fire("Error Inesperado al importar participantes " + r.rptaServer);
-       // mensajeServer(r.rptaServer)
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
       }
-    },
-    error: function(jqXHR, textStatus, errorThrow){
-      //console.log(textStatus, errorThrow);
-      Swal.fire(errorThrow,"",'red');
-    }
-  })
-
-
-  //
-  
-
-    
+    })
 
   }
 
 
-
   
 
-  function refrescaTablaError(datos){
-  
-    $("#tableLista").dataTable().fnDestroy();
+
+  function refrescaTablaEncontrados(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
     $("table > tbody").empty()
     
     var tabla= $("table")
+
     var rows = $.map(datos,function(value,index){
 
-    return `<tr id=\"row_reg${value.fila}"\">
-    <td>${value.fila}</td>
-    <td>${value.apellido}</td>
-    <td>${value.nombre}</td>
-    <td>${value.email}</td>  
-    <td>${value.is_valid}</td>       
+     
+    nfila=index+1;
+
+    
+   
+
+    return `<tr id=\"row_reg${value.id}"\" >
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /> 
+     
+        ${value.id}</td>
+
+
+      <td>${value.archivo_csv}</td>
+      <td>${value.cantidad}</td>
+      <td>${value.fc}</td>
+         
+      
+   
+   
+    <td>
+      <button type="button" class="btn btn-warning btn-circle" onclick="{% if perms.par.change_participante%} dialogoPopup(${value.id} {% else %}''{%endif%},'DEL')"><i class="far fa-trash-alt"></i></button>      
+      
+      
+    </td>  
 
     </tr>`
      })
      
     $("table > tbody").html(rows.join(''))
-   creaFuncionDataTable()
-   ocultaMuestraObj("rowdata",1)
+    creaFuncionDataTable()
 
 
   }
 
   function creaFuncionDataTable(){
-     console.log("crea funcion cabecera 1")
+     console.log("crea funcion cabecera 1 busca_participante.html 363")
     <!-- inicio -->
-    <!--$("#tableLista").dataTable().fnDestroy();-->
+   
     if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
       console.log("crea funcion cabecera 2")
         $('.table').DataTable({
@@ -309,7 +281,8 @@
           }
           }
         });
-    }
+        console.log("crea funcion cabecera 3")
+       }
     <!-- fin  -->
 
   }
@@ -319,43 +292,55 @@
   
 
 
-  function dialogoAsistencia(id,tipo,obj){
-    asistio_evento=document.getElementById(obj+id).value;
-
-    if (asistio_evento.toLowerCase()=="true"){
+  function dialogoPopup(id,opc){
+  
+//console.log(obj);
+   
+    //if (obj){
     Swal.fire({
       title: "¿Borrar?",
-      text : "Anular Asistencia",
+      text : "Eliminar importación",
       icon:"question",
       showCancelButton: true,
       confirmButtonText: `Si, Borrar`,
       cancelButtonText: `No borrar`,
       allowOutsideClick:false,
-      confirmButtonClass: 'btn btn-danger',
+      //confirmButtonClass: 'btn btn-danger',
+      customClass: {
+        confirmButton: 'btn btn-primary btn-lg',
+        cancelButton: 'btn btn-danger btn-lg',
+        loader: 'custom-loader'
+      },
+
+
     }).then((borrar) => {
       console.log(borrar)
       if(borrar.isConfirmed){
-           participanteAsistencia(id,tipo)
+           eliminarCsv(id,opc)
   
       }else{
         Swal.fire("Registro No fue borrado... ACCION CANCELADA","","info")
       }
     })  
-    }else{
-      console.log("ddddddddddd 1")
-      participanteAsistencia(id,tipo)
-
-    }
+    
   }
 
 
 
- function participanteAsistencia(id,tipo){
-  console.log("ddddddddddd")
+ function eliminarCsv(id,opc){
   //url = "/par/asistencia_participante/"+id
-  url = "asistencia_participante/"+id
+  var form = new FormData(document.getElementById('frmbuscar'));
+  var inputEvento = form.get("evento")
+
+  if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+    mensajeServer("Seleccione Evento");
+    return false
+  }
+
+  url = "participante_import_delete/"+id
   var data = {"id":id,
-              "tipo":tipo}
+              "opc":opc,
+             "evento":inputEvento}
 
   var token = "{{csrf_token}}"
   $.ajax({
@@ -364,19 +349,13 @@
     url:url,
     data:data,
     success: function(r){
-      if(r.rpta==="OK"){
-        actualiza_RowTable(r)
-        Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
-        
+      if(r.rptaServer==="OK"){
+        refrescaTablaEncontrados(r.liscsv);
+  
+        Swal.fire("Se elimino importación");                          
       }else{
-        let result = r.indexOf("no-acceso");
+        Swal.fire(r.mensaje);
         
-        if (result>=0){
-          Swal.fire("No tiene acceso")
-        }else{
-          Swal.fire("Error Inesperado al procesar registro ")
-          
-        }
         
         
       }
@@ -539,8 +518,9 @@
 
 
    function actualiza_RowTable(r) {
-
+    console.log("dato 1");
     if(r.rpta=="OK"){
+      console.log("dato 1b");
       var e_li = document.getElementById("i_asistio"+r.id);
       var row_reg=document.getElementById("row_reg"+r.id);
       row_reg.style.backgroundColor = r.background_tipo_participante
@@ -551,6 +531,8 @@
         e_li.classList.remove("fa-hand-pointer");
         e_li.classList.remove("far");
         e_li.classList.remove("fa-hand-pointer");
+
+        
        // e_li.classList.add("fa fa-user-check");
        
       }else{            
@@ -561,13 +543,50 @@
         
       //  e_li.classList.remove("fa fa-user-check");
        }
-      document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
-      console.log("edudddddddddddddddddddddddddddd")
-      console.log(r.tipo_participante)
-      document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
+     
+    document.getElementById("up_asistio"+r.id).value=r.asistio_evento;
+   /*   document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_nombre"+r.id).value=r.nombre_participante;
+      document.getElementById("up_apellido"+r.id).value=r.apellido_participante;
+      document.getElementById("up_email"+r.id).value=r.email_participante;
+      document.getElementById("up_empresa"+r.id).value=r.empresa_participante;
+      document.getElementById("up_modalidad"+r.id).value=r.modalidad_asistencia;
+      document.getElementById("up_tipo"+r.id).value=r.tipo_participante;*/
+     
+      nfila = document.getElementById("item"+r.id).value;
+      console.log("modi 1")
+       //#tableLista.Rows[0][1] = "Victoriano Huerta";
+      
+     //  console.log(document.getElementById("tableLista")tableLista.Rows);
+
+     const table = $('#tableLista').DataTable();
+    //  table_filtered=table.rows({page:'current'})
+ 
+///console.log({data: table_filtered.data()});
+
+           // Create table with data set
+
+var rows = table.rows( 0 ).data();
+console.log(rows);
+      console.log("modi 2")
+      table.cell(nfila-1, 1 ).data( r.apellido_participante ).draw();
+      table.cell(nfila-1, 2 ).data( r.nombre_participante ).draw();
+      table.cell(nfila-1, 3 ).data( r.email_participante).draw();
+      table.cell(nfila-1, 4 ).data( r.empresa_participante).draw();
+      table.cell(nfila-1, 5 ).data( r.modalidad_asistencia).draw();
+      table.cell(nfila-1, 6 ).data( r.tipo_participante).draw();
+      table.cell(nfila-1, 7 ).data( r.tipo_identificacion_participante).draw();
+
+      //console.log(r.tipo_participante)
+      //document.getElementById("up_tipo"+r.id).value=r.tipo_participante;
     }
 
    }
+
+
+  
+
+
 </script>
 
  

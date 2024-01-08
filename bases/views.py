@@ -162,6 +162,9 @@ def user_groups_admin(request,pk=None):
             ...
         
         grp.save()
+        print(grp)
+        print(grp.id)
+        
         messages.success(request, "Registro Guardado Satisfactoriamente")
         return redirect("config:user_groups_modify", grp.id)
     return render(request,template_name,context)

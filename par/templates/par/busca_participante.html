@@ -2,7 +2,8 @@
 
 {% block content_wrapper %}
 
-    <form method="POST" class="form-inline" id="frmbuscar">
+    <!--<form method="POST" class="form-inline" id="frmbuscar">-->
+    <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
   
         <div class="col-xl-12 col-md-12 mb-12">
@@ -30,14 +31,14 @@
                               <div class="form-group col-md-2">
                                 <label for="id_evento">Evento:</label>
                               </div>
-                              <div class="form-group col-md-10">                              
+                              <div class="form-group col-md-3">                              
                                 <select name="evento" class="form-control" required="" id="bus_id_evento">
-                                  <option value="0">Selecciona Modalidad b</option>
-                                        {% for item in liseventos %}    
+                                  <option value="0">Selecciona Evento</option>
+                                  {% for item in liseventos %}    
                                               
-                                              <option value={{item.id}}>{{item.nombre_evento}}</option>
-                                              <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
-                                        {% endfor%}
+                                  <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                  <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                 {% endfor%}
                                 </select>
                               </div>  
                                 
@@ -46,26 +47,25 @@
                             
                             </div>
 
+
+
+                         
+
                             <div class="form-row">
                               <div class="form-group col-md-2">
                                 <label for="apellido_participante">Apellido</label>
                               </div>  
-                              <div class="form-group col-md-4">                            
+                              <div class="form-group col-md-3">                            
                                 
                                 <input id="bus_apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
                                 
                                   <!-- {{eve.apellido_participante}}-->
-
-                                    
-                                      
-                                  
-
                               </div>
 
                               <div class="form-group col-md-2">
                                 <label for="lblNombre">Nombre</label>
                               </div>  
-                              <div class="form-group col-md-4">                            
+                              <div class="form-group col-md-3">                            
                                 <input id="bus_nombre_participante" type="text" name="nombre_participante" value="{{nombre_participante }}">
 
                                 <!--{{eve.nombre_participante}}-->
@@ -78,8 +78,8 @@
                               <div class="form-group col-md-2">
                                 <label for="lblEmpresa">Empresa</label>
                               </div>  
-                              <div class="form-group col-md-10">                            
-                                <input id="bus_empresa_participante" type="text" name="apellido_participante" value="{{empresa_participante }}">
+                              <div class="form-group col-md-3">                            
+                                <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
                                 <!--{{eve.empresa_participante}}-->
                               </div>
                             
@@ -108,6 +108,8 @@
             </div>
         </div>
     </form>
+
+ 
     
 {% endblock content_wrapper %}
 
@@ -209,6 +211,19 @@
     var inputEmpresa = form.get("empresa_participante")
     var inputEvento = form.get("evento")
 
+
+   
+  
+    if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+      mensajeServer("Seleccione Evento (cl)");
+      return false
+    }
+
+
+
+
+
+
     
     console.log("apellido " +inputApellido);
     console.log("nombre " +inputNombre);
@@ -251,7 +266,11 @@
           /*Swal.fire("mostrara " +  r.lispar);*/
           /*location.reload(true)*/
         }else{
-          Swal.fire("Error Inesperado tratando de borrar registro " + r);
+          if (typeof r.mensaje === 'undefined') {
+           Swal.fire("Error Inesperado tratando de borrar registro " + r);
+          }else{
+            Swal.fire(r.mensaje);
+          } 
         }
       },
       error: function(jqXHR, textStatus, errorThrow){
@@ -449,8 +468,8 @@
            participanteAsistencia(id,tipo)
   
       }else{
-        Swal.fire("Registro No fue borrado... ACCION CANCELADA","","info")
       }
+      Swal.fire("Acción Cancelada","","info")
     })  
     }else{
       console.log("ddddddddddd 1")

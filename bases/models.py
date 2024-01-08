@@ -63,7 +63,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     
     #    def get_absolute_url(self):
     #    return "/users/%s" % urlquote(self.email)
-    
+        
+        
     
     
 class ClaseModelo(models.Model):

@@ -4,9 +4,9 @@ from django.db import models
 from django.forms import fields
 from django import forms
 from django.forms.widgets import PasswordInput
-from .models import Modalidad_Evento,Evento
-
-
+from .models import Modalidad_Evento,Evento,Usuario_Evento
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 
 class ModalidadEventoForm(forms.ModelForm):
@@ -48,4 +48,50 @@ class EventoForm(forms.ModelForm):
                      'class':'form-control'
                  })
         self.fields['modalidad_evento'].empty_label="Seleccione Modalidad"
+    
+    
+class UsuarioEventoForm(forms.ModelForm):
+   
+    class Meta:
+        model=Usuario_Evento
+        fields = ['evento','usuario']
+        labels = {'Evento':"nombre_evento",
+        'usuario':"usuario"}
+        widget={'nombre_evento':forms.TextInput}
+        
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        usuario = cleaned_data.get('usuario')
+        evento=cleaned_data.get("evento")
+        mensaje='Verifique ingrese de datos'
+        print('uno UsuarioEventoForm forms.py')
+        print(id)
+        
+        if(not evento or evento==0):
+            print('uno a xxx')     
+            self.add_error("evento", ValidationError(_("Evento no valido")))
+            requestValido="OFF"
+                        
+        if(not usuario):
+            print('uno c')
+            mensaje=f'Error verifique'
+            self.add_error("usuario",ValidationError(_("Seleccione modalidad de asistencia")))
+            requestValido="OFF"
+           
+        print ("cleaned_data 58")               
+             
+        return self.cleaned_data
+        
+        
+        
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                     'class':'form-control'
+                 })
+        self.fields['evento'].empty_label="Ingrese evento"
     
