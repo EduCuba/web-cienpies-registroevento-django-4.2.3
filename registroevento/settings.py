@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-(hdas)*9g)plrw1$8n6m$^6l))qxu)z#s(54bn#mgn1mc5tpa)
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['18.215.144.178','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['34.207.220.185','localhost', '127.0.0.1']
 
 
 # Application definition
@@ -115,7 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_registro',
-        'HOST': 'localhost',
+        'HOST': 'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
         'USER': 'postgres',
         'PASSWORD': 'postgresql',
         'PORT': 5432,
@@ -124,7 +124,7 @@ DATABASES = {
 
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
-
+         
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
