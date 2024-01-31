@@ -16,7 +16,7 @@ from .forms import BuscarParticipanteForm,ParticipanteForm,CreateForm,TipoPartic
                    ModalidadAsistenciaForm,Participante_Csv,ParticipanteCsvForm
 
 
-from bases.views import SinPrivilegios
+from bases.views import SinPrivilegios,SinPrivilegiosAjax
 from eve.views import lista_Eventos_Por_Acceso
 
 from eve.models import Evento, Usuario_Evento
@@ -96,7 +96,7 @@ def buscarparticipante(request,participante_id=None):
         #Formulario creado en forms.py
         form_buscar=BuscarParticipanteForm()
         
-        lisEventos = lista_Eventos_Por_Acceso(pkUser,request.user.is_staff)
+        lisEventos = lista_Eventos_Por_Acceso(pkUser,request.user.is_staff,"O")
         
         
         '''if request.user.is_staff:
@@ -613,8 +613,7 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
         return redirect('par:buscar_participante')
 
 
-
-class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):    
+class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateView):    
     permission_required = 'par.add_participante'
     model = Participante
     #template_name="par/participante_add.html"    
@@ -652,7 +651,7 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
                 form.instance.uc = self.request.user   
                 form.save() 
                
-                contexto={'mensaje':"Datos actualizados",
+                contexto={'mensaje':"Participante agregado",
                             'error':'',
                             'rptaServer':"OK"}  
                 status_code = 200
@@ -752,7 +751,7 @@ def xx_ImportarCsv(request,participante_id=None):
         #Formulario creado en forms.py
         #form_buscar=BuscarParticipanteForm()
         #lisEventos = Evento.objects.all()
-        lisEventos = lista_Eventos_Por_Acceso(request.user.pk,request.user.is_staff)
+        lisEventos = lista_Eventos_Por_Acceso(request.user.pk,request.user.is_staff,"O")
 
         #lispar=Participante.objects.filter(Q(evento_id=par_evento_id))
         
@@ -831,7 +830,7 @@ def ListarCsv(request,participante_id=None):
         #Formulario creado en forms.py
         #form_buscar=BuscarParticipanteForm()
         #lisEventos = Evento.objects.all()
-        lisEventos = lista_Eventos_Por_Acceso(request.user.pk,request.user.is_staff)
+        lisEventos = lista_Eventos_Por_Acceso(request.user.pk,request.user.is_staff,"O")
 
         #lispar=Participante.objects.filter(Q(evento_id=par_evento_id))
         
@@ -1399,16 +1398,23 @@ class TipoParticipanteDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView
 
 
 
- 
-class ModalidadAsistenciaList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
-    permission_required = 'par.view_modalidad_asisitencia'
+#class TipoParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView): 
+#class ModalidadAsistenciaList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class ModalidadAsistenciaList(LoginRequiredMixin, PermissionRequiredMixin, ListView): 
+    permission_required = 'par.view_modalidad_asistencia'
     template_name = "eve/modalidad_asistencia_list.html"
     login_url = 'config:login'
     model = Modalidad_Asistencia    
     context_object_name = 'obj'    
 
 
-
+class ccccccTipoParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_tipo_participante'
+    template_name = "eve/tipo_participante_list.html"
+    login_url = 'config:login'
+    model = Tipo_Participante
+    
+    context_object_name = 'obj'   
 
 
 class ModalidadAsistenciaAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
@@ -1464,11 +1470,10 @@ def contarasistencia(request,participante_id=None):
     #eve=Evento.objects.filter(estado=True)
     form_compras={}
     contexto={}
-    par_evento_id=0
-    nombre=''
-    apellido =''
-    evento=0,
-    asistencia=Participante.objects.filter(Q(evento_id=par_evento_id) & Q(asistio_evento=True)).count()
+    
+   
+    evento = request.POST.get("evento")
+    asistencia=Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).count()
     print('eduuuuuuuuuuuuuu')     
     if request.method=='POST':    
         print('es pooooooooooossssttt')

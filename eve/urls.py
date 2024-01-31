@@ -15,7 +15,10 @@ urlpatterns = [
     path('eve/evento_list', EventoList.as_view(),name="evento_list"),
     path('eve/evento_add',EventoAdd.as_view(),name="evento_add"),
     path('eve/evento_edit/<int:pk>',EventoEdit.as_view(),name="evento_edit"),
-    path('eve/evento_del/<int:pk>',EventoDel.as_view(), name='evento_del'),   
+    #path('eve/evento_del/<int:pk>',EventoDel.as_view(), name='evento_del'),   
+    path('eve/evento_del/<int:pk>',EventoDel,name="evento_del"),
+    
+    
     
     
     path('eve/usuario_evento',buscarusuarioevento,name="usuario_evento"),

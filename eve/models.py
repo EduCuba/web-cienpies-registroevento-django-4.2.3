@@ -12,6 +12,13 @@ class Modalidad_Evento(ClaseModelo2):
       unique=True
   )
   
+  ''' 
+  def delete(self, *args, **kwargs):
+        if Evento.objects.filter(modalidad_evento_id= self.pk).exists():
+            raise Exception('Modalidad esta siendo utilizada en Evento(s)') 
+           # or you can throw your custom exception here.
+        super(Modalidad_Evento, self).delete(*args, **kwargs)
+  '''
   def __str__(self):
     return '{}'.format(self.descripcion_modalidad_evento)
 
@@ -21,7 +28,7 @@ class Modalidad_Evento(ClaseModelo2):
       
       
 class Evento(ClaseModelo2):
-    modalidad_evento = models.ForeignKey(Modalidad_Evento, on_delete=models.CASCADE)
+    modalidad_evento = models.ForeignKey(Modalidad_Evento, on_delete=models.PROTECT)
     nombre_evento = models.CharField(
         max_length=100,
         help_text='Evento',

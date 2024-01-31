@@ -76,20 +76,8 @@
 <div class="card shadow mb-4">
   <!-- Card Header - Dropdown -->
   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
-    <div class="dropdown no-arrow">
-      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-      </a>
-      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-        <div class="dropdown-header">Acciones:</div>
-        <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
-        <!--compras_new esta devlarado en el archivo urls.py-->
-        <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
-        <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
-        
-      </div>
-    </div>
+    <h6 class="m-0 font-weight-bold text-primary">Acceso de usuario a evento</h6>
+  
   </div>
 
 <!-- Card Boby 2 columnas (inicio)-->
@@ -272,7 +260,7 @@
         
     <td>   
         <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
-        onclick="{% if perms.eve.change_usuario_evento%} addAccesoEvento(${value.usuario_id},'DEL'){% else %}''{%endif%}
+        onclick="{% if perms.eve.view_usuario_evento%} addAccesoEvento(${value.usuario_id},'DEL'){% else %}''{%endif%}
         " ><i class="far fa-trash-alt" id=\"i_asistio${value.id}\"></i></button>        
     </td>
   
@@ -311,7 +299,7 @@
     <td>
       
         <button id=\"button_asist"${value.id}\" type="button" class="btn btn-sm text-success"
-        onclick="{% if perms.eve.change_usuario_evento%} addAccesoEvento(${value.id},'ADD'){% else %}''{%endif%}
+        onclick="{% if perms.eve.view_usuario_evento%} addAccesoEvento(${value.id},'ADD'){% else %}''{%endif%}
         " ><i class="fas fa-plus" id=\"i_asistio${value.id}\"></i></button>
 
         
@@ -549,9 +537,25 @@
                 mensajeServer(r.mensaje)
                
             }else{
-                console.log("linea 688"+r.rptaServer);
-                mensajeServer(r.mensaje)
-                Swal.fire(r.mensaje)
+
+              console.log("linea edu 1");
+                if(r.rptaServer==="OFF"){
+                   Swal.fire(r.mensaje);
+                   console.log("linea edu 2");
+                 }else{
+                  console.log("linea edu 3");
+                  //console.log(r);   
+                  mostrarErrorPopup(r)
+                 
+                  //Swal.fire('Error...', 'verificar!', 'error')
+                          
+                      
+                 }
+
+
+
+                console.log("usuario_evento 574");
+              
             }
             console.log("participante_form.html 191")
             // desactivamos para que no recargue la pagina   
@@ -570,13 +574,17 @@
            // mensaje(error);
           
             mensajeServer("Error desconocifo fail");
+           
             Swal.fire("Error desconocido fail")
             console.log("usuario_evento.html 707")
+            
+
+
     });
     
     
  
-
+   
 	
   }
   

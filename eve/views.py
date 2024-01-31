@@ -1,3 +1,4 @@
+from typing import Any
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -12,12 +13,19 @@ from django.views.generic import *
 
 from .models import Modalidad_Evento, Evento, Usuario, Usuario_Evento
 from .forms import ModalidadEventoForm,EventoForm, UsuarioEventoForm
-
-from bases.views import SinPrivilegios
+from par.models import Participante
+from bases.views import SinPrivilegios, SinPrivilegiosAjax
 
 from django.db.models import Q
 import json
 
+from django.db.models import ProtectedError
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+
+
+from django.db import transaction
+from django.db import IntegrityError
 
 # Create your views here.
 #class TipoEventoList(LoginRequiredMixin, PermissionRequiredMixin):
@@ -112,17 +120,75 @@ class ModalidadEventoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView)
     def form_valid(self, form):
         form.instance.um_id = self.request.user.id
         return super().form_valid(form)    
-    
+   
+   
+#https://www.youtube.com/watch?v=IYQFt8XJiIU video de eliminar    
 class ModalidadEventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
-# agregado para controlar acceso de usuario
+# agregado para controlar acceso de usuario   
+   
+    print('educubaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     permission_required="eve.delete_modalidad_evento"
     model=Modalidad_Evento
     template_name = "eve/modalidad_evento_del.html"
     context_object_name = "obj"
     success_url = reverse_lazy("eve:modalidad_evento_list")
-    success_message="Modalidad Eliminada Satisfactoriamente"     
+    success_message="Modalidad Eliminada Satisfactoriamente"
+   
+  
     
     
+    
+    def form_valid(self, form, **kwargs):
+        
+      # self.object = self.get_object() # assign the object to the view
+      # form = self.get_form()
+      # print(form)
+       #if not (Modalidad_Evento.objects.filter(id= self.kwargs['pk']).exists()): 
+       #    raise Exception('Modalidad no existe') 
+       if Evento.objects.filter(modalidad_evento_id= self.kwargs['pk']).exists(): 
+           messages.add_message(self.request,messages.WARNING,"Form is invalid")
+           raise Exception('Modalidad esta siendo utilizada en Evento(s)') 
+       return super(ModalidadEventoDel, self).form_valid(form)
+       #return redirect('/eve/modalidad_evento_del.html')
+       #response = redirect('/modalidad_evento_list/')
+       #return response
+       
+   
+    def form_invalid(self, form):
+        'form is invalid'
+        messages.add_message(self.request,messages.WARNING,"Form is invalid")
+        return redirect('/modalidad_evento_list/')
+    
+        
+   
+    
+   
+   
+   
+    '''
+    def get_context_data(self, **kwargs):
+        r = super().get_context_data(**kwargs) 
+        r['rptaServer'] ='OK'
+        r['mensaje'] ='Datos Eliminados OK'
+        r['list_url'] =reverse_lazy("eve:modalidad_evento_list")
+        
+        return r
+        
+    '''
+    '''
+    def get_context_data(self, **kwargs):
+        r = super().get_context_data()
+        r['g_name'] = Evento.objects.filter(id=self.kwargs['pk']).values('nombre_evento')
+       
+        return r
+'''
+  
+      
+   
+      
+   
+   
+  
     
 #class EventoList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 class EventoList(SuccessMessageMixin, SinPrivilegios, ListView):
@@ -130,7 +196,14 @@ class EventoList(SuccessMessageMixin, SinPrivilegios, ListView):
     template_name = "eve/evento_list.html"
     login_url = 'config:login'
     model = Evento    
-    context_object_name = 'obj'    
+    context_object_name = 'obj'  
+    def get_queryset(self):
+        lisModel=lista_Eventos_Por_Acceso(self.request.user.id,self.request.user.is_staff,"O")
+        #likes = Evento.objects.filter(like = True).count() #el resultado es un int
+        #dislikes = Evento.objects.filter(dislike = True).count() #el resultado es un int
+
+        return lisModel #o dislikes 
+       
     
        
 #class EventoAdd(LoginRequiredMixin, generic.CreateView):
@@ -167,7 +240,8 @@ class EventoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
         return super().form_valid(form)
 
 
-
+'''
+Se desactivo , para poder controlar se creo una funcion definida
 class EventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
 # agregado para controlar acceso de usuario
     permission_required="eve.delete_evento"
@@ -176,13 +250,94 @@ class EventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):
     context_object_name = "obj"
     success_url = reverse_lazy("eve:evento_list")
     success_message="Evento Eliminado Satisfactoriamente"   
-    
-    
-    
-#@login_required(login_url='config:login')
-#@permission_required('par.view_participante', login_url='config:home')
+'''    
+
+
+
+@login_required(login_url='config:login')
+@permission_required('eve.delete_evento', login_url='bases:denegado')
+def EventoDel(request,pk=None):
+
+   
+    rptaServer="OFF"
+    lista=""
+    contexto={
+                    'rptaServer':rptaServer
+                   
+                     } 
+    if request.method == "POST":
+        print('edu 02')
+        opc= request.POST.get("opc")
+        id= request.POST.get("id")
+        
+       
+        if opc == "DEL":
+           
+            #sid = transaction.savepoint()
+            try:
+             
+                if (Participante.objects.filter(evento_id=pk).exists()):
+                   mensaje="Evento no se puede eliminar, tiene participantes"
+                  
+                else:
+                        
+                   
+                   #eveDelete = Evento.objects.get(id=pk)
+                   eveDelete = Evento.objects.filter(id=pk)
+                  
+                   if (eveDelete):       
+                       eveDelete.delete()  
+                       rptaServer="OK"
+                       mensaje="Evento eliminado con exito"   
+                       lista=lista_Eventos_Por_Acceso(request.user.id,request.user.is_staff,"Q")  
+                    
+                   else:
+                       mensaje="No existe Evento"   
+                status_code = 200
+                
+           
+            except Exception as e:
+                rptaServer="OFF"
+                mensaje="Error de integridad de datos 1(p)" 
+                  
+            except IntegrityError:
+                 
+                mensaje="Error de integridad de datos 2(p)" 
+                rptaServer="OFF"
+               
+               
+            contexto={'mensaje':mensaje,
+                    'error':'',
+                    'rptaServer':rptaServer,
+                    'lista':lista
+                     } 
+                                
+        else:
+                contexto={'mensaje':'Acción desconocida ()',
+                            'error':'',
+                            'rptaServer':'OFF',
+                            'lista':lista}  
+                print (contexto)
+                
+    else:
+                contexto={'mensaje':'Acción desconocida (Post)',
+                            'error':'',
+                            'rptaServer':'OFF',
+                            'lista':lista}  
+                
+    print(contexto)           
+    response = JsonResponse(contexto) 
+    if(rptaServer=='OK'):
+        response.status_code = 200        
+    return response
+  
+
+   
+  
+@login_required(login_url='config:login')
+@permission_required('eve.view_usuario_evento', login_url='config:home')
 def buscarusuarioevento(request,evento=None):
-#    permission_required = 'par.view_participante'
+    permission_required = 'eve.view_usuario_evento'
 
     template_name="eve/usuario_evento.html"
     #eve=Evento.objects.filter(estado=True)
@@ -195,8 +350,8 @@ def buscarusuarioevento(request,evento=None):
     if request.method=='GET':
         print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
-        lisEventos=Evento.objects.filter(estado=True)
-      
+        lisEventos=lista_Eventos_Por_Acceso(request.user.id,request.user.is_staff,"O")
+     
        
     
 
@@ -261,8 +416,10 @@ class UsuarioEventoAdd_2(SuccessMessageMixin, SinPrivilegios, generic.CreateView
     
 
 
-class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):    
-  
+#class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):    
+
+class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateView):    
+   
     permission_required = 'eve.add_usuario_evento'
     model = Usuario_Evento
     template_name="/eve/usuario_evento.html"    
@@ -345,8 +502,9 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
             print (contexto)
             response = JsonResponse(contexto)
             print(response)
-            return response       
-        return redirect('par:buscar_participante')
+        return response       
+
+    #return redirect('par:buscar_participante')
     
     
     
@@ -361,10 +519,12 @@ class UsuarioEventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):
     success_message="Acceso de usuario eliminado"
     
     
-    
-    
+
+#@permission_required('bases.change_usuario', login_url='bases:login')
 @login_required(login_url='config:login')
-@permission_required('bases.change_usuario', login_url='bases:login')
+#@permission_required('eve.delete_usuario_evento', login_url='bases:login')
+@permission_required('eve.delete_usuario_evento', login_url='bases:denegado')
+#@permission_required('eve.delete_usuario_evento',raise_exception=True)
 def usuarioAccesoEvento(request,accion=None):
     permission_required = 'eve.delete_usuario_evento'
     if request.method == "POST":
@@ -436,12 +596,32 @@ def lista_Usuarios_No_Evento(evento):
     return lisUsuarios;        
         
 
-def lista_Eventos_Por_Acceso(pkUser,staff):
-    if staff:
-           lisEventos = Evento.objects.all().only('id','estado','nombre_evento')
-           #lisEventos = ""         
-    else:
-            #filtra por relacion
+def lista_Eventos_Por_Acceso(pkUser,staff,tipo):
+    if tipo=="O":
+        if staff:
+            lisEventos = Evento.objects.all().only('id','estado','nombre_evento')
+            #lisEventos = ""         
+        else:
+                #filtra por relacion
             lisEventos = Evento.objects.filter(usuario_evento__usuario_id=pkUser).only('id','estado','nombre_evento')
+                
+           #lisEventos=list(Evento.objects.select_related("usuario_evento","modalidad_evento").filter(Q(usuario_evento__usuario_id=pkUser)).values("id",
+           #         "nombre_evento","modalidad_evento__descripcion_modalidad_evento"))
+    else:
+        if staff:
+                lisEventos=list(Evento.objects.select_related("usuario_evento","modalidad_evento").values("id",
+                    "nombre_evento","modalidad_evento__descripcion_modalidad_evento"))
+                 
+        else:
+                #filtra por relacion
+                
+                lisEventos=list(Evento.objects.select_related("usuario_evento","modalidad_evento").filter(Q(usuario_evento__usuario_id=pkUser)).values("id",
+                    "nombre_evento","modalidad_evento__descripcion_modalidad_evento"))
+        
+        
+                
+    print(lisEventos)         
     return lisEventos;        
       
+
+

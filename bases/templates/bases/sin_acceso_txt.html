@@ -1,0 +1,42 @@
+
+<div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+       
+        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+            Usuario: <mark>{{ user.username }}  {{user.get_full_name }}</mark> 
+          </div>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="row">
+            <mark>No tiene acceso para realizar la opción solicitada.</mark> 
+        </div>    
+        <div class="row">
+            <small>Para poder acceder, debes loguearte con un usuario que tenga acceso.</small>
+        </div> 
+        
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+
+ <script> 
+  {% if messages %}
+  console.log("mostrando errores messages index.html 631")
+    {% for m in messages%}
+    console.log("{{ m.tags }}")
+    mensaje("{{m}}","{{ m.tags }}")
+    {% endfor %}
+  {% endif %}
+ </script>

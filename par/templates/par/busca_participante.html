@@ -308,7 +308,7 @@
       data:data,
       success: function(r){
         if(r.rpta=="OK"){
-          Swal.fire("Total Asistencia :"+r.lispar);
+          Swal.fire("Total Asistencia :"+r.asistencia);
         }else{
           Swal.fire("Error Inesperado tratando de borrar registro " + r);
         }
@@ -323,7 +323,7 @@
 
 
   function refrescaTablaEncontrados(datos){
-    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("#tableLista").dataTable().fnDestroy();
     $("table > tbody").empty()
     
     var tabla= $("table")
@@ -461,7 +461,14 @@
       confirmButtonText: `Si, Borrar`,
       cancelButtonText: `No borrar`,
       allowOutsideClick:false,
-      confirmButtonClass: 'btn btn-danger',
+      //confirmButtonClass: 'btn btn-danger',
+
+      customClass: {
+        confirmButton: 'btn btn-primary btn-lg',
+        cancelButton: 'btn btn-danger btn-lg',
+        loader: 'custom-loader'
+      },
+
     }).then((borrar) => {
       console.log(borrar)
       if(borrar.isConfirmed){
@@ -669,6 +676,7 @@
 
    function actualiza_RowTable(r) {
     console.log("dato 1");
+    console.log(r);
     if(r.rpta=="OK"){
       console.log("dato 1b");
       var e_li = document.getElementById("i_asistio"+r.id);

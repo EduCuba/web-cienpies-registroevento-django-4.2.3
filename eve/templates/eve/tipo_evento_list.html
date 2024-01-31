@@ -2,6 +2,16 @@
 {% extends 'bases/index.html' %}
 
 {% block content_wrapper %}
+
+{% if messages %}
+<ul class="messages">
+     {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% endfor %}
+ </ul>
+{% endif %}
+
+
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -35,6 +45,8 @@
                   <th>Modalidad</th>
                   <th>Estado</th>
                   <th>Acciones</th>
+                  <th>sss</th>
+                  <th>sss</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,6 +70,13 @@
 
                     
                   </td>
+                  <td>
+                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'MEDEL','DEL')"><i class="far fa-trash-alt"></i></button>      
+                    
+                    
+                  </td>  
+
+                 
                 </tr>
                 {% endfor %}
                 </tbody>

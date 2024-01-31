@@ -240,6 +240,8 @@
 <script>
 $(function() {
 
+    
+
     //var url = $("form").attr("action");
     // captura el atributo action del form 
     var url = $("#frmPrv").attr("action");
@@ -269,16 +271,10 @@ $(function() {
                 //console.log(xhr);
                 if(r.rptaServer=='OK'){
                     console.log("aaaaaaaaa")
-                    console.log(url)
                     cerrar_modal()
-                    if (url.search('edit') != -1) {
-                        actualiza_RowTable(r.participante)
-                      } 
-
-                    /*actualiza_RowTable(r.participante)
-                    console.log(r.participante.id)*/
+                    actualiza_RowTable(r.participante)
+                    console.log(r.participante.id)
                     Swal.fire("Datos actualizados")
-                    mensajeServer(r.mensaje)
                 }else{
                     console.log("linea 215"+r.rptaServer);
                     mensajeServer(r.mensaje)

@@ -37,6 +37,7 @@ from .forms import Userform
 
 
 
+
 class Home(LoginRequiredMixin,TemplateView):
     template_name='bases/home.html'
     # cuando no tiene permiso lo redirigira al login
@@ -62,6 +63,7 @@ def user_admin(request,pk=None):
     if request.method == "GET":
         if not pk:
             form = Userform(instance = None )
+            print('NUEVO USUARIO')
         else:
             obj = Usuario.objects.filter(id=pk).first()
             form = Userform(instance = obj)
@@ -85,29 +87,42 @@ def user_admin(request,pk=None):
         fn = data.get("nombre")
         ln = data.get("apellido")
         p = data.get("password")
-
+        st = data.get("is_staff")
+        ac = data.get("is_active") 
+        stl=False
+        acl=False
+       
+        if (st == "on"):
+            stl=True
+        if (ac == "on"):
+            acl=True 
         if pk:
             obj = Usuario.objects.filter(id=pk).first()
             if not obj:
                 print("Error Usuario No Existe")
             else:
                 obj.email = e
-                #obj.first_name = fn
-                #obj.last_name = ln
                 obj.nombre = fn
-                obj.apellido = ln
+                obj.apellido = ln           
+                obj.is_staff=stl
+                obj.is_active=acl
                 obj.password = make_password(p)
                 obj.save()
         else:
+            
             obj = Usuario.objects.create_user(
                 email = e,
                 password = p,
-                #first_name = fn,
-                #last_name = ln
                 nombre = fn,
-                apellido = ln
-
+                apellido = ln,              
+                #is_staff=stl,
+                #is_active=acl               
             )
+            
+            obj.is_staff=stl
+            obj.is_active=acl 
+            obj.save()
+            
             print(obj.email,obj.password)
         return redirect('config:users_list')
     
@@ -244,6 +259,25 @@ def user_group_add(request,id_usr,id_grp):
 
 class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin):
     login_url = 'bases:login'
+    print("01")
+    raise_exception=False
+    redirect_field_name="redirecto_to"
+    print("02")
+    def handle_no_permission(self):
+        print("03")
+        from django.contrib.auth.models import AnonymousUser
+        if not self.request.user==AnonymousUser():
+            print("04")
+            self.login_url='bases:sin_privilegios'
+            print("05")
+            messages.error(self.request, 'No tiene acceso mensaje desde SinPrivilegios views.py')
+            print("05")
+        return HttpResponseRedirect(reverse_lazy(self.login_url))
+
+
+
+class SinPrivilegiosAjax(LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = 'bases:login'
     raise_exception=False
     redirect_field_name="redirecto_to"
 
@@ -251,18 +285,15 @@ class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin):
         
         from django.contrib.auth.models import AnonymousUser
         if not self.request.user==AnonymousUser():
-            self.login_url='bases:sin_privilegios'
-            messages.error(self.request, 'No tiene acceso')
-        return HttpResponseRedirect(reverse_lazy(self.login_url))
-    
-    
+            self.login_url='bases:denegado'
+            messages.error(self.request, 'No tiene acceso SinPrivilegiosAjax')
+       
+        return HttpResponseRedirect(reverse_lazy(self.login_url))    
+   
 class HomeSinPrivilegios(LoginRequiredMixin, generic.TemplateView):
     login_url = "bases:login"
     template_name="bases/sin_privilegios.html"         
     
-    
-    
-    
-    
-    
-    
+
+
+

@@ -29,9 +29,11 @@ class Userform(forms.ModelForm):
     
     class Meta:
         model = Usuario
-        fields = ['email','nombre','apellido','password']
+        fields = ['email','nombre','apellido','password','is_staff','is_active']
         widget = {'email': forms.EmailInput,
-                   'password': forms.PasswordInput }
+                   'password': forms.PasswordInput  
+                           
+                  }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -40,3 +42,5 @@ class Userform(forms.ModelForm):
                 'class':'form-control'
             })        
     
+    
+     

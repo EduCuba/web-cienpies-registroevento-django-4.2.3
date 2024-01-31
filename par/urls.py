@@ -12,7 +12,8 @@ from par.views import TipoParticipanteList,TipoParticipanteAdd,TipoParticipanteE
 urlpatterns = [
     path('par/registro_list', ParticipanteList.as_view(),name="registro_list"),
     path('par/buscar_participante',buscarparticipante,name="buscar_participante"),
-    path('par/buscar_participante',contarasistencia,name="contar_asistencia"),
+    #path('par/buscar_participante',contarasistencia,name="contar_asistencia"),
+    path('par/contar_asistencia',contarasistencia,name="contar_asistencia"),
     path('par/participante_add',ParticipanteAdd.as_view(),name="participante_add"),
     #path('par/participante_import_add',VistaParticipanteImportar.as_view(),name="participante_import_add"),
     path('par/participante_import_add',xx_ImportarCsv,name="participante_import_add"),

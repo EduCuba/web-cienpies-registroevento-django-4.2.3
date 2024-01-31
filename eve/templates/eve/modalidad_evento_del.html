@@ -3,6 +3,13 @@
 {% block content_wrapper %}
 {% endblock content_wrapper %}
 {% block content %}
+{% if messages %}
+<ul class="messages">
+     {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% endfor %}
+ </ul>
+{% endif %}
 <form method="POST" class="form-inline">
     {% csrf_token %}
     <div class="col-xl-3 col-md-6 mb-4">
@@ -11,7 +18,7 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            ¿Eliminar {{obj.descripcion_modalidad_evento}}</div>
+                            ¿Eliminaruuu {{obj.descripcion_modalidad_evento}}{{obj.id}}</div>
                         <button type="submit" class="btn btn-danger"><i class="far fa-question-circle"></i>Si, Eliminar</button>
                         <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
 
@@ -23,6 +30,7 @@
             </div>
         </div>
     </div>
+   
 </form>
 
 {% endblock content %}

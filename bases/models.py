@@ -30,8 +30,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('cuenta correo'), max_length=100, unique=True)
     nombre = models.CharField(_('nombres'), max_length=50, blank=False)
     apellido = models.CharField(_('apellidos'), max_length=50, blank=False)
-    is_staff = models.BooleanField(_('es staff'), default=False, help_text=('Indica si puede iniciar sesión de admin'))
-    is_active = models.BooleanField(_('activo'), default=True, help_text=('esta activo'))
+    is_staff = models.BooleanField(_('is_staff'), default=False, help_text=('Indica si puede iniciar sesión de admin'))
+    is_active = models.BooleanField(_('active'), default=True, help_text=('esta activo'))
     fecha_registro = models.DateTimeField(_('fecha registro'), default=timezone.now, help_text=('Indica si puede iniciar sesión de admin'))
    
    # se setea para que el campo email sea el principal 
@@ -64,7 +64,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     #    def get_absolute_url(self):
     #    return "/users/%s" % urlquote(self.email)
         
-        
+   # @property
+   # def get_is_staff(self):
+        #"Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+   #     return self.is_staff
     
     
 class ClaseModelo(models.Model):

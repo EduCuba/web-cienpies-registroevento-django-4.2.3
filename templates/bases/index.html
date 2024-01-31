@@ -261,23 +261,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   {% endif %}
                 </li>
                 <li class="nav-item">
+                  {% if perms.eve.view_usuario_evento%}
                   <a href="{% url 'eve:usuario_evento' %}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Asignar Usuario a Evento</p>
                   </a>
+                  {% endif %}
                 </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Importar Invitados</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Productos</p>
-                  </a>
-                </li>
+               
+              
               </ul>
             </li>
             <!-- inicio de participante -->
@@ -291,7 +283,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  {% if perms.eve.view_modalidad_evento%}
+                  {% if perms.par.view_tipo_participante%}
                   <a href="{% url 'par:tipo_participante_list' %}" class="nav-link">                  
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tipo Participante</p>
@@ -299,7 +291,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   {% endif %}
                 </li>
                 <li class="nav-item">
-                  {% if perms.eve.view_evento%}
+                  {% if perms.par.view_modalidad_asistencia%}
                   <a href="{% url 'par:modalidad_asistencia_list' %}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Modalidad de Asistencia</p>
@@ -313,7 +305,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Registro
+                  Acreditación
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
@@ -328,24 +320,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   {% endif %}
                 </li>
                 <li class="nav-item">
+                  {% if perms.par.view_participante%}
                   <a href="#" class="nav-link">
                     <a href="{% url 'par:participante_add' %}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Agregar Participante</p>
                   </a>
+                  {% endif %}
                   <li class="nav-item">
+                  {% if perms.par.view_participante%}  
                     <a href="#" class="nav-link">
                       <a href="{% url 'par:participante_import_add' %}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Importar Participantes</p>
                     </a>
+                  {% endif %}  
                   </li>
                   <li class="nav-item">
+                  {% if perms.par.view_participante%}  
                     <a href="#" class="nav-link">
                       <a href="{% url 'par:participante_import_delete' %}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Eliminar Participantes</p>
                     </a>
+                    {% endif %}  
                   </li>
 
                 </li>
@@ -480,7 +478,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- ./wrapper -->
 
 <div class="modal fade" id="popup"></div>
-
+<div class="modal fade" id="errorpopup"></div>
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
@@ -596,7 +594,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function mensaje(msg,tipo="info"){
     msjPopup=""
-    console.log("edu")
+    console.log("edu index.html 597")
     console.log(msg)
     if (is_json(msg)){
         for(let item in msg.responseJSON.mensaje){
@@ -606,8 +604,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         //var tst = `toastr.${tipo}('${msg]}')`
         var tst = `toastr.${tipo}('${msjPopup}')`
         console.log(tst)
+        
+    }else{
+      mensajeServer(msg)
     }        
     console.log("index.html linea 547")
+   
     eval(tst)
     
   }
@@ -617,21 +619,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   function mensajeServer(msg,tipo="warning"){
-    console.log ("salvame 556 "+msg)
+    console.log ("index.html 622 mensaje server : "+msg)
     var tst = `toastr.${tipo}('${msg}')`
     console.log(tst)
-    console.log("index.html linea 559")
+    console.log("index.html linea 625 mensajeServer")
     eval(tst)
     
   }
 
   {% if messages %}
+  console.log("mostrando errores messages index.html 631")
     {% for m in messages%}
     console.log("{{ m.tags }}")
     mensaje("{{m}}","{{ m.tags }}")
     {% endfor %}
   {% endif %}
 
+
+  
   /*----------------------*/
   function abrir_modal(url,evento)
   { //console.log("lleg-"+evento);
@@ -645,13 +650,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     return false
   }
 
-
+  console.log("653 index.html");
     /*var id_evento = document.getElementById(evento).value;
     console.log("evento seleccionado - "+id_evento);*/
 
     //console.log(url);
     $("#popup").load(url, function(responseTxt, statusTxt, xhr){
-      //console.log("index 595");
+      console.log("659 ...index.html");
+      
       let result = responseTxt.indexOf("no-acceso");
       $(this).modal({
         
@@ -661,21 +667,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
       })
 
       if(result < 0) {
-        document.getElementById("id_evento").value = id_evento;  
+        
+        
+        /*verifica que el obj exista*/
+       
+          if (document.getElementById("id_evento")){
+              document.getElementById("id_evento").value = id_evento;
+            }
       }
       /* muestra modal*/
       
       $(this).modal('show');
     });
     /* se retorna false para que no refresque la pagina*/
+    console.log("676 index.html");
     return false;
   }
 
   function cerrar_modal()
   {
     $('#popup').modal('hide');
+    $('#errorpopup').modal('hide');
     return false;
   }
+
+
+ 
+
+
+
+
+
    /*-----------------*/        
    function activarBoton(){
     if($('#boton_creacion').prop('disabled')){
@@ -738,6 +760,121 @@ scratch. This page gets rid of all links and provides the needed markup only.
     /* se retorna false para que no refresque la pagina*/
     return false;
   }
+
+
+
+  function cargaRegistroDel(id,evento,tipo)
+  { 
+    url = "/modalidad_evento_del/"+id
+    
+
+     abrir_modal_del(url,evento,tipo)
+    
+    /* se retorna false para que no refresque la pagina*/
+    return false;
+  }
+
+
+  function LdialogoPopup(id,menu,opc){
+    accionPopup(id,menu,opc)
+  }
+
+  
+  function dialogoPopup(id,menu,opc){
+  
+    //console.log(obj);
+       
+        //if (obj){
+        Swal.fire({
+          title: "¿Borrar?",
+          text : "Eliminar Registro",
+          icon:"question",
+          showCancelButton: true,
+          confirmButtonText: `Si, Borrar`,
+          cancelButtonText: `No borrar`,
+          allowOutsideClick:false,
+          //confirmButtonClass: 'btn btn-danger',
+          customClass: {
+            confirmButton: 'btn btn-primary btn-lg',
+            cancelButton: 'btn btn-danger btn-lg',
+            loader: 'custom-loader'
+          },
+    
+    
+        }).then((borrar) => {
+          console.log(borrar)
+          if(borrar.isConfirmed){
+               accionPopup(id,menu,opc)
+              // reventon(id)
+      
+          }else{
+            Swal.fire("Acción cancelada","","info")
+          }
+        })  
+        
+      }
+  
+   function urlPopup(menu) {
+
+    switch (menu) {
+      case 'EV01':
+        retUrl = "/eve/evento_del/";
+        break;
+      default:
+        retUrl = "";
+    }
+    return retUrl
+   }
+  
+
+      
+   function accionPopup(id,menu,opc){  
+    url = urlPopup(menu)
+    url = url+id
+    console.log(url)
+    var data = {}
+    var token = "{{csrf_token}}"
+    var data = {"id":id,
+    "opc":opc
+   }
+
+    $.ajax({
+      headers : {"X-CSRFToken": token},
+      type: "POST",
+      url:url,
+      data:data,
+      success: function(r){
+        console.log("verano")
+        if(r.rptaServer==="OK"){
+        
+         refrescaTablaEncontrados(r.lista);
+        
+          Swal.fire(r.mensaje);                          
+        }else{
+            if(r.rptaServer==="OFF"){
+              Swal.fire(r.mensaje);
+            }else{
+              if(r.substring(0,4)=="00NA"){
+                 Swal.fire(r.substring(5))
+              }else{
+                Swal.fire("Error no identificado")
+              }
+            }
+          
+          
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log("index.html 853")
+       
+      
+        
+      }
+    })
+  
+  
+   } 
+
 
   function x_mensajePopup(titulo,message) {
     $('<div></div>').appendTo('body')
@@ -820,6 +957,32 @@ function ocultaMuestraObj(obj,opc) {
       x.style.display = "none";
   }
 }
+
+
+function mostrarErrorPopup(rmensaje){
+  $('#errorpopup').html('');
+  $('#errorpopup').append(rmensaje);
+  
+
+  $('#errorpopup').modal({
+      
+    /* cambia propiedades de modal para que no se cierre */
+    backdrop:'static',
+    keyboard: false
+  })
+  $('#errorpopup').modal('show');
+
+ 
+}
+
+
+
+
+
+
+ 
+
+
 
 </script>  
  

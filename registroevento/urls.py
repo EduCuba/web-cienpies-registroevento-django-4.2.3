@@ -22,6 +22,9 @@ from django.urls import include, path
 from django.urls.conf import include
 
 
+
+
+
 urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
