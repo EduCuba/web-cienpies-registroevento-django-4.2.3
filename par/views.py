@@ -88,7 +88,7 @@ def buscarparticipante(request,participante_id=None):
     apellido =''
     evento=0,
     lisparb=""
-    print('eduuuuuuuuuuuuuu')
+    #print('eduuuuuuuuuuuuuu')
     pkUser=request.user.pk
   
     if request.method=='GET':
@@ -127,11 +127,11 @@ def buscarparticipante(request,participante_id=None):
         nombre_participante = request.POST.get("nombre_participante")
         empresa_participante = request.POST.get("empresa_participante")
         evento = request.POST.get("evento")
-        print(apellido_participante)    
-        print(nombre_participante)    
-        print("empresa")
-        print(empresa_participante)
-        print(evento)  
+        #print(apellido_participante)    
+        #print(nombre_participante)    
+        #print("empresa")
+        #print(empresa_participante)
+        #print(evento)  
         if (evento=='0'):
             print('Seleccione Evento') 
             contexto={'rpta':'OFF',
@@ -186,7 +186,7 @@ def buscarparticipante(request,participante_id=None):
             print('json es') 
             contexto={'rpta':'OK',
                   'lispar':lispar}            
-        print(contexto)                    
+        #print(contexto)                    
     return JsonResponse(contexto)
         
     return render(request, template_name, contexto)    
