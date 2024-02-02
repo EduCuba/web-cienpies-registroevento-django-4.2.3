@@ -1387,14 +1387,131 @@ class TipoParticipanteEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView
     
     
     
-class TipoParticipanteDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
+class TipoParticipanteDelete(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
 # agregado para controlar acceso de usuario
+    print("delete 1")
     permission_required="par.delete_tipo_participante"
+    print("delete 2")
     model=Tipo_Participante
     template_name = "par/tipo_participante_del.html"
+    print("delete 3")
     context_object_name = "obj"
     success_url = reverse_lazy("par:tipo_participante_list")
-    success_message="Tipo Participante eliminado Satisfactoriamente"     
+    print("delete 4")
+    success_message="Tipo Participante eliminado Satisfactoriamente"   
+    
+    print("delete 5")  
+    
+    #def delete(request, *args, **kwargs):
+   
+    
+  #  def form_valid(self, form):
+  #      print('prision')
+  #      print (self)
+  #      print (form)
+  #      if Participante.objects.filter(tipo_participante_id= self.id).exists():
+  #          raise Exception('This team is related to a game.')  # or you can throw your custom exception here.
+    
+   #     return super().form_valid(form)
+    
+        
+   # def delete(self, *args, **kwargs):
+   #     print ('delte personalizado')
+   #     if Participante.objects.filter(tipo_participante_id= self.pk).exists():
+   #         raise Exception('This team is related to a game.')  # or you can throw your custom exception here.
+   #     super(Tipo_Participante, self).delete(*args, **kwargs)    
+    
+    '''
+    def form_valid(self, form, *args, **kwargs):
+        print('VIEWSSS')
+       #imprime url
+        print(self.request)
+      
+        print('VIEWSSS 3333')
+        #imprime datos configurados en _self
+        print(self.get_object())
+        print('VIEWSSS 4444')
+        if Participante.objects.filter(tipo_participante_id= 3).exists():
+            raise Exception('Tipo de Participante se esta utilizando VISTA')  # or you can throw your custom exception here.
+        super(Tipo_Participante, self).delete(*args, **kwargs)  
+        return super().form_valid(form)
+   '''
+    
+@login_required(login_url='config:login')
+@permission_required('eve.delete_tipo_participante', login_url='bases:denegado')
+def TipoParticipanteDel(request,pk=None):
+
+   
+    rptaServer="OFF"
+    lista=""
+    contexto={ 'rptaServer':rptaServer} 
+    if request.method == "POST":
+        print('edu 02')
+        opc= request.POST.get("opc")
+        id= request.POST.get("id")
+        
+       
+        if opc == "DEL":
+           
+            #sid = transaction.savepoint()
+            try:
+             
+                if (Participante.objects.filter(tipo_participante_id=pk).exists()):
+                   mensaje="Tipo participante existe en Evento, no se puede eliminar"
+                  
+                else:
+                        
+                   
+                   #eveDelete = Evento.objects.get(id=pk)
+                   parDelete = Tipo_Participante.objects.filter(id=pk)
+                  
+                   if (parDelete):       
+                       parDelete.delete()  
+                       rptaServer="OK"
+                       mensaje="Tipo Participante eliminado con exito"   
+                       lista=lista_Tipo_Participante(request.user.id,request.user.is_staff,"Q")  
+                    
+                   else:
+                       mensaje="No existe Tipo Participante"   
+                status_code = 200
+                
+           
+            except Exception as e:
+                rptaServer="OFF"
+                mensaje="Error de integridad de datos 1(p)" 
+                  
+            except IntegrityError:
+                 
+                mensaje="Error de integridad de datos 2(p)" 
+                rptaServer="OFF"
+               
+               
+            contexto={'mensaje':mensaje,
+                    'error':'',
+                    'rptaServer':rptaServer,
+                    'lista':lista
+                     } 
+                                
+        else:
+                contexto={'mensaje':'Acción desconocida ()',
+                            'error':'',
+                            'rptaServer':'OFF',
+                            'lista':lista}  
+                print (contexto)
+                
+    else:
+                contexto={'mensaje':'Acción desconocida (Post)',
+                            'error':'',
+                            'rptaServer':'OFF',
+                            'lista':lista}  
+                
+    print('contexto')
+    print(contexto)           
+    response = JsonResponse(contexto) 
+    if(rptaServer=='OK'):
+        response.status_code = 200        
+    return response
+      
 
 
 
@@ -1624,3 +1741,20 @@ def lista_participante_csv(evento):
  liscsv=list(Participante_Csv.objects.select_related("Usuario").filter(Q(evento_id=evento)).values("id",
                        "evento_id","archivo_csv","cantidad","fc"))
  return liscsv
+
+
+
+def lista_Tipo_Participante(pkUser,staff,tipo):
+    if tipo=="O":
+        
+        lisTipoParticipante = Tipo_Participante.objects.all()
+        
+    else:
+       
+        lisTipoParticipante=list(Tipo_Participante.objects.filter().values("id","descripcion_tipo_participante",
+    "background_tipo_participante","tipo_identificacion_participante"))
+                 
+   
+    print("sergio")           
+    print(lisTipoParticipante)         
+    return lisTipoParticipante;   

@@ -392,7 +392,7 @@ def buscarusuarioevento(request,evento=None):
                   'lisUsuarios':lisUsuarios
                   }      
               
-        print(contexto) 
+        #print(contexto) 
        
         return JsonResponse(contexto)
         
@@ -565,20 +565,20 @@ def usuarioAccesoEvento(request,accion=None):
                             'rptaServer':'OFF'}  
                 print ('mensaje except')
                
-                print (e)
+               # print (e)
                 response = JsonResponse(contexto)
                 
         else:
                 contexto={'mensaje':'Acción desconocida',
                             'error':'',
                             'rptaServer':'OFF'}  
-                print (contexto)
+               # print (contexto)
                 response = JsonResponse(contexto)
     else:
                 contexto={'mensaje':'Acción desconocida',
                             'error':'',
                             'rptaServer':'OFF'}  
-                print (contexto)
+               # print (contexto)
                 response = JsonResponse(contexto)
     return response
         
@@ -620,7 +620,7 @@ def lista_Eventos_Por_Acceso(pkUser,staff,tipo):
         
         
                 
-    print(lisEventos)         
+    #print(lisEventos)         
     return lisEventos;        
       
 

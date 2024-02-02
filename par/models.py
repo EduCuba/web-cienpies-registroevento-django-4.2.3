@@ -39,6 +39,14 @@ class Tipo_Participante(ClaseModelo2):
     class Meta:
         verbose_name_plural = "Tipo de participantes"
         
+        
+    def delete(self, *args, **kwargs):
+        print('modelo')
+        print(self.descripcion_tipo_participante)
+        if Participante.objects.filter(tipo_participante_id= self.pk).exists():
+            raise Exception('Tipo de Participante se esta utilizando')  # or you can throw your custom exception here.
+        super(Tipo_Participante, self).delete(*args, **kwargs)     
+        
 
 class Modalidad_Asistencia(ClaseModelo2):
     descripcion_modalidad_asistencia=models.CharField(

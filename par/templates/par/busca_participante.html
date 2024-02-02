@@ -98,9 +98,10 @@
                                   
                                     <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
                                 </div>    
-
-                            </div>    
-
+                                <div id="totalAsistencia"class="col-6" style="font-size:24px "></div>
+                            </div>  
+                            
+                          
                         </div>
                     
                     </div>
@@ -198,6 +199,21 @@
 {% block js %}
 
 <script>
+
+  $(function () {
+  
+      $('#bus_id_evento').on('change', function() {
+      
+        refrescaDiv("totalAsistencia","");
+        $("table > tbody").empty() 
+        $("#tableLista").dataTable().fnDestroy(); 
+        $("table > tbody").html('')
+      });
+
+    
+  });
+
+
   function editarRegistro(id){
 
     url = "/par/registro_edit"
@@ -308,7 +324,9 @@
       data:data,
       success: function(r){
         if(r.rpta=="OK"){
-          Swal.fire("Total Asistencia :"+r.asistencia);
+          //Swal.fire("Total Asistencia :"+r.asistencia);
+          refrescaDiv("totalAsistencia","Total Asistencia:"+r.asistencia)
+
         }else{
           Swal.fire("Error Inesperado tratando de borrar registro " + r);
         }

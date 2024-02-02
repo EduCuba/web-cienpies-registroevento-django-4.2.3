@@ -2,26 +2,16 @@
 {% extends 'bases/index.html' %}
 
 {% block content_wrapper %}
-
-{% if messages %}
-<ul class="messages">
-     {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-     {% endfor %}
- </ul>
-{% endif %}
-
-
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Listado Tipo de Evento</h1>
+          <h1 class="m-0">Listado de Evento</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active">Listado Tipo de Evento</li>
+            <li class="breadcrumb-item active">Listado de Evento</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -34,7 +24,7 @@
         <div class="card">
             <div class="card-header">
               <!-- <h3 class="card-title">DataTable with default features</h3> -->
-              <a href="{% url 'eve:modalidad_evento_add' %}" class="btn btn-app bg-info"><i class="fas fa-user-plus"></i></a>
+              <a href="{% url 'eve:evento_add' %}" class="btn btn-app bg-info"><i class="fas fa-user-plus"></i></a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -42,41 +32,40 @@
                 <thead>
                 <tr>
                   <th>Id</th>
+                  <th>Evento</th>
                   <th>Modalidad</th>
                   <th>Estado</th>
                   <th>Acciones</th>
-                  <th>sss</th>
-                  <th>sss</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for i in obj %}
                 <tr>
                   <td>{{i.id}}</td>
-                  <td>{{i.descripcion_modalidad_evento}}</td>
+                  <td>{{i.nombre_evento}}</td>
+                  <td>{{i.modalidad_evento}}</td>
                   <td>{{i.estado}}</td>
+                  
                   <td>
                     {% if not i.is_staff %}
-                    <a href="{% url 'eve:modalidad_evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    <a href="{% url 'eve:evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
                     {% elif user.is_staff %}
-                    <a href="{% url 'eve:modalidad_evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
-                    {% endif %}
-
-                    {% if not i.is_staff %}
-                    <a href="{% url 'eve:modalidad_evento_del' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
-                    {% elif user.is_staff %}
-                    <a href="{% url 'eve:modalidad_evento_del' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
-                    {% endif %}
-
-                    
+                    <a href="{% url 'eve:evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% endif %}   
                   </td>
                   <td>
-                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'MEDEL','DEL')"><i class="far fa-trash-alt"></i></button>      
+                    {% if not i.is_staff %}
+                    {% if perms.eve.view_evento %}
+                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'EV01','DEL')"><i class="far fa-trash-alt"></i></button>      
                     
+                    {% endif %}
+                    {% elif user.is_staff %}
+                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'EV01','DEL')"><i class="far fa-trash-alt"></i></button>      
+                   
+                    {% endif %}
                     
                   </td>  
 
-                 
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -87,4 +76,191 @@
           <!-- /.card -->
     </div>
 </div>
-{% endblock%}
+{% endblock content%}
+
+
+{% block js %}
+
+<script>
+  function editarRegistro(id){
+
+    url = "/par/registro_edit"
+  }
+  function participantesEncontrados(){
+    // alert(id)
+    // alert(accion)
+    var form = new FormData(document.getElementById('frmbuscar'));
+    var inputEvento = form.get("evento")
+  
+    if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+      mensajeServer("Seleccione Evento (cl)");
+      return false
+    }
+
+    console.log("evento " +inputEvento);
+
+    var url = "/par/participante_import_delete"
+    console.log(url);
+    var token = '{{csrf_token}}'
+    var data = {
+    "evento":inputEvento
+  }
+  console.log("entra ajax");
+    $.ajax({
+      headers : {"X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest"},
+      
+
+      type:"POST",
+      body:form,
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rptaServer=="OK"){
+          $("table > tbody").empty()  
+         
+
+         
+         
+          refrescaTablaEncontrados(r.liscsv);
+          
+          /*Swal.fire("mostrara " +  r.lispar);*/
+          /*location.reload(true)*/
+        }else{
+          if (typeof r.mensaje === 'undefined') {
+           Swal.fire("Error Inesperado tratando de borrar registro " + r);
+          }else{
+            Swal.fire(r.mensaje);
+          } 
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log(textStatus, errorThrow);
+        Swal.fire(errorThrow,"",'red');
+      }
+    })
+
+  }
+
+
+  
+
+
+  function refrescaTablaEncontrados(datos){
+    <!--$("#tableLista").dataTable().fnDestroy();-->
+    $("table > tbody").empty()
+    
+    var tabla= $("table")
+
+    var rows = $.map(datos,function(value,index){
+
+     
+    nfila=index+1;
+
+    
+   
+
+
+
+
+    return `<tr id=\"row_reg${value.id}"\" >
+      <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /> 
+     
+        ${value.id}</td>
+
+
+      <td>${value.nombre_evento}</td>
+      <td>${value.modalidad_evento}</td>
+      <td>${value.estado}</td>
+         
+    <td>
+
+      <a href="{% if perms.eve.delete_evento%}/eve/evento_edit/{% else %}''{%endif%}${value.id}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+     </td>     
+     
+   
+    <td>
+      <button type="button" class="btn btn-warning btn-circle" onclick="{% if perms.eve.delete_evento%} dialogoPopup(${value.id} {% else %}''{%endif%},'EV01','DEL')"><i class="far fa-trash-alt"></i></button> 
+    
+        
+      
+      
+    </td>  
+
+    </tr>`
+     })
+     
+    $("table > tbody").html(rows.join(''))
+    /*creaFuncionDataTable()*/
+
+
+  }
+
+  function creaFuncionDataTable(){
+     console.log("crea funcion cabecera 1 busca_participante.html 363")
+    <!-- inicio -->
+   
+    if ( ! $.fn.DataTable.isDataTable( '#tableLista' ) ) {
+      console.log("crea funcion cabecera 2")
+        $('.table').DataTable({
+          
+          "searching": true,
+          "pageLength": 10,
+          "language": {
+          "sProcessing": "Procesando...",
+          "sLengthMenu": "Mostrar _MENU_ registros_",
+          "sZeroRecords": "No se encontraron resultados",
+          "sEmptyTable": "Ningún dato disponible en esta tabla",
+          "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix": "",
+          "sSearch": "Buscar en:",
+          "sUrl": "",
+          "sInfoThousands": ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+              "sFirst": "<span class='fa fa-angle-double-left'></span>",
+              "sLast": "<span class='fa fa-angle-double-right'></span>",
+              "sNext": "<span class='fa fa-angle-right'></span>",
+              "sPrevious": "<span class='fa fa-angle-left'></span>"
+          },
+          "oAria": {
+              "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+          }
+        });
+        console.log("crea funcion cabecera 3")
+       }
+    <!-- fin  -->
+
+  }
+  
+
+
+  
+
+
+ 
+
+
+
+
+</script>
+
+
+<script>
+    $(document).ready(function() {
+      
+      /*
+        $('.table').DataTable(
+          
+        );
+*/
+      });
+
+</script>
+
+ 
+{% endblock js %}

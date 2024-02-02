@@ -820,6 +820,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       case 'EV01':
         retUrl = "/eve/evento_del/";
         break;
+      case 'TP01':
+        retUrl = "/par/tipo_participante_del/";
+        break;  
       default:
         retUrl = "";
     }
@@ -827,7 +830,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
    }
   
 
-      
    function accionPopup(id,menu,opc){  
     url = urlPopup(menu)
     url = url+id
@@ -854,11 +856,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             if(r.rptaServer==="OFF"){
               Swal.fire(r.mensaje);
             }else{
+              /*
               if(r.substring(0,4)=="00NA"){
                  Swal.fire(r.substring(5))
               }else{
                 Swal.fire("Error no identificado")
-              }
+                Swal.fire(r)
+                
+                
+              }*/
+              mostrarErrorPopup(r)
             }
           
           
@@ -975,7 +982,12 @@ function mostrarErrorPopup(rmensaje){
  
 }
 
-
+function refrescaDiv(odiv,mensaje){
+  const elem = document.getElementById(odiv)
+  $(elem).html('');
+  $(elem).append(mensaje);
+  //$('#totalregistro').modal('show');
+}
 
 
 

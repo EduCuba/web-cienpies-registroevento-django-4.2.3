@@ -35,7 +35,8 @@
                   <th>Evento</th>
                   <th>Modalidad</th>
                   <th>Estado</th>
-                  <th>Acciones</th>
+                  <th>Accionesx</th>
+                  <th>Accionesx</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,19 +48,25 @@
                   <td>{{i.estado}}</td>
                   
                   <td>
-                    {% if not i.is_staff %}
+                    {% if not user.is_staff %}
+                    {% if perms.eve.view_evento %}
+ 
                     <a href="{% url 'eve:evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+                    {% endif %}
                     {% elif user.is_staff %}
+                   
                     <a href="{% url 'eve:evento_edit' i.id %}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
                     {% endif %}   
                   </td>
                   <td>
-                    {% if not i.is_staff %}
+                    {% if not user.is_staff %}
                     {% if perms.eve.view_evento %}
+                    
                     <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'EV01','DEL')"><i class="far fa-trash-alt"></i></button>      
                     
                     {% endif %}
                     {% elif user.is_staff %}
+                  
                     <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'EV01','DEL')"><i class="far fa-trash-alt"></i></button>      
                    
                     {% endif %}

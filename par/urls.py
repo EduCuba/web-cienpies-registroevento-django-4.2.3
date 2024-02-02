@@ -4,7 +4,7 @@ from bases.views import *
 from par.views import ParticipanteList,buscarparticipante,ParticipanteAdd,participanteAsistencia,ParticipanteEdit,DetailForm,VistaParticipanteImportar,subir_csv,xx_ImportarCsv,contarasistencia
 from par.views import TipoParticipanteList,TipoParticipanteAdd,TipoParticipanteEdit,TipoParticipanteDel,\
                       ModalidadAsistenciaAdd,ModalidadAsistenciaEdit,ModalidadAsistenciaDel,ModalidadAsistenciaList,\
-                      ListarCsv,participante_csv_delete 
+                      ListarCsv,participante_csv_delete,TipoParticipanteDelete
 
 
 #app_name = 'eve'
@@ -35,7 +35,9 @@ urlpatterns = [
     path('par/tipo_participante_list', TipoParticipanteList.as_view(),name="tipo_participante_list"),
     path('par/tipo_participante_add',TipoParticipanteAdd.as_view(),name="tipo_participante_add"),
     path('par/tipo_participante_edit/<int:pk>',TipoParticipanteEdit.as_view(),name="tipo_participante_edit"),
-    path('par/tipo_participante_del/<int:pk>',TipoParticipanteDel.as_view(), name='tipo_participante_del'),  
+    path('par/tipo_participante_delete/<int:pk>',TipoParticipanteDelete.as_view(), name='tipo_participante_delete'), 
+    path('par/tipo_participante_del/<int:pk>',TipoParticipanteDel, name='tipo_participante_del'), 
+     
     
     
     path('par/modalidad_asistencia_list', ModalidadAsistenciaList.as_view(),name="modalidad_asistencia_list"),

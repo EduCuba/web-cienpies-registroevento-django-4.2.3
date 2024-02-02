@@ -36,6 +36,7 @@
                   <th>Background</th>
                   <th>Tipo Identificación</th>
                   <th>Acciones</th>
+                  <th>....</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -53,12 +54,23 @@
                     {% endif %}
 
                     {% if not i.is_staff %}
-                    <a href="{% url 'par:tipo_participante_del' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
+                    <a href="{% url 'par:tipo_participante_delete' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
                     {% elif user.is_staff %}
-                    <a href="{% url 'par:tipo_participante_del' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
+                    <a href="{% url 'par:tipo_participante_delete' i.id %}" class="btn btn-danger btn-circle" role="button"><i class="far fa-trash-alt"></i>
                     {% endif %}
 
                     
+                  </td>
+                  <td>
+                    {% if not i.is_staff %}
+                    {% if perms.par.view_tipo_participante %}
+                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'TP01','DEL')"><i class="far fa-trash-alt"></i></button>      
+                    
+                    {% endif %}
+                    {% elif user.is_staff %}
+                    <button type="button" class="btn btn-warning btn-circle" onclick="dialogoPopup({{i.id}},'TP01','DEL')"><i class="far fa-trash-alt"></i></button>      
+                   
+                    {% endif %}
                   </td>
                 </tr>
                 {% endfor %}
@@ -70,4 +82,54 @@
           <!-- /.card -->
     </div>
 </div>
-{% endblock%}
+{% endblock content%}
+
+
+
+
+{% block js %}
+
+<script>
+function refrescaTablaEncontrados(datos){
+  <!--$("#tableLista").dataTable().fnDestroy();-->
+  $("table > tbody").empty()
+  
+  var tabla= $("table")
+
+  var rows = $.map(datos,function(value,index){
+
+   
+  nfila=index+1;
+
+  return `<tr id=\"row_reg${value.id}"\" >
+    <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /> 
+   
+      ${value.id}</td>
+
+
+    <td>${value.descripcion_tipo_participante}</td>
+    <td>${value.background_tipo_participante}</td>
+    <td>${value.tipo_identificacion_participante}</td>
+       
+  <td>
+
+    <a href="{% if perms.par.edit_tipo_participante%}/par/tipo_participante_edit/{% else %}''{%endif%}${value.id}" class="btn btn-sm text-success"><i class="fa fa-edit"></i></a>
+   </td>     
+   
+ 
+  <td>
+    <button type="button" class="btn btn-warning btn-circle" onclick="{% if perms.par.delete_tipo_participante%} dialogoPopup(${value.id} {% else %}''{%endif%},'TP01','DEL')"><i class="far fa-trash-alt"></i></button> 
+    
+  </td>  
+
+  </tr>`
+   })
+   
+  $("table > tbody").html(rows.join(''))
+  /*creaFuncionDataTable()*/
+
+
+}
+
+</script>
+{% endblock js%}
