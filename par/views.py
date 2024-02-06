@@ -1438,7 +1438,7 @@ class TipoParticipanteDelete(SuccessMessageMixin,SinPrivilegios, generic.DeleteV
    '''
     
 @login_required(login_url='config:login')
-@permission_required('eve.delete_tipo_participante', login_url='bases:denegado')
+@permission_required('par.delete_tipo_participante', login_url='bases:denegado')
 def TipoParticipanteDel(request,pk=None):
 
    
