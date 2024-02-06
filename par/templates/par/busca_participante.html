@@ -86,19 +86,25 @@
                             </div>
 
                         
-                            <div class="row">
-                                <div class="col-3">
+                            <div class="form-row">
+                              <div class="form-group col-md-2">
                                   <!---
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
                                 -->
                                     <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
                                 </div>    
-                                <div class="col-3">
+                                <div class="form-group col-md-2">
                                   
                                     <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
                                 </div>    
-                                <div id="totalAsistencia"class="col-6" style="font-size:24px "></div>
+                                <div id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                                <!--
+                                <div class="form-group col-md-2">
+                                  
+                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">QR</i></button>                                    
+                                </div>  
+                                -->
                             </div>  
                             
                           
@@ -156,7 +162,7 @@
               </thead>
               <tbody>
               
-    <!--<td>{{ item.asistio_evento }}</td>-->
+               <!--<td>{{ item.asistio_evento }}</td>-->
                 
                 {% for item in lispar%}
                 <tr>
@@ -189,6 +195,9 @@
             </table>
           </div>
         </div>
+
+
+        
 
 
 

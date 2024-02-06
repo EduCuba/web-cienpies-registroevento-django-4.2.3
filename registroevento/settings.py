@@ -29,7 +29,7 @@ DEBUG = True
 
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['3.80.73.116','localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['54.160.225.120','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['54.162.134.14','localhost', '127.0.0.1']
 
 # Application definition
 
@@ -115,7 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_registro',
-        'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
+        'HOST': 'localhost',
         'USER': 'postgres',
         'PASSWORD': 'postgresql',
         'PORT': 5432,

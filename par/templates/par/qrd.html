@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.1">
+    <title>Dcomuent</title>
+</head>
+<body>
+
+    <script src="http://code.jsqr.de/jsqr-0.2-min.js" type="text/javascript"></script>
+    <div id="rowqr" >
+   
+        <h1>Take a photo and upload it to the server</h1>
+
+        <video autoplay="true" id="videoElement"></video>
+        <button id="capture">Capturej</button>
+
+        <div style="position:relative; width:100%; height:100%; z-index:10;">
+          <canvas id="Vcanvas" style="width:100%; height:100%; z-index:10;" height="350" width="350">jj</canvas>
+        </div>
+    
+        
+        <input type="text" id="canvas.cam-frame" name="idQr" class="form-control">
+    
+  
+        
+
+     
+    </div>
+
+
+<!--
+    <script src="camera.js"></script>
+-->
+    <script>
+      let video = document.querySelector("#videoElement");
+      let captureButton = document.querySelector("#capture");
+      
+      if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(function (stream) {
+            video.srcObject = stream;
+          })
+          .catch(function (error) {
+            console.log("Something went wrong!");
+          });
+      }
+      
+      captureButton.addEventListener("click", function() {
+    /*
+        const canvasElement = document.querySelector('canvas.cam-frame');
+        const ctxCanvas = canvas.getContext("2d");
+        const frameData = ctxCanvas.getImageData(0,0,canvasElement.width, canvasElement.height);
+        const code = jsQR(
+          frameData.data,
+          frameData.width,
+          frameData.height,
+          {
+            inversionAttempts: 'dontInvert'
+          }
+        );
+    
+        print(code)
+    
+    */
+    
+        let canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        let context = canvas.getContext("2d");
+        aaa=context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const stream = canvas.captureStream(25)
+       
+console.log(stream)
+        //self.canvas.drawImage(self.video, 0, 0, self.canvasElement.width, self.canvasElement.height);
+        //var code = jsQR(imageData.data, imageData.width, imageData.height);
+/*
+        self.canvas.drawImage(self.video, 0, 0, self.canvasElement.width, self.canvasElement.height);
+        var imageData = self.canvas.getImageData(0, 0, self.canvasElement.width, self.canvasElement.height);
+        var code = jsQR(imageData.data, imageData.width, imageData.height);
+*/
+
+    /*
+        const code = JSQR(
+          aaa.data,
+          aaa.width,
+          aaa.height,
+          {
+            inversionAttempts: 'dontInvert'
+          }
+        );
+*/
+
+const code = JSQR(stream,stream.width, stream.height);
+
+  if (code) {
+    console.log("Found QR code", code);
+    
+    
+}else{
+    console.log("no exisre")
+
+}
+  
+       console.log(code)
+      
+     console.log("con2")
+        let imageData = canvas.toDataURL("image/png");
+        
+        // Send the image data to the server
+        fetch("/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ image: imageData })
+        });
+      });
+    </script>
+    
+    
+
+</body>
+</html>

@@ -344,7 +344,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                
 
 
-             
+                <li class="nav-item">
+                  {% if perms.par.view_participante%}
+                  <a href="{% url 'par:tipo_participante_list' %}" class="nav-link">    
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>QR</p>
+                  </a>
+                  {% endif %}
+                </li>
 
                 <li class="nav-item">
                   {% if perms.par.view_participante%}  
@@ -380,6 +387,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       
+      <!-- inicio rowqr-->
+
+      <div id="rowqr" hidden>
+   
+        <h1>Take a photo and upload it to the server</h1>
+
+        <video autoplay="true" id="videoElement"></video>
+        <button id="capture">Capturej</button>
+
+        <div style="position:relative; width:100%; height:100%; z-index:10;">
+          <canvas id="Vcanvas" style="width:100%; height:100%; z-index:10;" height="350" width="350">jj</canvas>
+        </div>
+    
+        
+        <input type="text" id="canvas.cam-frame" name="idQr" class="form-control">
+    
+  
+        
+
+     
+      </div>
+      <!-- fin rowqr-->
       {% block content_wrapper %}
       <!-- Content Header (Page header) -->
       <div class="content-header">
@@ -531,6 +560,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 
+<script src="camera.js"></script>
+
+<script>
+  let video = document.querySelector("#videoElement");
+  let captureButton = document.querySelector("#capture");
+  
+  if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function (stream) {
+        video.srcObject = stream;
+      })
+      .catch(function (error) {
+        console.log("Something went wrong!");
+      });
+  }
+  
+  captureButton.addEventListener("click", function() {
+/*
+    const canvasElement = document.querySelector('canvas.cam-frame');
+    const ctxCanvas = canvas.getContext("2d");
+    const frameData = ctxCanvas.getImageData(0,0,canvasElement.width, canvasElement.height);
+    const code = jsQR(
+      frameData.data,
+      frameData.width,
+      frameData.height,
+      {
+        inversionAttempts: 'dontInvert'
+      }
+    );
+
+    print(code)
+
+*/
+
+    let canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    let context = canvas.getContext("2d");
+    aaa=context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+   
+
+   console.log(aaa)
+   // print (aaa)
+   // print("con2")
+    let imageData = canvas.toDataURL("image/png");
+    
+    // Send the image data to the server
+    fetch("/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ image: imageData })
+    });
+  });
+</script>
+<!-- fin scrip qr-->
 <script>
 
   $("#btnLogout").click(function(e){
