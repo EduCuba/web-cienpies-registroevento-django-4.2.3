@@ -502,11 +502,12 @@
            participanteAsistencia(id,tipo)
   
       }else{
+        Swal.fire("Acción Cancelada","","info")
       }
-      Swal.fire("Acción Cancelada","","info")
+      
     })  
     }else{
-      console.log("ddddddddddd 1")
+      //console.log("ddddddddddd 1")
       participanteAsistencia(id,tipo)
 
     }
@@ -702,8 +703,8 @@
 
 
    function actualiza_RowTable(r) {
-    console.log("dato 1");
-    console.log(r);
+    //console.log("dato 1");
+    //console.log(r);
     if(r.rpta=="OK"){
       console.log("dato 1b");
       var e_li = document.getElementById("i_asistio"+r.id);
