@@ -28,7 +28,17 @@ urlpatterns = [
     #path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
     path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
     
-    path('participante/new',ParticipanteAdd.as_view(), name='participante_new'),
+    
+    # funciona path('participante/new',ParticipanteAdd.as_view(), name='participante_new'),
+    
+    
+    path('participante_new/<int:evento_id>/',ParticipanteAdd.as_view(), name='participante_new'),
+   
+    #path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
+    #path('participante/<int:pk>',ParticipanteAdd.as_view(), name='participante_new_var'),
+     
+    
+    
     path('participante/newb',DetailForm, name='participante_newb'),
     
  

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -92,7 +92,7 @@ def buscarparticipante(request,participante_id=None):
     pkUser=request.user.pk
   
     if request.method=='GET':
-        print('es geeeeeeeeetttttttttttttt')
+        #print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
         form_buscar=BuscarParticipanteForm()
         
@@ -121,7 +121,7 @@ def buscarparticipante(request,participante_id=None):
         return render(request, template_name,contexto )    
         
     if request.method=='POST':    
-        print('es pooooooooooossssttt')
+        #print('es pooooooooooossssttt')
         
         apellido_participante = request.POST.get("apellido_participante")
         nombre_participante = request.POST.get("nombre_participante")
@@ -133,7 +133,7 @@ def buscarparticipante(request,participante_id=None):
         #print(empresa_participante)
         #print(evento)  
         if (evento=='0'):
-            print('Seleccione Evento') 
+            #print('Seleccione Evento') 
             contexto={'rpta':'OFF',
                   'lispar':'',
                   'mensaje':'Seleccione Evento'}  
@@ -145,45 +145,45 @@ def buscarparticipante(request,participante_id=None):
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                     "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                    print('busqueda solo por evento')
+                    #print('busqueda solo por evento')
                 else:    
                     if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                         lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                         "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                        print('busqueda por apellido y nombre : caso empresa vacio')
+                        #print('busqueda por apellido y nombre : caso empresa vacio')
                     else:
                         if (nombre_participante == ""):
                             lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                             "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                             "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                            print('busqueda por apellido :  empresa vacio')
+                            #print('busqueda por apellido :  empresa vacio')
                         else:    
                             lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                             "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                             "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                            print('busqueda por nombre caso empresa vacia')
+                            #print('busqueda por nombre caso empresa vacia')
                 
             else:
                 if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                     "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                    print('busqueda por empresa, apellido y nombre : caso 4')
+                    #print('busqueda por empresa, apellido y nombre : caso 4')
                 else:    
                     if (nombre_participante == ""):
                         lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
                         "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                        print('busqueda por empresa y apellid : caso 5')
+                        #print('busqueda por empresa y apellid : caso 5')
                     else:    
                         lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
                         "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
-                        print('caso empresa y nombre')
+                        #print('caso empresa y nombre')
                 
                         
-            print('json es') 
+            #print('json es') 
             contexto={'rpta':'OK',
                   'lispar':lispar}            
         #print(contexto)                    
@@ -214,26 +214,18 @@ def participanteAsistencia(request, id):
     
         idPar=request.POST.get("id")
         tipo=request.POST.get("tipo")
-        print("imprime id request")
-        print(id)
-        print("imprime idpar")
-        print(idPar)
-        print(tipo)
+     
         participante = Participante.objects.filter(pk=id).first()
         
-        print("edu 01")
+        
         contexto={'rpta':'OFF'}          
     
         if request.method=="POST":
-           print("edu 02") 
+           #print("edu 02") 
            if participante:
                if tipo=="A":
-                   print("edu 03") 
                    participante.asistio_evento = not participante.asistio_evento
                    participante.save()
-                   print("nose")
-                   print(participante.tipo_participante)
-                   print(participante)
                    
                    tipo_participante=participante.tipo_participante.descripcion_tipo_participante
                    tipo_identificacion_participante=participante.tipo_participante.tipo_identificacion_participante
@@ -253,14 +245,11 @@ def participanteAsistencia(request, id):
                              "rpta":'OK'
                              }      
                     
-                   print(contexto)
                    return JsonResponse(contexto,safe=False)      
                
                    
-        print("edu 04")
         return JsonResponse(contexto)      
-        print("edu 05")
-        return JsonResponse(contexto)     
+        #return JsonResponse(contexto)     
     except ValueError as e:            
         mensaje=str(e)
         print("captura el error")
@@ -295,17 +284,16 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
         context["eventos"] = Evento.objects.all()
         context["tipos"] = Tipo_Participante.objects.all()
         context["modalidades"] = Modalidad_Asistencia.objects.all()
-        print("eduuuuuuuuuuuuuuuu get_context_data 238")
-        print(context)        
+        #print(context)        
         return context
         
     def form_valid(self, form):
-        print(form.instance.id)
-        print(form.instance.apellido_participante)
+       # print(form.instance.id)
+       # print(form.instance.apellido_participante)
         
-        print("es valido")
-        print("no es valido")    
-        print(form.instance.apellido_participante)
+       # print("es valido")
+       # print("no es valido")    
+       # print(form.instance.apellido_participante)
         
         
         
@@ -314,8 +302,8 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                                 
                 status_code = 200
                 form.instance.um = self.request.user   
-                print(form.instance.id)
-                print(form.instance.apellido_participante)
+                #print(form.instance.id)
+                #print(form.instance.apellido_participante)
                 form.save()                 
                 
                 ##return super().form_valid(form)                        
@@ -324,16 +312,16 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                          'error':'',
                          'rptaServer':"OK"}  
 
-                print("grabo edit ")
+                #print("grabo edit ")
                 response = JsonResponse(contexto)
                 response.status_code = status_code
             else:
                 status_code = 400
                 error= form.errors 
-               # print("form.errors")
-               # print(form.errors.as_data())
-               # print("solo error")
-               # print(error)
+               #print("form.errors")
+               #print(form.errors.as_data())
+               #print("solo error")
+               #print(error)
                 contexto={'mensaje':"Verifique Datos",
                         'error':error,
                         'rptaServer':'OFF'} 
@@ -341,9 +329,9 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                 response.status_code = status_code
                 
                 
-            print("debe de regresar de edit")  
-            print(contexto)
-            print(response)
+            #print("debe de regresar de edit")  
+            #print(contexto)
+            #print(response)
             return response
 
         except ValueError as e:
@@ -355,18 +343,18 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
             contexto={'mensaje':'mensaje',
                             'error':'',
                             'rptaServer':'OFF'}  
-            print ('mensaje except')
-            print (contexto)
+            #print ('mensaje except')
+            #print (contexto)
             response = JsonResponse(contexto)
-            print(response)
+            #print(response)
             return response
          
     
 
     def post(self, request, *args, **kwargs):
-        print("post edi")
-        print(request.POST.get("apellido_participante"))
-        print(request.POST.get("id"))                
+        #print("post edi")
+        #print(request.POST.get("apellido_participante"))
+        #print(request.POST.get("id"))                
         busca=request.POST.get("id")
         requestValido="OK"
         response=""
@@ -404,10 +392,10 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
 
                     participante.uc = self.request.user   
                     
-                    print("form.instance,id")
-                    print(participante.id)
+                    #print("form.instance,id")
+                    #print(participante.id)
                     
-                    print(to_dict(participante))
+                    #print(to_dict(participante))
                     
                     
                     participante.save() 
@@ -435,7 +423,7 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                                 'rptaServer':"OK",
                                'participante' : data}  
                     status_code = 200
-                    print("grabo ")
+                    #print("grabo ")
                     response = JsonResponse(contexto)
                     response.status_code = status_code
                 else:
@@ -443,7 +431,7 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                                 'error':'',
                                 'rptaServer':"OFF"}  
                     status_code = 200
-                    print("grabo")
+                    #print("grabo")
                     response = JsonResponse(contexto)
                     response.status_code = status_code
                     
@@ -452,7 +440,7 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
             else:
                 status_code = 400
                 error= form.errors 
-                print("form.errors 491")
+                #print("form.errors 491")
                # print(form.errors.as_data())
                # print("solo error")
                # print(error)
@@ -463,9 +451,9 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
                 response.status_code = status_code
                 
                 
-            print("debe de regresar 436")  
-            print(contexto)
-            print(response)
+            #print("debe de regresar 465")  
+            #print(contexto)
+            #print(response)
             return response
 
         except ValueError as e:
@@ -477,10 +465,10 @@ class ParticipanteEdit(SuccessMessageMixin, SinPrivilegios,generic.UpdateView):
             contexto={'mensaje':'mensaje',
                             'error':'',
                             'rptaServer':'OFF'}  
-            print ('mensaje except')
-            print (contexto)
+            #print ('mensaje except')
+            #print (contexto)
             response = JsonResponse(contexto)
-            print(response)
+            #print(response)
             return response
             
         
@@ -508,8 +496,6 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
     
     #se carga en el form el usuario logueado
     def form_valid(self, form):
-        print("es valido")
-        print("no es valido")    
         form.instance.uc = self.request.user   
         form.save()     
         return super().form_valid(form)
@@ -562,10 +548,7 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
                         
                 error= form.errors 
                 # error= form.errors.as_data()
-                print("form.errors")
                 print(form.errors.as_data())
-                print("solo error")
-                print(error)
                 contexto={'mensaje':mensaje,
                         'error':error,
                         'rptaServer':'OFF'}  
@@ -579,18 +562,16 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
                             'rptaServer':"OK"}  
                     status_code = 200
                     
-                    print(contexto)
                     form.instance.uc = self.request.user   
                     form.save() 
-                    print("grabo ")
                 else:    
                     status_code = 400
                             
                         
                 response = JsonResponse(contexto)
                 response.status_code = status_code
-                print (contexto)
-                print(response)
+                #print(contexto)
+                #print(response)
             return response
 
         except ValueError as e:
@@ -602,10 +583,10 @@ class ParticipanteAdd_xx(SuccessMessageMixin,generic.CreateView):
             contexto={'mensaje':mensaje,
                             'error':'',
                             'rptaServer':'OFF'}  
-            print ('mensaje except')
-            print (contexto)
+            #print ('mensaje except')
+            #print (contexto)
             response = JsonResponse(contexto)
-            print(response)
+            #print(response)
             return response
             
         
@@ -625,22 +606,67 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
     success_message="Participante registrado satisfactoriamente"
     
     #se carga en el form el usuario logueado
+    #def __init__(self, request, evento=None):
+    #    print("sss")
+    #    self.evento= evento
+    
+   # def get_success_url(self):
+    #   #return reverse('participante_new', args = [self.object.evento.id])
+     #  return reverse('participante_new', kwargs={'evento_id':1})
+    
+   
+    
+   ## def form_valid(self, form):
+        # Obtén la ID del libro desde los argumentos de la URL
+    ##    evento_id = self.kwargs['evento_id']
+    ##    print("ingesoooo")
+        # Asigna el libro correspondiente a la instancia
+      ##  form.instance.evento= Evento.objects.get(evento_id=evento_id)
+        ##return super().form_valid(form)
+    
+    
+   # def get_absolute_url(self):
+   #     return reverse('participante_new', kwargs={'evento_id': self.evento.evento_id})
+        
     def form_valid(self, form):
-        print("es valido")
-        print("no es valido")    
+      #  print("es valido")
+      #  print("no es valido")    
         form.instance.uc = self.request.user   
         form.save()     
         return super().form_valid(form)
     
+    
     def get_context_data(self, **kwargs):
+       # print("self.tipo_participante_id")
+        evento_id = self.kwargs['evento_id']
+       # print("ingesoooo context_Data")
+       # print(evento_id)
+       
         context = super(ParticipanteAdd, self).get_context_data(**kwargs)
-        context["eventos"] = Evento.objects.all()
+        #context["eventos"] = Evento.objects.all()
+        eventos=lista_Eventos_Por_Acceso(self.request.user.id,self.request.user.is_staff,"O")
+        param=eventos.filter(id=evento_id).first()
+        context["eventos"]=eventos
         context["tipos"] = Tipo_Participante.objects.all()
         context["modalidades"] = Modalidad_Asistencia.objects.all()
+        context["eventoId"] = evento_id
+        context["nuevoTipo"] = param.nuevo_tipo_participante
+        
+      
+        
+     
+        '''
+        testprodms = TestPROD.objects.order_by().values_list('prodID', flat=True).distinct()
+        AllProdcts = TestPROD.objects.all()
+        listtests  =  [AllProdcts.filter(prodID__exact=prodtest).first() for prodtest in testprodms]        listtests  =  [eventos.filter(id=evento_id).first()
+        '''
+       # print(context)
+        
+        
         return context
     
     def post(self, request, *args, **kwargs):
-        print("post")
+        #print("post")
         requestValido="OK"
         response=""
         
@@ -672,9 +698,9 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
                 response.status_code = status_code
                 
                 
-            print("debe de regresar 645")  
-            print(contexto)
-            print(response)
+            #print("debe de regresar 645")  
+            #print(contexto)
+            #print(response)
             return response
 
         except ValueError as e:
@@ -686,10 +712,10 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
             contexto={'mensaje':'mensaje',
                             'error':'',
                             'rptaServer':'OFF'}  
-            print ('mensaje except')
-            print (contexto)
+            #print ('mensaje except')
+            #print (contexto)
             response = JsonResponse(contexto)
-            print(response)
+            #print(response)
             return response
             
         
@@ -806,7 +832,7 @@ def xx_ImportarCsv(request,participante_id=None):
                 }        
                            
         response = JsonResponse(mensaje)
-        print(response)
+        #print(response)
         return response
     
     
@@ -824,9 +850,9 @@ def ListarCsv(request,participante_id=None):
     evento=0,
     lisparb=""
     
-    print('eduuuuuuuuuuuuuu')
+    #print('eduuuuuuuuuuuuuu')
     if request.method=='GET':
-        print('es geeeeeeeeetttttttttttttt')
+        #print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
         #form_buscar=BuscarParticipanteForm()
         #lisEventos = Evento.objects.all()
@@ -836,7 +862,7 @@ def ListarCsv(request,participante_id=None):
         
         #En el contexto definimos que mandamos a la plantilla
         contexto={'liseventos':lisEventos}
-        print(contexto)
+        #print(contexto)
         return render(request, template_name, contexto)    
         
     if request.method=='POST':
@@ -854,11 +880,11 @@ def ListarCsv(request,participante_id=None):
         if(msg==""):        
                    
             evento = request.POST.get("evento")
-            print(evento)  
+            #print(evento)  
             
            
             liscsv=lista_participante_csv(evento)
-            print('busqueda solo por evento')
+            #print('busqueda solo por evento')
             
             
             contexto={
@@ -1143,7 +1169,7 @@ def subir_csv_req(request):
                 if (fila>1):
                     try:
                          
-                        print('verifican '+str(fila))    
+                        #print('verifican '+str(fila))    
                         data_dict = {}
                         data_dict["evento"]=evento
                         #evento
@@ -1159,10 +1185,10 @@ def subir_csv_req(request):
                         confirmo = confirmo.lower()
                         if (confirmo == "si"):
                              data_dict["confirmo_asistencia"]=True
-                             print("campos verdad")
+                             #print("campos verdad")
                         else:    
                              data_dict["confirmo_asistencia"]=False
-                             print("campos falso")
+                             #print("campos falso")
                         form = ParticipanteForm(data_dict)
                        
                         if form.is_valid():
@@ -1170,14 +1196,14 @@ def subir_csv_req(request):
                             nsave=nsave+1                                        
                         else:
                            
-                            print("muestra los mensajes de error")
+                            #print("muestra los mensajes de error")
                             #print(form.errors)
-                            print(form.errors.items())
-                            print("muestra los mensajes de error")
+                            #print(form.errors.items())
+                            #print("muestra los mensajes de error")
                             swError="SI"
                             msg=""
                             for key in form.errors.items():
-                                print(key ,"->")
+                                #print(key ,"->")
                                 dato=str(key)
                                 ini=dato.index('[')+1
                                 fin=dato.index(']')
@@ -1190,16 +1216,16 @@ def subir_csv_req(request):
                             #msg=form.errors 
                             #print(msg)
                             #for key,value in form.errors.items():
-                              #  print(value, 'zzzzzzzzzz')
+                              #print(value, 'zzzzzzzzzz')
                                 #forms[key]=BeautifulSoup(value,'html.parser').get_text()
                             
                                 
                             #for key in form.errors:
-                            #    print(key, " xxx")
+                            #print(key, " xxx")
                                 
                             
                             #for item in form.errors.as_data().items():
-                             #   print(fields[item[0]])
+                             #print(fields[item[0]])
                              
                                    
                             #for item in self.errors.as_data().items():
@@ -1209,7 +1235,7 @@ def subir_csv_req(request):
                            
                     #except Exception as ex:
                     except Exception as msg_error:
-                                print(f"¡Lo siento, {msg_error} !")    
+                                #print(f"¡Lo siento, {msg_error} !")    
                         
                                 msg=(f"¡Lo siento, {msg_error}!")
                               
@@ -1226,17 +1252,17 @@ def subir_csv_req(request):
                 'errorData': '',
                 'mensaje': msg
                     }
-            print(contexto)
+            #print(contexto)
         else:    
             if(swError=="SI"):
-                print('caso edu 1')
+                #print('caso edu 1')
                 contexto={
                     'rptaServer':'OFF',
                     'errorData': errorData,
                     'mensaje': msg
                         }
             else: 
-                print('caso edu 2')              
+                #print('caso edu 2')              
                 contexto={
                     'rptaServer':'OK',
                     'errorData': '',
@@ -1244,20 +1270,20 @@ def subir_csv_req(request):
                         }
                
     else:
-        print('caso edu 3')
+        #print('caso edu 3')
         contexto={
             'rptaServer':'OFF',
             'errorData': '',
             'mensaje':'Opción no es enviada desde aplicativo'
                     }
        
-    print(contexto)  
-    print("eeee")  
+    #print(contexto)  
+    #print("eeee")  
     return contexto
  
 
 
-##edu
+
 
 
 
@@ -1267,16 +1293,16 @@ def subir_csv_req(request):
 @transaction.atomic
 def participante_csv_delete(request,id=None):
     permission_required = 'par.delete_participante'
-    print('edu 01')
+    #print('edu 01')
     if request.method == "POST":
-        print('edu 02')
+        #print('edu 02')
         opc= request.POST.get("opc")
         idCsv = request.POST.get("id")
         evento = request.POST.get("evento")
-        print("accion a ejecutar ")
+        #print("accion a ejecutar ")
       
         if opc == "DEL":
-            print('edu 03')
+            #print('edu 03')
             sid = transaction.savepoint()
             try:
                
@@ -1295,8 +1321,8 @@ def participante_csv_delete(request,id=None):
                                 'liscsv': liscsv
                                 }  
                 status_code = 200
-                print("grabo ")
-                print(contexto)
+                #print("grabo ")
+                #print(contexto)
                 response = JsonResponse(contexto)
                 response.status_code = status_code
                 
@@ -1312,8 +1338,8 @@ def participante_csv_delete(request,id=None):
                 contexto={'mensaje':'Error de integridad de datos (p)',
                             'error':'',
                             'rptaServer':'OFF'}  
-                print ('mensaje except')
-                print(contexto)
+                #print ('mensaje except')
+                #print(contexto)
                 response = JsonResponse(contexto)   
             except IntegrityError:
                 transaction.savepoint_rollback(sid) 
@@ -1328,13 +1354,13 @@ def participante_csv_delete(request,id=None):
                 contexto={'mensaje':'Acción desconocida ()',
                             'error':'',
                             'rptaServer':'OFF'}  
-                print (contexto)
+                #print (contexto)
                 response = JsonResponse(contexto)
     else:
                 contexto={'mensaje':'Acción desconocida (Post)',
                             'error':'',
                             'rptaServer':'OFF'}  
-                print (contexto)
+                #print (contexto)
                 response = JsonResponse(contexto)
            
     return response
@@ -1389,18 +1415,13 @@ class TipoParticipanteEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView
     
 class TipoParticipanteDelete(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
 # agregado para controlar acceso de usuario
-    print("delete 1")
     permission_required="par.delete_tipo_participante"
-    print("delete 2")
     model=Tipo_Participante
     template_name = "par/tipo_participante_del.html"
-    print("delete 3")
     context_object_name = "obj"
     success_url = reverse_lazy("par:tipo_participante_list")
-    print("delete 4")
     success_message="Tipo Participante eliminado Satisfactoriamente"   
     
-    print("delete 5")  
     
     #def delete(request, *args, **kwargs):
    
@@ -1446,7 +1467,7 @@ def TipoParticipanteDel(request,pk=None):
     lista=""
     contexto={ 'rptaServer':rptaServer} 
     if request.method == "POST":
-        print('edu 02')
+        #print('edu 02')
         opc= request.POST.get("opc")
         id= request.POST.get("id")
         
@@ -1497,7 +1518,7 @@ def TipoParticipanteDel(request,pk=None):
                             'error':'',
                             'rptaServer':'OFF',
                             'lista':lista}  
-                print (contexto)
+                #print (contexto)
                 
     else:
                 contexto={'mensaje':'Acción desconocida (Post)',
@@ -1505,8 +1526,8 @@ def TipoParticipanteDel(request,pk=None):
                             'rptaServer':'OFF',
                             'lista':lista}  
                 
-    print('contexto')
-    print(contexto)           
+    #print('contexto')
+    #print(contexto)           
     response = JsonResponse(contexto) 
     if(rptaServer=='OK'):
         response.status_code = 200        
@@ -1591,13 +1612,13 @@ def contarasistencia(request,participante_id=None):
    
     evento = request.POST.get("evento")
     asistencia=Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).count()
-    print('eduuuuuuuuuuuuuu')     
+    #print('eduuuuuuuuuuuuuu')     
     if request.method=='POST':    
-        print('es pooooooooooossssttt')
+        #print('es pooooooooooossssttt')
         
         contexto={'rpta':'OK',
                   'asistencia':asistencia}            
-        print(contexto)                    
+        #print(contexto)                    
         return JsonResponse(contexto)
         
     return render(request, template_name, contexto)  
@@ -1631,7 +1652,7 @@ def valida_cabecera_csv(cp0,cp1,cp2,cp3,cp4,cp5,cp6,cp7):
 
 def valida_email(email):
    emailObject = validate_email(email)
-   print(emailObject.email+" - " +email)
+   #print(emailObject.email+" - " +email)
 
 
 #user_email = input("Enter your Email Address: ")
@@ -1755,6 +1776,6 @@ def lista_Tipo_Participante(pkUser,staff,tipo):
     "background_tipo_participante","tipo_identificacion_participante"))
                  
    
-    print("sergio")           
-    print(lisTipoParticipante)         
+    #print("sergio")           
+    #print(lisTipoParticipante)         
     return lisTipoParticipante;   

@@ -1,6 +1,8 @@
 from django.db import models
 
 from bases.models import ClaseModelo2,Usuario
+#from par.models import Tipo_Participante
+
 # Create your models here.
 
 
@@ -35,9 +37,12 @@ class Evento(ClaseModelo2):
         blank=False,
         unique=True
     )
+    nuevo_tipo_participante= models.IntegerField(default=0)   
+    #nuevo_tipo_participante=models.ForeignKey(Tipo_Participante, on_delete=models.PROTECT)
+    
     
     def __str__(self):
-        return '{}'.format(self.nombre_evento)
+        return '{}:{}:{}'.format(self.id,self.nombre_evento,self.nuevo_tipo_participante)
     
     #sobreescribimos el metodo save para grabar con mayusculas
     #def save(self):

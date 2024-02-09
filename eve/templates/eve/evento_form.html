@@ -18,6 +18,47 @@
                             {% if obj %} Editar {% else %} Nuevo {% endif %} Evento
                         </div>
                         <div class="dropdown-divider"></div>
+
+
+                        <div class="form-group">
+                            <label for="id_evento">Modalidad Evento:</label>
+                            <div class="input-group">
+                                <!--
+                                <input type="text" name="descripcion" maxlength="100" class="form-control" required id="id_descripcion" placeholder="Descripción de categoría" value="{% if obj %} {{ obj.descripcion }} {% endif %}">
+                                -->
+                                {{form.modalidad_evento}}
+                            </div>    
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_evento">Nombre Evento:</label>
+                            <div class="input-group">
+                                <!--
+                                <input type="text" name="descripcion" maxlength="100" class="form-control" required id="id_descripcion" placeholder="Descripción de categoría" value="{% if obj %} {{ obj.descripcion }} {% endif %}">
+                                -->
+                                {{form.nombre_evento}}
+                            </div>    
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="id_evento">Código de Tipo Participante por defecto al agregar en Registro:</label>
+                            <div class="input-group">
+                           
+                                {{form.nuevo_tipo_participante}}
+                            </div>    
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="id_evento">Activo/Estado:</label>
+                            <div class="input-group">
+                                <!--
+                                <input type="text" name="descripcion" maxlength="100" class="form-control" required id="id_descripcion" placeholder="Descripción de categoría" value="{% if obj %} {{ obj.descripcion }} {% endif %}">
+                                -->
+                                {{form.estado}}
+                            </div>    
+                        </div>
+
                         <div class="row">
                             
                             <div class="col-5">
@@ -25,26 +66,37 @@
                                     <!--
                                     <input type="text" name="descripcion" maxlength="100" class="form-control" required id="id_descripcion" placeholder="Descripción de categoría" value="{% if obj %} {{ obj.descripcion }} {% endif %}">
                                     -->
-                                    {{form.modalidad_evento}}
+                                    <!--form.modalidad_evento}}-->
                                 </div>    
                                 <div class="input-group">
                                     <!--
                                     <input type="text" name="descripcion" maxlength="100" class="form-control" required id="id_descripcion" placeholder="Descripción de categoría" value="{% if obj %} {{ obj.descripcion }} {% endif %}">
                                     -->
-                                    {{form.nombre_evento}}
+                                    <!--form.nombre_evento}}-->
                                 </div>    
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                    <!-- <label for="id_estado">Estado</label>
                                     <input type="checkbox" name="estado" class="form-control" id="id_estado" {% if obj.estado %} checked {% endif %}>
-                                    ---->
-                                    {{form.estado}}
+                                    -->
+                                    <!--form.nuevo_tipo_participante}}-->
+                                </div>    
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                   <!-- <label for="id_estado">Estado</label>
+                                    <input type="checkbox" name="estado" class="form-control" id="id_estado" {% if obj.estado %} checked {% endif %}>
+                                    
+                                    form.estado}}-->
                                 </div>    
                             </div>
                             
-                            <!-- {{ form.as_p }} -->
-                        </div>    
+                            <!--  form.as_p }} -->
+                        </div> 
+                        
+                      
+
                         <div class="row">
                             <div class="col">
                                 <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>

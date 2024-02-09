@@ -5,6 +5,7 @@ from django.forms import fields
 from django import forms
 from django.forms.widgets import PasswordInput
 from .models import Modalidad_Evento,Evento,Usuario_Evento
+from par.models import Tipo_Participante
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
@@ -34,12 +35,20 @@ class EventoForm(forms.ModelForm):
         queryset=Modalidad_Evento.objects.filter(estado=True)
         .order_by('descripcion_modalidad_evento')
     )
+    '''
+    nuevo_tipo_participante = forms.ModelChoiceField(
+        queryset=Tipo_Participante.objects.filter(estado=True)
+        .order_by('descripcion_tipo_participante')
+    )'''
     class Meta:
         model=Evento
-        fields = ['modalidad_evento','nombre_evento','estado']
+        fields = ['modalidad_evento','nombre_evento','nuevo_tipo_participante','estado']
         labels = {'Evento':"nombre_evento",
-        'estado':"Estado"}
-        widget={'nombre_evento':forms.TextInput}
+        'estado':"Estado",
+        'nuevo_tipo_participante':"nuevo_tipo_participante"}
+        
+        widget={'nombre_evento':forms.TextInput,
+                'nuevo_tipo_participante':forms.TextInput}
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -48,6 +57,8 @@ class EventoForm(forms.ModelForm):
                      'class':'form-control'
                  })
         self.fields['modalidad_evento'].empty_label="Seleccione Modalidad"
+        self.fields['nuevo_tipo_participante'].empty_label="Seleccione Tipo Participante"
+    
     
     
 class UsuarioEventoForm(forms.ModelForm):

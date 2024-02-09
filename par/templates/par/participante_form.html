@@ -5,7 +5,7 @@
         <!--    <form id="frmPrv" role="form" method="post"  class="form-inline">-->
         <!--<form id="frmPrv" role="form"  method="post" action="participanteAsistencia({{obj.id}},'E')" class="form-inline">    -->
         {% else %}
-        <form id="frmPrv" role="form" action="{% url 'par:participante_new' %}" method="post" style="padding:15px">
+        <form id="frmPrv" role="form" action="{% url 'par:participante_new' 0 %}" method="post" style="padding:15px">
         {% endif %}
             <!--<div class="col-xl-12 col-md-12 mb-12">-->
             <div>    
@@ -26,7 +26,10 @@
                         <div>
                             <div>
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                {% if obj %} Editar hhh{% else %} Nuevo {% endif %} Participante
+                                {% if obj %} Editar {% else %} 
+                                Nuevo 
+                                
+                                {% endif %} Participante
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 {{ form.non_field_errors}}
@@ -37,11 +40,17 @@
 
                                 <div class="form-group">
                                     <label for="id_evento">Evento:</label>
-                                    <select name="evento" class="form-control" required="" id="id_evento" >
-                                        <option value="" selected="">Seleccione Evento</option>
+                                    <select disabled name="evento" class="form-control" required="" id="id_evento" >
+                                        {% if obj %}
+                                        <!--<option value="" selected="">Seleccione Tipo edit</option>-->
+                                        {% else %} 
+                                           <option value="" selected="">Seleccione Evento</option>
+                                        {% endif %}   
                     
                                             {% for item in eventos %}
-                                                <option value="{{item.id}}">{{item.nombre_evento}}</option>
+                                                <option value="{{item.id}}" {% if obj.evento == item %} selected {% endif %}>{{item.nombre_evento}}</option>
+                                                                                      
+
                                             {% endfor%}
                                     </select>       
                                     <div id="message_evento">
@@ -57,7 +66,7 @@
                                                 {% if obj %}
                                                   <!--<option value="" selected="">Seleccione Tipo edit</option>-->
                                                 {% else %}
-                                                <option value="" selected="">Seleccione Tipo nuevo</option>
+                                                <option value="" selected="">Seleccione Tipo Participante</option>
                                                 {% endif %}
                     
                                                 
@@ -186,6 +195,8 @@
             <!-- inicia div -->          
         </form>
 
+
+        
         <!-- inicia div -->
         <!--
         <form style="padding:15px">
@@ -238,6 +249,29 @@
 </div> 
 
 <script>
+    $(document).ready(function() {
+    {% if obj %} console.log("Editar") {% else %}
+    console.log("nuevo")
+    cargaValores()
+     {% endif %} 
+     document.getElementById("id_apellido_participante").focus();
+
+    });
+ 
+ 
+    function cargaValores(){
+    {% if eventoId %};
+       document.getElementById("id_evento").value = {{eventoId}};
+       document.getElementById("id_tipo_participante").value = {{nuevoTipo}};
+       document.getElementById("id_modalidad_asistencia").value = 1
+       document.getElementById("id_asistio_evento").checked=true
+    {% endif %}   
+
+    };
+    
+
+    
+    
 $(function() {
 
     //var url = $("form").attr("action");

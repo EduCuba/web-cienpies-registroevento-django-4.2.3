@@ -82,7 +82,7 @@ def x_ModalidadEventoAdd(request,pk=None):
                 estado = fn                
 
             )
-            print(obj.descripcion_modalidad_evento,obj.estado)
+           #print(obj.descripcion_modalidad_evento,obj.estado)
         return redirect('eve:modalidad_evento_list')
     
     return render(request,template_name,context)
@@ -126,7 +126,7 @@ class ModalidadEventoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView)
 class ModalidadEventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView):    
 # agregado para controlar acceso de usuario   
    
-    print('educubaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    #print('educubaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     permission_required="eve.delete_modalidad_evento"
     model=Modalidad_Evento
     template_name = "eve/modalidad_evento_del.html"
@@ -142,7 +142,7 @@ class ModalidadEventoDel(SuccessMessageMixin,SinPrivilegios, generic.DeleteView)
         
       # self.object = self.get_object() # assign the object to the view
       # form = self.get_form()
-      # print(form)
+      #print(form)
        #if not (Modalidad_Evento.objects.filter(id= self.kwargs['pk']).exists()): 
        #    raise Exception('Modalidad no existe') 
        if Evento.objects.filter(modalidad_evento_id= self.kwargs['pk']).exists(): 
@@ -235,8 +235,8 @@ class EventoEdit(SuccessMessageMixin,SinPrivilegios,generic.UpdateView):
     #se carga en el form el usuario logueado
     def form_valid(self, form):
         form.instance.um_id = self.request.user.id
-        print ("form.instance.id")
-        print (form.instance.id)
+        #print ("form.instance.id")
+        #print (form.instance.id)
         return super().form_valid(form)
 
 
@@ -266,7 +266,7 @@ def EventoDel(request,pk=None):
                    
                      } 
     if request.method == "POST":
-        print('edu 02')
+        #print('edu 02')
         opc= request.POST.get("opc")
         id= request.POST.get("id")
         
@@ -317,7 +317,7 @@ def EventoDel(request,pk=None):
                             'error':'',
                             'rptaServer':'OFF',
                             'lista':lista}  
-                print (contexto)
+                #print (contexto)
                 
     else:
                 contexto={'mensaje':'Acción desconocida (Post)',
@@ -325,7 +325,7 @@ def EventoDel(request,pk=None):
                             'rptaServer':'OFF',
                             'lista':lista}  
                 
-    print(contexto)           
+    #print(contexto)           
     response = JsonResponse(contexto) 
     if(rptaServer=='OK'):
         response.status_code = 200        
@@ -346,9 +346,9 @@ def buscarusuarioevento(request,evento=None):
    
     evento=0,
    
-    print('eduuuuuuuuuuuuuu')
+    #print('eduuuuuuuuuuuuuu')
     if request.method=='GET':
-        print('es geeeeeeeeetttttttttttttt')
+        #print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
         lisEventos=lista_Eventos_Por_Acceso(request.user.id,request.user.is_staff,"O")
      
@@ -357,22 +357,22 @@ def buscarusuarioevento(request,evento=None):
 
         #contexto={'eve':form_buscar,'lispar':lispar, 'liseventos':lisEventos}
         contexto={'liseventos':lisEventos}
-        print(contexto)
+        #print(contexto)
         return render(request, template_name, contexto)    
         
     if request.method=='POST':    
-        print('es pooooooooooossssttt')
+        #print('es pooooooooooossssttt')
         evento = request.POST.get("evento")
-        print(evento)
+        #print(evento)
         lisUSuarios = []  
         lisUsuariosEvento = []
           
         if evento=='0':
            lisUsuariosEvento=[]
            lisUSuarios=[] 
-           print("evento vacio")
+           #print("evento vacio")
         else:    
-            print("evento lleno")
+            #print("evento lleno")
             #lisUsuariosEvento=list(Usuario_Evento.objects.select_related("evento","usuario").filter(Q(evento_id=evento)).values("id",
             #       "evento_id","usuario_id","usuario__nombre","usuario__apellido"))
             lisUsuariosEvento=lista_Usuarios_Evento(evento)
@@ -431,13 +431,13 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVi
     
     #se carga en el form el usuario logueado
     def form_valid(self, form):
-        print("es valido")
-        print("no es valido xxxxxxxxxxxxxxxxx")  
+        #print("es valido")
+        #print("no es valido xxxxxxxxxxxxxxxxx")  
           
         form.instance.uc = self.request.user 
         evento = form.instance.evento  
         form.save()     
-        print("nuevo usuario")
+        #print("nuevo usuario")
         return super().form_valid(form)
     
     #def get_context_data(self, **kwargs):
@@ -448,7 +448,7 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVi
     #    return context
     
     def post(self, request, *args, **kwargs):
-        print("post")
+        #print("post")
         requestValido="OK"
         response=""
         
@@ -471,13 +471,13 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVi
                           
                             
                 status_code = 200
-                print("grabo ")
+                #print("grabo ")
                 response = JsonResponse(contexto)
                 response.status_code = status_code
             else:
                 status_code = 400
                 error= form.errors 
-                print("form.errors 491")
+                #print("form.errors 491")
                 contexto={'mensaje':"Verifique Datos",
                         'error':error,
                         'rptaServer':'OFF'} 
@@ -485,8 +485,8 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVi
                 response.status_code = status_code
                 
                 
-            print("debe de regresar 645")  
-            print(contexto)
+            #print("debe de regresar 645")  
+            #print(contexto)
             return response
 
         except ValueError as e:
@@ -498,10 +498,10 @@ class UsuarioEventoAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVi
             contexto={'mensaje':'mensaje',
                             'error':'',
                             'rptaServer':'OFF'}  
-            print ('mensaje except')
-            print (contexto)
+            #print ('mensaje except')
+            #print (contexto)
             response = JsonResponse(contexto)
-            print(response)
+            #print(response)
         return response       
 
     #return redirect('par:buscar_participante')
@@ -531,7 +531,7 @@ def usuarioAccesoEvento(request,accion=None):
         opc= request.POST.get("opc")
         usuario = request.POST.get("usuario")
         evento = request.POST.get("evento")
-        print("accion a ejecutar ")
+        #print("accion a ejecutar ")
       
         if opc == "DEL":
             try:
@@ -547,7 +547,7 @@ def usuarioAccesoEvento(request,accion=None):
                                 'lisUsuariosEvento': lisUsuEve,
                                 'lisUsuarios': lisUsuario}  
                 status_code = 200
-                print("grabo ")
+               #print("grabo ")
                 response = JsonResponse(contexto)
                 response.status_code = status_code
                 
@@ -563,22 +563,22 @@ def usuarioAccesoEvento(request,accion=None):
                 contexto={'mensaje':mensaje,
                             'error':'',
                             'rptaServer':'OFF'}  
-                print ('mensaje except')
+                #print ('mensaje except')
                
-               # print (e)
+               #print (e)
                 response = JsonResponse(contexto)
                 
         else:
                 contexto={'mensaje':'Acción desconocida',
                             'error':'',
                             'rptaServer':'OFF'}  
-               # print (contexto)
+               #print (contexto)
                 response = JsonResponse(contexto)
     else:
                 contexto={'mensaje':'Acción desconocida',
                             'error':'',
                             'rptaServer':'OFF'}  
-               # print (contexto)
+               #print (contexto)
                 response = JsonResponse(contexto)
     return response
         
@@ -599,11 +599,12 @@ def lista_Usuarios_No_Evento(evento):
 def lista_Eventos_Por_Acceso(pkUser,staff,tipo):
     if tipo=="O":
         if staff:
-            lisEventos = Evento.objects.all().only('id','estado','nombre_evento')
+            #print("sssssssssssssssss")
+            lisEventos = Evento.objects.all().only('id','estado','nombre_evento','nuevo_tipo_participante')
             #lisEventos = ""         
         else:
                 #filtra por relacion
-            lisEventos = Evento.objects.filter(usuario_evento__usuario_id=pkUser).only('id','estado','nombre_evento')
+            lisEventos = Evento.objects.filter(usuario_evento__usuario_id=pkUser).only('id','estado','nombre_evento','nuevo_tipo_participante')
                 
            #lisEventos=list(Evento.objects.select_related("usuario_evento","modalidad_evento").filter(Q(usuario_evento__usuario_id=pkUser)).values("id",
            #         "nombre_evento","modalidad_evento__descripcion_modalidad_evento"))
@@ -620,7 +621,8 @@ def lista_Eventos_Por_Acceso(pkUser,staff,tipo):
         
         
                 
-    #print(lisEventos)         
+    #print(lisEventos) 
+    #print("swsw")        
     return lisEventos;        
       
 

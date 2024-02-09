@@ -7,11 +7,34 @@
         {% csrf_token %}
   
         <div class="col-xl-12 col-md-12 mb-12">
+         
             {% if obj %}
             <div class="card border-left-warning shadow h-100 py-2">
             {% else %}    
             <div class="card border-left-success shadow h-100 py-2">
-            {% endif %}    
+            {% endif %}  
+            
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+              <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
+              <i class="fa fa-search fa-1x" style="color:#252F87"></i>
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Buscar por :</div>
+                  <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+                <!-- compras_new esta devlarado en el archivo urls.py-->
+  
+
+
+                  <a class="dropdown-item" onclick="return criterioBusqueda(1)" href="#"><i class="fa fa-address-card" ></i> Apellido Nombre</a>
+                  <a class="dropdown-item" onclick="return criterioBusqueda(2)" href="#"><i class="fa fa-suitcase" aria-hidden="true"></i> Empresa</a>
+                  
+                </div>
+              </div>
+            </div>
+            
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -49,9 +72,14 @@
 
 
 
+
+
+
+
+
                          
 
-                            <div class="form-row">
+                            <div class="form-row" id="divBusApeNom">
                               <div class="form-group col-md-2">
                                 <label for="apellido_participante">Apellido</label>
                               </div>  
@@ -74,7 +102,7 @@
                             </div>
 
 
-                            <div class="form-row">
+                            <div class="form-row" id="divBusEmpresa" hidden>
                               <div class="form-group col-md-2">
                                 <label for="lblEmpresa">Empresa</label>
                               </div>  
@@ -82,7 +110,6 @@
                                 <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
                                 <!--{{eve.empresa_participante}}-->
                               </div>
-                            
                             </div>
 
                         
@@ -133,14 +160,40 @@
               <div class="dropdown-header">Acciones:</div>
               <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
             <!-- compras_new esta devlarado en el archivo urls.py-->
-              <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo</a>
-              <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>
+             <!--
+            <a class="dropdown-item" onclick="return aaabbb('/par/participante_new','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
+            -->
+            <!--
+            /
+            
+/par/participante_new
+par/participante_new
+/participante_new
+
+
+            -->
+            
+            <!--funciona camb iar # por %
+            <a class="dropdown-item" onclick="return abrir_modal('{ url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
+            -->
+
+            <!-- FUNCIONA CON PARAMETRO VISTA
+            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' '1' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
+            -->
+            
+            
+            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' 0 %}','bus_id_evento')"  href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
+            
+            
+            
+            <!--  <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>-->
               
             </div>
           </div>
         </div>
     <!-- Card Body -->
-    
+  
+
         <div id="rowdata" class="card-body">
           {% if not lispar %}
           <div class="alert alert-info">No existe coincidencias</div>
@@ -156,7 +209,7 @@
                 <th>Empresa</th>
                 <th>Modalidad</th>
                 <th>Tipo Par.</th>
-                <th>Tipo Ide.</th>
+                <th>Tipo Ident.</th>
                 <th class="all">Asistio</th>
                 <th class="all">Acciones</th>
               </thead>
@@ -195,6 +248,9 @@
             </table>
           </div>
         </div>
+
+
+      
 
 
         
@@ -244,6 +300,11 @@
       return false
     }
 
+    var criterio=inputApellido.trim()+inputNombre.trim()+inputEmpresa.trim();
+    if(criterio.length<=1){
+      mensajeServer("Ingrese criterio de busqueda, debe tener dos o mas caracteres");
+      return false
+    }
 
 
 
@@ -770,7 +831,24 @@ console.log(rows);
    }
 
 
-  
+  function criterioBusqueda(opc){
+    objApe=document.getElementById("divBusApeNom")
+    objEmp=document.getElementById("divBusEmpresa")
+    document.getElementById("bus_apellido_participante").value=""
+    document.getElementById("bus_nombre_participante").value=""
+    document.getElementById("bus_empresa_participante").value=""
+    
+    if(opc==1){
+      
+      showDiv(objApe);
+      hiddenDiv(objEmp);
+      
+    }else{
+      showDiv(objEmp);
+      hiddenDiv(objApe);
+
+    }
+  }
 
 
 </script>
