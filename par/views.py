@@ -1779,3 +1779,114 @@ def lista_Tipo_Participante(pkUser,staff,tipo):
     #print("sergio")           
     #print(lisTipoParticipante)         
     return lisTipoParticipante;   
+
+
+
+
+@login_required(login_url='config:login')
+@permission_required('par.view_participante', login_url='config:home')
+def lecturaqr(request,participante_id=None):
+#    class ModalidadEventoList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'par.view_participante'
+
+    template_name="par/lectura_qr.html"
+   
+    form_compras={}
+    contexto={}
+    par_evento_id=0
+    nombre=''
+    apellido =''
+    evento=0,
+    lisparb=""
+    #print('eduuuuuuuuuuuuuu')
+    pkUser=request.user.pk
+  
+    if request.method=='GET':
+        #print('es geeeeeeeeetttttttttttttt')
+        #Formulario creado en forms.py
+        form_buscar=BuscarParticipanteForm()
+        
+        lisEventos = lista_Eventos_Por_Acceso(pkUser,request.user.is_staff,"O")
+        
+       
+        #crea objeto vacio
+        lispar=""
+       
+        
+        #En el contexto definimos que mandamos a la plantilla
+        
+        contexto={'eve':form_buscar,'lispar':lispar, 'liseventos':lisEventos}
+        # la impresion de contexto ejecutara consulta a la BD
+        #print(contexto)
+        return render(request, template_name,contexto )    
+        
+    if request.method=='POST':    
+        #print('es pooooooooooossssttt')
+        
+        apellido_participante = request.POST.get("apellido_participante")
+        nombre_participante = request.POST.get("nombre_participante")
+        empresa_participante = request.POST.get("empresa_participante")
+        evento = request.POST.get("evento")
+        #print(apellido_participante)    
+        #print(nombre_participante)    
+        #print("empresa")
+        #print(empresa_participante)
+        #print(evento)  
+        if (evento=='0'):
+            #print('Seleccione Evento') 
+            contexto={'rpta':'OFF',
+                  'lispar':'',
+                  'mensaje':'Seleccione Evento'}  
+        else:    
+        
+            if (len(empresa_participante)==0):  
+                
+                if (len(apellido_participante) == 0 and len(nombre_participante) == 0):    
+                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
+                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                    #print('busqueda solo por evento')
+                else:    
+                    if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+                        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                        #print('busqueda por apellido y nombre : caso empresa vacio')
+                    else:
+                        if (nombre_participante == ""):
+                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
+                            "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                            "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                            #print('busqueda por apellido :  empresa vacio')
+                        else:    
+                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+                            "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                            "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                            #print('busqueda por nombre caso empresa vacia')
+                
+            else:
+                if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
+                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+                    "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                    "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                    #print('busqueda por empresa, apellido y nombre : caso 4')
+                else:    
+                    if (nombre_participante == ""):
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).values("id",
+                        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                        #print('busqueda por empresa y apellid : caso 5')
+                    else:    
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).values("id",
+                        "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
+                        "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
+                        #print('caso empresa y nombre')
+                
+                        
+            #print('json es') 
+            contexto={'rpta':'OK',
+                  'lispar':lispar}            
+        #print(contexto)                    
+    return JsonResponse(contexto)
+        
+    return render(request, template_name, contexto)  

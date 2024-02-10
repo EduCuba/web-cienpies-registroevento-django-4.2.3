@@ -361,6 +361,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     {% endif %}  
                 </li>
 
+                <li class="nav-item">
+                  {% if perms.par.view_participante%}  
+                    <a href="#" class="nav-link">
+                      <a href="{% url 'par:lectura_qr' %}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>QR</p>
+                    </a>
+                    {% endif %}  
+                </li>
+
                
               </ul>
             </li>

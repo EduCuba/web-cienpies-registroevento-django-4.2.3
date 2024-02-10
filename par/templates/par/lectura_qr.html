@@ -1,0 +1,71 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Evento: </h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active">Lectura</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+{% endblock %}
+{% block content %}
+<!-- ./row -->
+<div id="rowdata" class="card-body">
+    <div id="your-qr-result"></div>
+        <h1>QR</h1>
+        <div style="display: flex;justify-content:center;">
+            <div id="my-qr-reader" style="width:500px;">
+            </div>     
+        </div> 
+</div>
+
+{% endblock%}
+
+{% block js %}
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    //Check if dom is ready
+    function domReady(fn){
+        if(document.readyState==="complete" || document.readyState==="interactive"){
+            setTimeout(fn,1)
+        }else{
+            document.addEventListener("DOMContentLoaded",fn)
+        }
+    }
+
+    domReady(function(){
+        var myqr = document.getElementById('your-qr-result')
+        var lastResult, countResults=0;
+
+        // If found you QR code,
+        function onScanSuccess(decodeText,decodeResult){
+            if(decodeText!=lastResult){
+                ++countResults;
+                lastResult=decodeText;
+
+                // alert you qr here
+                alert("you Qr is:"+decodeText,decodeResult)
+                // and add todo you qr in top 
+                myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+            }
+
+        }
+     // and last render you camera QR 
+     var htmlscanner = new Html5QrcodeScanner(
+        "my-qr-reader",{fps:10,qrbox:250})
+
+      htmlscanner.render(onScanSuccess)
+    })
+</script>    
+
+{% endblock js%}
