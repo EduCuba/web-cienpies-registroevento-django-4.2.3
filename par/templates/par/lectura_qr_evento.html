@@ -1,0 +1,172 @@
+{% extends 'bases/index.html' %}
+
+{% block content_wrapper %}
+
+    <!--<form method="POST" class="form-inline" id="frmbuscar">-->
+    <form method="POST" class="" id="frmbuscar">  
+        {% csrf_token %}
+  
+        <div class="col-xl-12 col-md-12 mb-12">
+         
+            {% if obj %}
+            <div class="card border-left-warning shadow h-100 py-2">
+            {% else %}    
+            <div class="card border-left-success shadow h-100 py-2">
+            {% endif %}  
+            
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+              <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
+              <i class="fa fa-search fa-1x" style="color:#252F87"></i>
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Buscar por :</div>
+                  <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+                <!-- compras_new esta devlarado en el archivo urls.py-->
+  
+
+
+                  <a class="dropdown-item" onclick="return criterioBusqueda(1)" href="#"><i class="fa fa-address-card" ></i> Apellido Nombre</a>
+                  <a class="dropdown-item" onclick="return criterioBusqueda(2)" href="#"><i class="fa fa-suitcase" aria-hidden="true"></i> Empresa</a>
+                  
+                </div>
+              </div>
+            </div>
+            
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            
+                            <div class="dropdown-divider"></div>
+
+                            <div class="form-row">
+                              <!---
+                              <div class="form-group col-md-2">
+                                <label for="lblEvento">Evento</label>
+                              </div>  
+                              <div class="form-group col-md-10">                            
+                                
+                                {{eve.evento}}
+                              </div>-->
+
+                              <div class="form-group col-md-2">
+                                <label for="id_evento">Evento:</label>
+                              </div>
+                              <div class="form-group col-md-3">                              
+                                <select name="evento" class="form-control" required="" id="bus_id_evento">
+                                  <option value="0">Selecciona Evento</option>
+                                  {% for item in liseventos %}    
+                                              
+                                  <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                  <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                 {% endfor%}
+                                </select>
+                              </div>  
+                                                           
+                            
+                            </div>
+
+                            <div class="form-row" id="divBusEmpresa" hidden>
+                              <div class="form-group col-md-2">
+                                <label for="lblEmpresa">Empresa</label>
+                              </div>  
+                              <div class="form-group col-md-3">                            
+                                <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
+                                <!--{{eve.empresa_participante}}-->
+                              </div>
+                            </div>
+
+                        
+                            <div class="form-row">
+                              <div class="form-group col-md-2">
+                                  <!---
+                                    <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                                    <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                                -->
+                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
+                                </div>    
+                                <div class="form-group col-md-2">
+                                  
+                                    <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
+                                </div>    
+                                <div id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                                <!--
+                                <div class="form-group col-md-2">
+                                  
+                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">QR</i></button>                                    
+                                </div>  
+                                -->
+                            </div>  
+                            
+                          
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+ 
+    
+{% endblock content_wrapper %}
+
+
+
+{% block content %}
+<!-- ./row -->
+<div id="rowdata" class="card-body">
+    <div id="your-qr-result">
+
+    </div>
+    <h1>QR</h1>
+    <div style="display: flex;justify-content:center;">
+        <div id="my-qr-reader" style="width:500px;">
+        </div>     
+    </div> 
+</div>
+
+{% endblock content %}
+
+{% block js %}
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    //Check if dom is ready
+    function domReady(fn){
+        if(document.readyState==="complete" || document.readyState==="interactive"){
+            setTimeout(fn,1)
+        }else{
+            document.addEventListener("DOMContentLoaded",fn)
+        }
+    }
+
+    domReady(function(){
+        var myqr = document.getElementById('your-qr-result')
+        var lastResult, countResults=0;
+
+        // If found you QR code,
+        function onScanSuccess(decodeText,decodeResult){
+            if(decodeText!=lastResult){
+                ++countResults;
+                lastResult=decodeText;
+
+                // alert you qr here
+                alert("you Qr is:"+decodeText,decodeResult)
+                // and add todo you qr in top 
+                myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+            }
+
+        }
+     // and last render you camera QR 
+     var htmlscanner = new Html5QrcodeScanner(
+        "my-qr-reader",{fps:10,qrbox:250})
+
+      htmlscanner.render(onScanSuccess)
+    })
+    
+</script>    
+
+{% endblock js%}

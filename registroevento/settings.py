@@ -115,7 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_registro',
-        'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
+        'HOST': 'localhost',
         'USER': 'postgres',
         'PASSWORD': 'postgresql',
         'PORT': 5432,
