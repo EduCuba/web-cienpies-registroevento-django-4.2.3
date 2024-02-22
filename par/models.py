@@ -145,7 +145,7 @@ class Participante(ClaseModelo2):
                                     name='evento_qr_unico')
                     ] 
         indexes = [
-           models.Index(fields=['evento', 'codigo_qr']),]
+           models.Index(fields=['evento', 'codigo_qr'], name="par_evento_qr_unico") ]
     
     
   
