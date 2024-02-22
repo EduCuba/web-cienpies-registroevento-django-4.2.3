@@ -121,7 +121,7 @@ class Participante(ClaseModelo2):
         max_length=100,
         null=False, blank=True)
     participante_csv = models.ForeignKey(Participante_Csv, on_delete=models.PROTECT,null=True, blank=True)
-    codigo_qr=models.CharField(('codigo qr'),max_length=100,null=True,default='', blank=True)
+    codigo_qr=models.CharField(('codigo qr'),max_length=100,null=True,default=None, blank=True)
     
     def __str__(self):
         return '{}:{}:{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
