@@ -1,4 +1,5 @@
 <div class="modal-dialog modal-lg">
+ 
     <div class="modal-content">
         {% if obj %}
         <form id="frmPrv" role="form" action="{% url 'par:participante_edit' obj.pk %}" method="post" style="padding:15px">
@@ -145,6 +146,13 @@
                                 </div>
                     
                     
+
+                                <div class="form-group">
+                                    <label for="id_codigo_qr">Código QR: {{ obj.codigo_qr}} </label>
+                                   
+                                   
+                                </div>
+
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                     
@@ -285,7 +293,7 @@ $(function() {
         e.preventDefault();
         // alert(token);
         var formData = $("form").serializeArray();
-        // console.log(formData);
+        console.log("aqui es formData");
         //alert(url);
         
         $.ajax({
@@ -314,26 +322,26 @@ $(function() {
                     Swal.fire("Datos actualizados")
                     mensajeServer(r.mensaje)
                 }else{
-                    console.log("linea 215"+r.rptaServer);
+                    console.log("linea 325"+r.rptaServer);
                     mensajeServer(r.mensaje)
                 }
-                console.log("participante_form.html 191")
+                console.log("participante_form.html 328")
                 // desactivamos para que no recargue la pagina   
                 //location.reload(true);
             
             }
             else{
-                console.log("participante_form.html 197")
+                console.log("participante_form.html 334")
                 mensaje(textStatus);
-
-            
+               
             }
         }).fail(function (error) {
             //.fail( function( jqXHR, textStatus, errorThrown ) {
             //mensaje(error.responseText);
+            console.log("participante_form.html 341")
                 mensaje(error);
                 mostrarErroresCrud(error);
-                console.log("participante_form.html 207")
+               
         });
     });
 });

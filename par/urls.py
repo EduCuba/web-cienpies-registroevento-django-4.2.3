@@ -24,7 +24,7 @@ urlpatterns = [
     
     path('par/subir_csv',subir_csv,name="subir_csv"),
     
-    path('par/asistencia_participante/<int:id>',participanteAsistencia, name="asistencia_participante"),
+    path('par/asistencia_participante/<str:id>',participanteAsistencia, name="asistencia_participante"),
     #path('par/asistencia_participante',participanteAsistencia, name="asistencia_participante"),
     path('par/participante_edit/<int:pk>',ParticipanteEdit.as_view(), name='participante_edit'),
     

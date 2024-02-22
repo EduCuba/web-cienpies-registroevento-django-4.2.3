@@ -182,7 +182,7 @@ par/participante_new
             -->
             
             
-            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' 0 %}','bus_id_evento')"  href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
+            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' 0 %}','bus_id_evento','N')"  href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo param</a>
             
             
             
@@ -560,7 +560,7 @@ par/participante_new
     }).then((borrar) => {
       console.log(borrar)
       if(borrar.isConfirmed){
-           participanteAsistencia(id,tipo)
+           participanteAsistencia(id,tipo,'',asistio_evento)
   
       }else{
         Swal.fire("Acción Cancelada","","info")
@@ -569,18 +569,22 @@ par/participante_new
     })  
     }else{
       //console.log("ddddddddddd 1")
-      participanteAsistencia(id,tipo)
+      participanteAsistencia(id,tipo,'',asistio_evento)
 
     }
   }
 
 
 
- function participanteAsistencia(id,tipo){
+ function participanteAsistencia(id,tipo,evento,asistencia){
   //url = "/par/asistencia_participante/"+id
   url = "asistencia_participante/"+id
+ 
+ 
   var data = {"id":id,
-              "tipo":tipo}
+              "tipo":tipo,
+              "evento":evento,
+              "anularAsistencia":asistencia}
 
   var token = "{{csrf_token}}"
   $.ajax({
@@ -594,6 +598,7 @@ par/participante_new
         Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
         
       }else{
+        /*
         let result = r.indexOf("no-acceso");
         
         if (result>=0){
@@ -601,8 +606,9 @@ par/participante_new
         }else{
           Swal.fire("Error Inesperado al procesar registro ")
           
-        }
-        
+        }*/
+        Swal.fire(r.mensaje)
+        mensajeServer(r.mensaje)
         
       }
     },

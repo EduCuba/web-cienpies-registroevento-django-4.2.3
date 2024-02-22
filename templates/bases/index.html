@@ -611,6 +611,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     console.log("edu index.html 597")
     console.log(msg)
     if (is_json(msg)){
+      console.log("es json 514")
         for(let item in msg.responseJSON.mensaje){
           msjPopup +=   msg.responseJSON.mensaje[item]
                 
@@ -620,6 +621,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         console.log(tst)
         
     }else{
+      console.log("no es json 624")
       mensajeServer(msg)
     }        
     console.log("index.html linea 547")
@@ -634,10 +636,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   function mensajeServer(msg,tipo="warning"){
     console.log ("index.html 622 mensaje server : "+msg)
+   
     var tst = `toastr.${tipo}('${msg}')`
     console.log(tst)
     console.log("index.html linea 625 mensajeServer")
     eval(tst)
+
+
     
   }
 
@@ -650,8 +655,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   {% endif %}
 
 
+  
 
-  function abrir_modal(curl,evento){ 
+  function abrir_modal(curl,evento,tipo){ 
+    console.log("debe mostrar")
     var comboEvento = document.getElementById(evento);
     var selected = comboEvento.options[comboEvento.selectedIndex].text;
     var id_evento= comboEvento.value
@@ -666,7 +673,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     console.log("686 index.html");
     url=curl
-    url=url.replace('0', id_evento);
+    if(tipo=='N'){
+      url=url.replace('0', id_evento);
+    }
+    
     $("#popup").load(url, function(responseTxt, statusTxt, xhr){
       console.log("679 ...index.html");
         
@@ -869,7 +879,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
   
 
+  function activaCamara(){
+
+
+/* Para obtener el valor */
+var evento = document.getElementById("id_evento").value;
+
+if(evento=='0' || evento==''){
+  mensajeServer("Seleccione Evento ");
+  return false
+}
+
  
+/* Para obtener el texto
+var combo = document.getElementById("id_evento");
+var selected = combo.options[combo.selectedIndex].text;
+alert(selected);
+ */
+
+    //console.log(document.getElementById("id_evento))
+
+        //showPantalla3();
+       // document.getElementById("rowdata").innerHTML="";
+        //let element=document.getElementById("rowqr");
+        
+        // element.style.display = "block";}
+       
+        //hiddenDiv(document.getElementById('rowdata'))
+       // let element=document.getElementById("html5-qrcode-button-camera-start")
+       //element.style.display = "block";
+
+        showDiv(document.getElementById('rowdata'))
+
+       // let element=document.getElementById("html5-qrcode-button-camera-start")
+       // element.style.display = "block";
+  }
 
   function showDiv(element){
     element.hidden=false;

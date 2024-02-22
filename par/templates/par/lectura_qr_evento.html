@@ -42,20 +42,13 @@
                             <div class="dropdown-divider"></div>
 
                             <div class="form-row">
-                              <!---
-                              <div class="form-group col-md-2">
-                                <label for="lblEvento">Evento</label>
-                              </div>  
-                              <div class="form-group col-md-10">                            
-                                
-                                {{eve.evento}}
-                              </div>-->
+                             
 
                               <div class="form-group col-md-2">
                                 <label for="id_evento">Evento:</label>
                               </div>
                               <div class="form-group col-md-3">                              
-                                <select name="evento" class="form-control" required="" id="bus_id_evento">
+                                <select name="evento" class="form-control" required="" id="id_evento">
                                   <option value="0">Selecciona Evento</option>
                                   {% for item in liseventos %}    
                                               
@@ -68,13 +61,13 @@
                             
                             </div>
 
-                            <div class="form-row" id="divBusEmpresa" hidden>
+                            <div class="form-row" id="divCodigoQr">
                               <div class="form-group col-md-2">
-                                <label for="lblEmpresa">Empresa</label>
+                                <label for="lblCodigoQr">QR</label>
                               </div>  
                               <div class="form-group col-md-3">                            
-                                <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
-                                <!--{{eve.empresa_participante}}-->
+                                <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
+                               
                               </div>
                             </div>
 
@@ -85,19 +78,19 @@
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
                                 -->
-                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
+                                    <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
                                 </div>    
                                 <div class="form-group col-md-2">
                                   
                                     <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
                                 </div>    
                                 <div id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
-                                <!--
+                                
                                 <div class="form-group col-md-2">
                                   
-                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">QR</i></button>                                    
+                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">Activa Camara</i></button>                                    
                                 </div>  
-                                -->
+                                
                             </div>  
                             
                           
@@ -110,14 +103,14 @@
     </form>
 
  
-    
+   
 {% endblock content_wrapper %}
 
 
 
 {% block content %}
 <!-- ./row -->
-<div id="rowdata" class="card-body">
+<div id="rowdata" class="card-body" hidden>
     <div id="your-qr-result">
 
     </div>
@@ -152,11 +145,16 @@
             if(decodeText!=lastResult){
                 ++countResults;
                 lastResult=decodeText;
-
+                var evento = document.getElementById("id_evento").value;
+                var eventoSeleccionado = $('#id_evento option:selected').text();
+                var codigo_qr = decodeText
                 // alert you qr here
-                alert("you Qr is:"+decodeText,decodeResult)
+               // alert("you Qr is:"+decodeText,decodeResult)
+                dialogoAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
                 // and add todo you qr in top 
-                myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+                //myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+              }else{
+                Swal.fire("Código recientemente leido")
             }
 
         }
@@ -167,6 +165,132 @@
       htmlscanner.render(onScanSuccess)
     })
     
-</script>    
+</script> 
+<script>
+
+  function dialogoAsistenciaQrManual(){
+
+    var codigo_qr = document.getElementById("id_codigo_qr").value;
+    if(codigo_qr=='0' || codigo_qr==''){
+      mensajeServer("Ingrese código");
+      return false
+    }
+
+    var evento = document.getElementById("id_evento").value;
+    var eventoSeleccionado = $('#id_evento option:selected').text();
+    if(evento=='0' || evento==''){
+      mensajeServer("Seleccione Evento ");
+      return false
+    }
+    participanteAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
+  }
+
+  function dialogoAsistenciaQr(codigo_qr,tipo,evento,nombreEvento){
+    var evento = document.getElementById("id_evento").value;
+    if(evento=='0' || evento==''){
+      mensajeServer("Seleccione Evento ");
+      return false
+    }
+     participanteAsistenciaQr(codigo_qr,"Q",evento,nombreEvento)
+   }
+
+
+   function participanteAsistenciaQr(id,tipo,evento,nombreEvento){
+    //url = "/par/asistencia_participante/"+id
+    url = "asistencia_participante/"+id
+    var data = {"id":id,
+                "tipo":tipo,
+                "evento":evento,
+                "nomEve":nombreEvento,
+                "anularAsistencia":"False"}
+
+                   
+  
+    var token = "{{csrf_token}}"
+    $.ajax({
+      headers : {"X-CSRFToken": token},
+      type: "POST",
+      url:url,
+      data:data,
+      success: function(r){
+      ///
+       
+      $('#popup').html(r);
+      ///$('#errorpopup').append(rmensaje);
+  
+
+
+
+  $('#popup').modal({
+      
+    /* cambia propiedades de modal para que no se cierre */
+    backdrop:'static',
+    keyboard: false
+  })
+  $('#popup').modal('show');
+        ///
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log("buscar_participante 417")
+        console.log(textStatus)
+        console.log(jqXHR)
+        /*Swal.fire(errorThrow,"","info")*/
+        /*Swal.fire("errorThrow","","red")*/
+        
+      }
+    })
+  
+  
+   } 
+
+
+
+   function __participanteAsistenciaQr(id,tipo,evento){
+    //url = "/par/asistencia_participante/"+id
+    url = "asistencia_participante/"+id
+    var data = {"id":id,
+                "tipo":tipo,
+                "evento":evento}
+  
+    var token = "{{csrf_token}}"
+    $.ajax({
+      headers : {"X-CSRFToken": token},
+      type: "POST",
+      url:url,
+      data:data,
+      success: function(r){
+        if(r.rpta==="OK"){
+        
+          Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
+          
+        }else{
+          if(r.rpta==="OFF"){
+            Swal.fire(r.mensaje)
+          }else{
+
+            Swal.fire("Error Inesperado al procesar registro ")
+
+          } 
+        }                         
+      },
+      error: function(jqXHR, textStatus, errorThrow){
+        console.log("buscar_participante 417")
+        console.log(textStatus)
+        console.log(jqXHR)
+        /*Swal.fire(errorThrow,"","info")*/
+        /*Swal.fire("errorThrow","","red")*/
+        
+      }
+    })
+  
+  
+   } 
+
+
+
+
+
+
+</script>     
 
 {% endblock js%}

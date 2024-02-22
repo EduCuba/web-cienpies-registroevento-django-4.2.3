@@ -14,6 +14,10 @@ from bases.models import ClaseModelo2
 # Create your models here.
 from eve.models import Evento
 
+from django.db.models import Deferrable, UniqueConstraint
+from django.db.models import Q
+
+
 class Tipo_Participante(ClaseModelo2):
     descripcion_tipo_participante=models.CharField(
         ('tipo participante'),
@@ -117,9 +121,10 @@ class Participante(ClaseModelo2):
         max_length=100,
         null=False, blank=True)
     participante_csv = models.ForeignKey(Participante_Csv, on_delete=models.PROTECT,null=True, blank=True)
+    codigo_qr=models.CharField(('codigo qr'),max_length=100,null=True,default='', blank=True)
     
     def __str__(self):
-        return '{}:{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
+        return '{}:{}:{}:{}:{}:{}:{}:{}:{}:{}'.format(self.apellido_participante,
                                              self.nombre_participante,
                                              self.empresa_participante,
                                              self.email_participante,
@@ -127,16 +132,38 @@ class Participante(ClaseModelo2):
                                              self.tipo_participante.descripcion_tipo_participante,
                                              self.tipo_participante.pk,
                                              self.modalidad_asistencia.descripcion_modalidad_asistencia,
+                                             self.codigo_qr,
                                              self.pk)
     
     
     class Meta:
         verbose_name_plural = "Participantes"
-              
+        constraints = [
+            models.UniqueConstraint(fields=['evento', 'codigo_qr'], 
+                                    condition=(~models.Q(codigo_qr=None)),
+                                    name='evento_qr_unico')
+                    ] 
+        indexes = [
+           models.Index(fields=['evento', 'codigo_qr']),]
+    
+    
+  
+       # indexes = [models.Index(fields=["evento", "codigo_qr"],name="evento_qr_idx")],
+       # constraints = [
+       #     models.UniqueConstraint(fields=['evento', 'codigo_qr'], 
+       #                             condition=(models.Q(codigo_qr=None)),
+       #                             name='evento_qr_unico')
+       #             ] 
 
+        #UniqueConstraint(fields=["evento,codigo_qr"], condition=(~(Q(codigo_qr=None))), name="unique_evento_qr")   
+       
+                          
+#indexes = [
+ #           models.Index(fields=["evento", "codigo_qr"],name="evento_qr_idx"),
 
-
-
+# unique_together = ["evento", "codigo_qr"]
+#        index_together=["evento", "codigo_qr"]
+       
    
 #class Meta:
 #       indexes = [
@@ -159,3 +186,7 @@ class Participante(ClaseModelo2):
     #        field=models.EmailField(null=False, verbose_name='email_participante', blank=True, max_length=100, unique=False),
     #    ),        
     #]
+    
+    
+
+   

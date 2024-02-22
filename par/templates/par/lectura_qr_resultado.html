@@ -1,0 +1,89 @@
+<div class="modal-dialog modal-lg">
+ 
+    <div class="modal-content">
+        {% if obj %}
+        <form id="frmPrv" role="form" action="{% url 'par:participante_edit' obj.pk %}" method="post" style="padding:15px">
+        <!--    <form id="frmPrv" role="form" method="post"  class="form-inline">-->
+        <!--<form id="frmPrv" role="form"  method="post" action="participanteAsistencia({{obj.id}},'E')" class="form-inline">    -->
+        {% else %}
+        <form id="frmPrv" role="form" action="{% url 'par:participante_new' 0 %}" method="post" style="padding:15px">
+        {% endif %}
+            <!--<div class="col-xl-12 col-md-12 mb-12">-->
+            {% if conDic.rpta == 'OK' %}   
+            <div class="bg-success mx-auto">    
+            {% else %}
+               
+                   <div class={% if conDic.rpta == 'OFF' %} "bg-warning mx-2"  {% else %}  "bg-danger mx-2" {% endif %}>  
+                  
+                 
+               
+            {% endif %} 
+            <div>    
+              
+                <div>               
+                    <div>
+                        <div>
+                            <div> 
+                                <div class="form-group">
+                                    <label for="id_evento">Evento:</label> {{conDic.nomEve}}           
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <h2 class="text-center"> {{conDic.mensaje}}</h2>  
+                                
+                                {% csrf_token %}
+                                <!-- campos - inicio -->
+
+                                <div class="form-row mx-2">
+                                    <div class="form-group">
+                                       <h3 class="text-center">{{obj.apellido_participante}} {{obj.nombre_participante}}</h3>               
+                     
+                                    </div>
+                                </div>
+                    
+                                <div class="form-row mx-2">
+                                    <div class="form-group">
+                                 
+                                        <label for="id_tipo_participante">{{obj.tipo_participante}}</label>
+                                     
+                                    </div>
+                                </div>
+                    
+                    
+                              
+                    
+                    
+              
+                           
+                                <div class="dropdown-divider"></div>
+                                <div class="row">
+                                            <div class="col">
+                                                <!--
+                                                <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+                                                -->
+                                                <button type="button" class="btn btn-success" onclick="return cerrar_modal()">
+                                                    Retornar
+                                                </button>
+                                            </div>
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- inicia div -->          
+        </form>
+
+
+        
+       
+    </div>
+</div> 
+
+<script>
+   
+
+    
+
+</script>
