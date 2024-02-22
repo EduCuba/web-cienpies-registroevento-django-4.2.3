@@ -135,7 +135,8 @@ class Participante(ClaseModelo2):
                                              self.codigo_qr,
                                              self.pk)
     
-    
+   
+   
     class Meta:
         verbose_name_plural = "Participantes"
         constraints = [
