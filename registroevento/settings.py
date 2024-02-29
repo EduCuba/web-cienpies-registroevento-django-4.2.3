@@ -29,7 +29,7 @@ DEBUG = True
 
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['3.80.73.116','localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['54.83.100.49','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['54.90.84.181','localhost', '127.0.0.1']
 #i-0e58ae49ce9e01355
 # Application definition
 

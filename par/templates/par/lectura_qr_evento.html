@@ -110,7 +110,7 @@
 
 {% block content %}
 <!-- ./row -->
-<div id="rowdata" class="card-body" hidden>
+<div id="rowdata" class="card-body">
     <div id="your-qr-result">
 
     </div>
@@ -142,20 +142,30 @@
 
         // If found you QR code,
         function onScanSuccess(decodeText,decodeResult){
+         
+          var evento = document.getElementById("id_evento").value;
+          if(evento=='0' || evento==''){
+            mensajeServer("Seleccione Evento ");
+            return false
+          }
+
             if(decodeText!=lastResult){
                 ++countResults;
                 lastResult=decodeText;
-                var evento = document.getElementById("id_evento").value;
+                //var evento = document.getElementById("id_evento").value;
                 var eventoSeleccionado = $('#id_evento option:selected').text();
                 var codigo_qr = decodeText
                 // alert you qr here
                // alert("you Qr is:"+decodeText,decodeResult)
+
                 dialogoAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
                 // and add todo you qr in top 
                 //myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
-              }else{
-                Swal.fire("Código recientemente leido")
+              //}else{
+               // Swal.fire("Código recientemente leido")
+              
             }
+
 
         }
      // and last render you camera QR 
@@ -191,6 +201,12 @@
       mensajeServer("Seleccione Evento ");
       return false
     }
+
+   
+  
+   hiddenDiv(document.getElementById("rowdata"))
+     
+
      participanteAsistenciaQr(codigo_qr,"Q",evento,nombreEvento)
    }
 
