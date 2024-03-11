@@ -129,10 +129,10 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 DATABASES = {
   'default': {
       'ENGINE': "django.db.backends.mysql",
-      'NAME': "db_registro",
-      'USER': "root",
+      'NAME': "acreditacion$db_registro",
+      'USER': "acreditacion",
       'PASSWORD': "mYpt#35uk%Yo",
-      'HOST': 'localhost',
+      'HOST': "acreditacion.mysql.pythonanywhere-services.com",
       'PORT': "3306",
     }
 }
@@ -141,6 +141,9 @@ DATABASES = {
 #'HOST': "acreditacion.mysql.pythonanywhere-services.com",
 #'HOST': "acreditacion.mysql.pythonanywhere-services.com",
 
+#'NAME': "db_registro",
+#'USER': "root",
+#'HOST': 'localhost',
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
