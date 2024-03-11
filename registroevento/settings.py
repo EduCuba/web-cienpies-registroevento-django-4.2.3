@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import pymysql
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -111,20 +111,36 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #}
 
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_registro',
-        'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
-        'USER': 'postgres',
-        'PASSWORD': 'postgresql',
-        'PORT': 5432,
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'db_registro',
+#        'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
+#        'USER': 'postgres',
+#        'PASSWORD': 'postgresql',
+#        'PORT': 5432,
+#    }
+#}
 
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
          
+#Mysql
+DATABASES = {
+  'default': {
+      'ENGINE': "django.db.backends.mysql",
+      'NAME': "db_registro",
+      'USER': "root",
+      'PASSWORD': "mYpt#35uk%Yo",
+      'HOST': 'localhost',
+      'PORT': "3306",
+    }
+}
+#'NAME': "acreditacion$db_registro",
+#'USER': "acreditacion",
+#'HOST': "acreditacion.mysql.pythonanywhere-services.com",
+#'HOST': "acreditacion.mysql.pythonanywhere-services.com",
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -2,7 +2,8 @@
 
 {% block content_wrapper %}
 
-    <!--<form method="POST" class="form-inline" id="frmbuscar">-->
+  <div id="rowheader" class="card-body"> 
+<!--<form method="POST" class="form-inline" id="frmbuscar">-->
     <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
   
@@ -102,7 +103,7 @@
         </div>
     </form>
 
- 
+  </div> 
    
 {% endblock content_wrapper %}
 
@@ -110,7 +111,7 @@
 
 {% block content %}
 <!-- ./row -->
-<div id="rowdata" class="card-body">
+<div id="rowdata" class="card-body" hidden>
     <div id="your-qr-result">
 
     </div>
@@ -120,7 +121,10 @@
         </div>     
     </div> 
 </div>
-
+<div id="rowreturn" class="card-body" hidden>
+  <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+                                
+</div>  
 {% endblock content %}
 
 {% block js %}
@@ -131,11 +135,15 @@
     function domReady(fn){
         if(document.readyState==="complete" || document.readyState==="interactive"){
             setTimeout(fn,1)
+           
+           
         }else{
-            document.addEventListener("DOMContentLoaded",fn)
+          
+          document.addEventListener("DOMContentLoaded",fn)
+          
         }
     }
-
+   
     domReady(function(){
         var myqr = document.getElementById('your-qr-result')
         var lastResult, countResults=0;
@@ -181,6 +189,7 @@
   function dialogoAsistenciaQrManual(){
 
     var codigo_qr = document.getElementById("id_codigo_qr").value;
+    var medio_lectura = "M"
     if(codigo_qr=='0' || codigo_qr==''){
       mensajeServer("Ingrese código");
       return false
@@ -192,11 +201,12 @@
       mensajeServer("Seleccione Evento ");
       return false
     }
-    participanteAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
+    participanteAsistenciaQr(medio_lectura,codigo_qr,"Q",evento,eventoSeleccionado)
   }
 
   function dialogoAsistenciaQr(codigo_qr,tipo,evento,nombreEvento){
     var evento = document.getElementById("id_evento").value;
+    var medio_lectura="C"
     if(evento=='0' || evento==''){
       mensajeServer("Seleccione Evento ");
       return false
@@ -207,17 +217,18 @@
    hiddenDiv(document.getElementById("rowdata"))
      
 
-     participanteAsistenciaQr(codigo_qr,"Q",evento,nombreEvento)
+     participanteAsistenciaQr(medio_lectura,codigo_qr,"Q",evento,nombreEvento)
    }
 
 
-   function participanteAsistenciaQr(id,tipo,evento,nombreEvento){
+   function participanteAsistenciaQr(medio_lectura,id,tipo,evento,nombreEvento){
     //url = "/par/asistencia_participante/"+id
     url = "asistencia_participante/"+id
     var data = {"id":id,
                 "tipo":tipo,
                 "evento":evento,
                 "nomEve":nombreEvento,
+                "medLec":medio_lectura,
                 "anularAsistencia":"False"}
 
                    
@@ -304,7 +315,14 @@
 
 
 
+function stopCamara(){
+  if ($("#html5-qrcode-button-camera-stop").length && !$('#qr-reader').is(':visible')) 
+    $("#html5-qrcode-button-camera-stop").trigger("click");
 
+  showDiv(document.getElementById('rowheader'))
+  hiddenDiv(document.getElementById('rowdata'))
+  hiddenDiv(document.getElementById('rowreturn'))
+}
 
 
 </script>     

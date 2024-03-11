@@ -635,15 +635,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   function mensajeServer(msg,tipo="warning"){
-    console.log ("index.html 622 mensaje server : "+msg)
-   
-    var tst = `toastr.${tipo}('${msg}')`
-    console.log(tst)
-    console.log("index.html linea 625 mensajeServer")
-    eval(tst)
-
-
+    console.log ("index.html 622 mensaje server: "+msg)
+    //var tst = `toastr.${tipo}('${msg}')`
+    //console.log("index.html linea 625 mensajeServer")
+    //eval(tst)
     
+   // toastr.warning(msg, 'Usuario',
+   //       { "positionClass" : "toast-bottom-right"}
+    //  );
+    
+      switch (tipo) {
+        case 'warning':
+        toastr.warning(msg, 'Usuario');
+        break
+        case 'success':
+        toastr.success(msg, 'Usuario');
+        break
+        case 'danger':
+        toastr.danger(msg, 'Usuario');
+        break
+        default:
+        toastr.info(msg, 'Usuario');
+        break
+      }
+
   }
 
   {% if messages %}
@@ -888,8 +903,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   
 
   function activaCamara(){
-
-
+   /*esto se agrego por que se oculta el div de la camara al inicio*/
+    if ($("#html5-qrcode-button-camera-stop").length && !$('#qr-reader').is(':visible')) 
+        $("#html5-qrcode-button-camera-stop").trigger("click");
 /* Para obtener el valor */
 var evento = document.getElementById("id_evento").value;
 
@@ -913,14 +929,16 @@ alert(selected);
         
         // element.style.display = "block";}
        
-        //hiddenDiv(document.getElementById('rowdata'))
+        //hiddenDiv(document.getElement").trigger("click");ById('rowdata'))
        // let element=document.getElementById("html5-qrcode-button-camera-start")
        //element.style.display = "block";
-
+        hiddenDiv(document.getElementById('rowheader'))
         showDiv(document.getElementById('rowdata'))
-
-       // let element=document.getElementById("html5-qrcode-button-camera-start")
-       // element.style.display = "block";
+        showDiv(document.getElementById('rowreturn'))
+        
+        $("#html5-qrcode-button-camera-start").trigger("click");
+          
+        hiddenDiv(document.getElementById('html5-qrcode-button-camera-stop'))
   }
 
   function showDiv(element){

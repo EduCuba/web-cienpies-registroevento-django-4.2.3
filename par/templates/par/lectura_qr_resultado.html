@@ -60,9 +60,15 @@
                                                 <!--
                                                 <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
                                                 -->
-                                                <button type="button" class="btn btn-success" onclick="return cerrar_modal_camara()">
-                                                    Retornar
-                                                </button>
+                                                {% if conDic.medLec == 'C' %}
+                                                    <button type="button" class="btn btn-success" onclick="return cerrar_modal_camara()">
+                                                        Retornar
+                                                    </button>
+                                                {% else %}   
+                                                    <button type="button" class="btn btn-success" onclick="return cerrar_modal()">
+                                                        Retornar
+                                                    </button>
+                                                {% endif %}     
                                             </div>
                                 </div>
                             </div>

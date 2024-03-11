@@ -2,6 +2,7 @@
 
 {% block content_wrapper %}
 
+  <div class="card-body"> 
     <!--<form method="POST" class="form-inline" id="frmbuscar">-->
     <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
@@ -63,22 +64,8 @@
                                   <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
                                  {% endfor%}
                                 </select>
-                              </div>  
-                                
-    
-                            
-                            
+                              </div>                                                                             
                             </div>
-
-
-
-
-
-
-
-
-                         
-
                             <div class="form-row" id="divBusApeNom">
                               <div class="form-group col-md-2">
                                 <label for="apellido_participante">Apellido</label>
@@ -142,56 +129,28 @@
             </div>
         </div>
     </form>
-
+  </div>
  
     
 {% endblock content_wrapper %}
 
 {% block content %}
-    <div class="card shadow mb-4">
+  <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
           <div class="dropdown no-arrow">
-            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-              <div class="dropdown-header">Acciones:</div>
-              <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
-            <!-- compras_new esta devlarado en el archivo urls.py-->
-             <!--
-            <a class="dropdown-item" onclick="return aaabbb('/par/participante_new','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
-            -->
-            <!--
-            /
-            
-/par/participante_new
-par/participante_new
-/participante_new
-
-
-            -->
-            
-            <!--funciona camb iar # por %
-            <a class="dropdown-item" onclick="return abrir_modal('{ url 'par:participante_new' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
-            -->
-
-            <!-- FUNCIONA CON PARAMETRO VISTA
-            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' '1' %}','bus_id_evento')" href="#' %}"><i class="far fa-calendar-plus"></i> Nuevo</a>
-            -->
-            
-            
-            <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' 0 %}','bus_id_evento','N')"  href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo param</a>
-            
-            
-            
-            <!--  <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>-->
-              
-            </div>
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Acciones:</div>                  
+                <a class="dropdown-item" onclick="return abrir_modal('{% url 'par:participante_new' 0 %}','bus_id_evento','N')"  href="#' %}"><i class="far fa-calendar-plus"></i>Nuevo param</a>  
+              <!--  <a class="dropdown-item" href="{# url 'cmp:compras_print_all'#}" target="reportes"><i class="fas fa-print"></i>Listado</a>-->   
+              </div>
           </div>
         </div>
-    <!-- Card Body -->
+         <!-- Card Body -->
   
 
         <div id="rowdata" class="card-body">
@@ -248,16 +207,7 @@ par/participante_new
             </table>
           </div>
         </div>
-
-
-      
-
-
-        
-
-
-
-        
+  </div>            
 {% endblock content %}
 
 
@@ -296,7 +246,7 @@ par/participante_new
    
   
     if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
-      mensajeServer("Seleccione Evento (cl)");
+      mensajeServer("Seleccione Evento (fr)","warning");
       return false
     }
 
@@ -307,14 +257,6 @@ par/participante_new
     }
 
 
-
-
-
-    
-    console.log("apellido " +inputApellido);
-    console.log("nombre " +inputNombre);
-    console.log("empresa " +inputEmpresa);
-    console.log("evento " +inputEvento);
 
     var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
     url = "buscar_participante"
