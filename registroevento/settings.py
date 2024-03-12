@@ -130,10 +130,10 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 DATABASES = {
   'default': {
       'ENGINE': "django.db.backends.mysql",
-      'NAME': "db_registro",
-      'USER': "root",
+      'NAME': "acreditacion$db_registro",
+      'USER': "acreditacion",
       'PASSWORD': "mYpt#35uk%Yo",
-      'HOST': "localhost",
+      'HOST': "acreditacion.mysql.pythonanywhere-services.com",
       'PORT': "3306",
     }
 }
