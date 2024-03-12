@@ -29,7 +29,8 @@ DEBUG = True
 
 #ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['3.80.73.116','localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['54.90.84.181','localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['acreditacion.pythonanywhere.com','localhost', '127.0.0.1']
+
 #i-0e58ae49ce9e01355
 # Application definition
 
@@ -129,10 +130,10 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 DATABASES = {
   'default': {
       'ENGINE': "django.db.backends.mysql",
-      'NAME': "acreditacion$db_registro",
-      'USER': "acreditacion",
+      'NAME': "db_registro",
+      'USER': "root",
       'PASSWORD': "mYpt#35uk%Yo",
-      'HOST': "acreditacion.mysql.pythonanywhere-services.com",
+      'HOST': "localhost",
       'PORT': "3306",
     }
 }

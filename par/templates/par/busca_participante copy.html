@@ -17,8 +17,7 @@
             
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
               <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
-              <!--<i class="fa fa-search fa-1x" style="color:#252F87"></i>-->
-              <i class="fa fa-th-list fa-1x" style="color:#252F87"></i>
+              <i class="fa fa-search fa-1x" style="color:#252F87"></i>
               <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -65,12 +64,7 @@
                                   <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
                                  {% endfor%}
                                 </select>
-                              </div> 
-                              <div class="form-group col-md-2">
-                                  
-                                <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>                                    
-                              </div>  
-                              <div class="form-group col-md-4" id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                              </div>                                                                             
                             </div>
                             <div class="form-row" id="divBusApeNom">
                               <div class="form-group col-md-2">
@@ -112,10 +106,13 @@
                                     <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
                                     <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
                                 -->
-                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">B</i></button>                                    
+                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
                                 </div>    
-                                
-                               
+                                <div class="form-group col-md-2">
+                                  
+                                    <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
+                                </div>    
+                                <div id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
                                 <!--
                                 <div class="form-group col-md-2">
                                   
@@ -235,17 +232,6 @@
 
     url = "/par/registro_edit"
   }
-
-
-  function noSeleccionado(inputEvento,mensaje){
-    if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
-      mensajeServer(mensaje,"warning");
-      return true;
-    }
-   return false;
-
-  }
-
   function participantesEncontrados(){
     // alert(id)
     // alert(accion)
@@ -255,13 +241,14 @@
     var inputEmpresa = form.get("empresa_participante")
     var inputEvento = form.get("evento")
 
-    if (noSeleccionado(inputEvento,"Seleccione evento (fr)")){
-      return false
 
-    }
    
   
-    
+    if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+      mensajeServer("Seleccione Evento (fr)","warning");
+      return false
+    }
+
     var criterio=inputApellido.trim()+inputNombre.trim()+inputEmpresa.trim();
     if(criterio.length<=1){
       mensajeServer("Ingrese criterio de busqueda, debe tener dos o mas caracteres");
@@ -321,17 +308,13 @@
 
   }
 
- 
+
   function contarAsistencia(){
     // alert(id)
     // alert(accion)
     var form = new FormData(document.getElementById('frmbuscar'));
     var inputEvento = form.get("evento")
     console.log("evento " +inputEvento);
-    if (noSeleccionado(inputEvento,"Seleccione evento (fr)")){
-      return false
-
-    }
 
     var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
     url = "buscar_participante"
@@ -449,7 +432,6 @@
   }
 
   function creaFuncionDataTable(){
-   
      console.log("crea funcion cabecera 1 busca_participante.html 363")
     <!-- inicio -->
    
@@ -588,7 +570,7 @@
 
 <script>
     $(document).ready(function() {
-      creaFuncionDataTable();
+      
       /*
         $('.table').DataTable(
           
