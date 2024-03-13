@@ -55,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="index3.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Home</a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">Contact</a>
@@ -1132,9 +1132,59 @@ function refrescaDiv(odiv,mensaje){
 }
 
 
+function noSeleccionado(inputEvento,mensaje){
+  if (inputEvento.trim()==="" || inputEvento === null || inputEvento === "0"){
+    mensajeServer(mensaje,"warning");
+    return true;
+  }
+ return false;
 
+}
 
- 
+function contarAsistencia(){
+  // alert(id)
+  // alert(accion)
+  var form = new FormData(document.getElementById('frmbuscar'));
+  var inputEvento = form.get("evento")
+  console.log("evento " +inputEvento);
+  if (noSeleccionado(inputEvento,"Seleccione evento (fr)")){
+    return false
+
+  }
+
+  var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
+  url = "buscar_participante"
+  url = "/par/contar_asistencia"
+  console.log(url);
+  var token = '{{csrf_token}}'
+  var data = {"evento":inputEvento}
+  
+console.log("entra ajax");
+  $.ajax({
+    headers : {"X-CSRFToken": token,
+    "X-Requested-With": "XMLHttpRequest"},
+    
+
+    type:"POST",
+    body:form,
+    url:url,
+    data:data,
+    success: function(r){
+      if(r.rpta=="OK"){
+        //Swal.fire("Total Asistencia :"+r.asistencia);
+        refrescaDiv("totalAsistencia","Total Asistencia:"+r.asistencia)
+
+      }else{
+        Swal.fire("Error Inesperado tratando de borrar registro " + r);
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrow){
+      console.log(textStatus, errorThrow);
+      Swal.fire(errorThrow,"",'red');
+    }
+  })
+
+}
 
 
 

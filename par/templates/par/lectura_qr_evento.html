@@ -15,26 +15,7 @@
             <div class="card border-left-success shadow h-100 py-2">
             {% endif %}  
             
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
-              <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
-              <i class="fa fa-search fa-1x" style="color:#252F87"></i>
-              <div class="dropdown no-arrow">
-                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                  <div class="dropdown-header">Buscar por :</div>
-                  <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
-                <!-- compras_new esta devlarado en el archivo urls.py-->
-  
-
-
-                  <a class="dropdown-item" onclick="return criterioBusqueda(1)" href="#"><i class="fa fa-address-card" ></i> Apellido Nombre</a>
-                  <a class="dropdown-item" onclick="return criterioBusqueda(2)" href="#"><i class="fa fa-suitcase" aria-hidden="true"></i> Empresa</a>
-                  
-                </div>
-              </div>
-            </div>
+          
             
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -57,8 +38,14 @@
                                   <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
                                  {% endfor%}
                                 </select>
+                              </div>
+                              
+                              <div class="form-group col-md-2">
+                                  
+                                <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>                                    
                               </div>  
-                                                           
+                              <div class="form-group col-md-4" id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                                                   
                             
                             </div>
 
@@ -70,26 +57,21 @@
                                 <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
                                
                               </div>
+                              <div class="form-group col-md-2">
+                                <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>     
+                                   
+                              </div>
                             </div>
+                           
 
                         
                             <div class="form-row">
-                              <div class="form-group col-md-2">
-                                  <!---
-                                    <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
-                                    <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
-                                -->
-                                    <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search" aria-hidden="true">Buscar</i></button>                                    
-                                </div>    
-                                <div class="form-group col-md-2">
-                                  
-                                    <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-search" aria-hidden="true">Contar</i></button>                                    
-                                </div>    
-                                <div id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                             
+                                
                                 
                                 <div class="form-group col-md-2">
                                   
-                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">Activa Camara</i></button>                                    
+                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-camera" aria-hidden="true" style="color:#252F87">.</i></button>                                    
                                 </div>  
                                 
                             </div>  
@@ -120,11 +102,12 @@
         <div id="my-qr-reader" style="width:500px;">
         </div>     
     </div> 
+    <div id="rowreturn" class="card-body" hidden>
+      <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+                                    
+    </div> 
 </div>
-<div id="rowreturn" class="card-body" hidden>
-  <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
-                                
-</div>  
+ 
 {% endblock content %}
 
 {% block js %}
