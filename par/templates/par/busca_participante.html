@@ -157,9 +157,10 @@
   
 
         <div id="rowdata" class="card-body">
+          <!--
           {% if not lispar %}
           <div class="alert alert-info">No existe coincidencias</div>
-          {% endif %}   
+          {% endif %}-->   
             <table id="tableLista" class="table table-striped table-hover dt-responsive nowrap" style="width:100%"
                 data-toggle="table" data-pagination="true" data-search="true">
               <thead>
@@ -287,7 +288,7 @@
         if(r.rpta=="OK"){
           $("table > tbody").empty()  
           {% if not r.lispar %}
-          console.log("no existe eduuuuuuuuuuuuuuuuu")
+              console.log("no existe eduuuuuuuuuuuuuuuuu")
           {% endif %}
 
           {% for item in r.lispar%}
@@ -323,7 +324,7 @@
     $("table > tbody").empty()
     
     var tabla= $("table")
-
+    var nfila=0
     var rows = $.map(datos,function(value,index){
 
       //styleRow=`${value.tipo_participante__background_tipo_participante}`;    
@@ -341,8 +342,8 @@
         classBoton="fa fa-user-check"
       }
       console.log("index")
-    console.log(index)
-    nfila=index+1;
+      console.log(index)
+      nfila=index+1;
 
     
     //item	Idx	xApellido	xNombre	xEmail	xEmpresa	xModalidad	xAsistio	xTipo	xEstado	xAcciones_X
@@ -394,7 +395,9 @@
      
     $("table > tbody").html(rows.join(''))
     creaFuncionDataTable()
-
+    if (nfila==0){
+      mensajeServer("No existe coincidencias de busqueda","info")
+    }
 
   }
 
