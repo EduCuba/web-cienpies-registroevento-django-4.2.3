@@ -287,13 +287,6 @@
       success: function(r){
         if(r.rpta=="OK"){
           $("table > tbody").empty()  
-          {% if not r.lispar %}
-              console.log("no existe eduuuuuuuuuuuuuuuuu")
-          {% endif %}
-
-          {% for item in r.lispar%}
-            console.log("solo item"+{{ item.id }})
-          {% endfor %}
          
           refrescaTablaEncontrados(r.lispar);
           
@@ -397,6 +390,9 @@
     creaFuncionDataTable()
     if (nfila==0){
       mensajeServer("No existe coincidencias de busqueda","info")
+
+    }else{
+      mensajeServer("Existen "+nfila+ " coincidencias","success")
     }
 
   }
