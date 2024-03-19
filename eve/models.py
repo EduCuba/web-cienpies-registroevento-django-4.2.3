@@ -37,7 +37,9 @@ class Evento(ClaseModelo2):
         blank=False,
         unique=True
     )
-    nuevo_tipo_participante= models.IntegerField(default=0)   
+    nuevo_tipo_participante= models.IntegerField(default=0)  
+    asigna_qr_registro = models.BooleanField(('Se asigna QR al registrarse'),default=False)
+    imprime_etiqueta_registro = models.BooleanField(('Se imprime etiqueta al registrarse'),default=False) 
     #nuevo_tipo_participante=models.ForeignKey(Tipo_Participante, on_delete=models.PROTECT)
     
     

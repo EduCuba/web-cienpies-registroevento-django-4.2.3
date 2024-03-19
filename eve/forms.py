@@ -40,9 +40,12 @@ class EventoForm(forms.ModelForm):
         queryset=Tipo_Participante.objects.filter(estado=True)
         .order_by('descripcion_tipo_participante')
     )'''
+    
+    
+    
     class Meta:
         model=Evento
-        fields = ['modalidad_evento','nombre_evento','nuevo_tipo_participante','estado']
+        fields = ['modalidad_evento','nombre_evento','nuevo_tipo_participante','estado','asigna_qr_registro','imprime_etiqueta_registro']
         labels = {'Evento':"nombre_evento",
         'estado':"Estado",
         'nuevo_tipo_participante':"nuevo_tipo_participante"}

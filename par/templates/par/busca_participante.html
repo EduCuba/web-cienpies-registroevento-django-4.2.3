@@ -61,14 +61,16 @@
                                   <option value="0">Selecciona Evento</option>
                                   {% for item in liseventos %}    
                                               
-                                  <option value={{item.id}}>{{item.nombre_evento}}</option>
+                                  <option value={% if item.asigna_qr_registro %}*{% endif %}{{item.id}}>{{item.nombre_evento}} </option>
                                   <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
                                  {% endfor%}
                                 </select>
                               </div> 
                               <div class="form-group col-md-2">
                                   
-                                <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>                                    
+                                <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>
+                                
+                                
                               </div>  
                               <div class="form-group col-md-4" id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
                             </div>
@@ -116,12 +118,9 @@
                                 </div>    
                                 
                                
-                                <!--
-                                <div class="form-group col-md-2">
-                                  
-                                  <button type="button" class="btn btn-info" onclick="activaCamara()" id="activa_camara" ><i class="fa fa-search" aria-hidden="true">QR</i></button>                                    
-                                </div>  
-                                -->
+                               
+                              
+                               
                             </div>  
                             
                           
@@ -133,7 +132,7 @@
         </div>
     </form>
   </div>
- 
+
     
 {% endblock content_wrapper %}
 
@@ -210,16 +209,155 @@
               </tbody>
             </table> 
         </div>
-  </div>            
+  </div> 
+  
+  <div class="modal fade" id="exampleModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"> <label id="lblParticipante">...</label></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+           <form method="POST" class="" id="frmbuscar">  
+           {% csrf_token %}
+           
+
+          <div class="form-row">
+            <div class="form-group">
+             
+                <label id="lblTipo">...</label>
+             
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+             
+                <label id="lblCredencial">...</label>
+             
+            </div>
+          </div>
+
+            <div class="form-row" id="divCodigoQr">
+                <div class="form-group col-md-1">
+                  <label for="lblCodigoQr">QR</label>
+                </div>  
+                <div class="form-group col-md-5">                            
+                  <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
+                
+                </div>
+                <div class="form-group col-md-2">
+                  <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>          
+                </div>
+            </div>
+
+           </form>   
+          <div id="rowdata" class="card-body">
+            <div id="your-qr-result">
+        
+            </div>
+          
+            <div style="display: flex;justify-content:center;">
+                <div id="my-qr-reader" style="width:500px;">
+                </div>     
+            </div> 
+            <div id="rowreturn" class="card-body" hidden>
+              <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+                                            
+            </div> 
+          </div>
+        
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">  <label id="lblcantidadTotalAsisitencia">...</label></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+         <!--
+
+          <div class="form-row">
+            <div class="form-group"> 
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+            </div>
+          </div>
+
+            <div class="form-row" id="divCodigoQr">
+                <div class="form-group col-md-1">
+                  <label for="lblCodigoQr">Asistecia Evento</label>
+                </div>   
+            </div>
+
+          -->
+          <div id="listaCantidadAsistencia" class="card">
+           
+          
+          
+            
+           
+            
+          </div>
+        
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow mb-4">
+
+  <div id="rowdata" class="card-body">
+
+    <div class="container d-flex justify-container-center">
+     
+        <!--<div class="row">-->
+        <div class="form-row">
+            <div class="col-md-12">
+                <div id="donutchart" style="width: 900px; height: 500px;">
+                 
+
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+ 
 {% endblock content %}
 
 
 {% block js %}
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 
   $(function () {
-  
+   // graficoAsistencia();
       $('#bus_id_evento').on('change', function() {
       
         refrescaDiv("totalAsistencia","");
@@ -248,6 +386,15 @@
     var inputNombre = form.get("nombre_participante")
     var inputEmpresa = form.get("empresa_participante")
     var inputEvento = form.get("evento")
+    inputEvento=inputEvento.trim()
+    if (inputEvento.substring(0,1)=="*"){
+       asignaQr=true
+       inputEvento=inputEvento.substring(1)
+    }else{
+      asignaQr=false
+      }
+
+   
 
     if (noSeleccionado(inputEvento,"Seleccione evento (fr)")){
       return false
@@ -313,6 +460,8 @@
 
 
   function refrescaTablaEncontrados(datos){
+    console.log("detalle de encontradoa")
+    console.log(datos)
     $("#tableLista").dataTable().fnDestroy();
     $("table > tbody").empty()
     
@@ -441,8 +590,7 @@
   
 
 
-  
-
+ 
 
   function dialogoAsistencia(id,tipo,obj){
    asistio_evento=document.getElementById(obj+id).value;
@@ -468,7 +616,7 @@
     }).then((borrar) => {
       console.log(borrar)
       if(borrar.isConfirmed){
-           participanteAsistencia(id,tipo,'',asistio_evento)
+           participanteAsistencia(id,tipo,'',asistio_evento,"")
   
       }else{
         Swal.fire("Acción Cancelada","","info")
@@ -476,23 +624,44 @@
       
     })  
     }else{
-      //console.log("ddddddddddd 1")
-      participanteAsistencia(id,tipo,'',asistio_evento)
+    
+      var form = new FormData(document.getElementById('frmbuscar'));
+     
+ 
+      var inputEvento = form.get("evento")
+          inputEvento=inputEvento.trim()
+          
+ 
+      if (inputEvento.substring(0,1)=="*"){
+       
+ 
+        activaCamaraModal(id)
+      
+ 
 
+      }else{
+      
+ 
+        participanteAsistencia(id,tipo,'',asistio_evento,"")
+       
+      }
     }
   }
 
 
 
- function participanteAsistencia(id,tipo,evento,asistencia){
+ function participanteAsistencia(id,tipo,evento,asistencia,qrAsignado){
   //url = "/par/asistencia_participante/"+id
+ 
+
   url = "asistencia_participante/"+id
  
  
   var data = {"id":id,
               "tipo":tipo,
               "evento":evento,
-              "anularAsistencia":asistencia}
+              "anularAsistencia":asistencia,
+              "qrAsignado":qrAsignado}
 
   var token = "{{csrf_token}}"
   $.ajax({
@@ -538,11 +707,7 @@
 <script>
     $(document).ready(function() {
       creaFuncionDataTable();
-      /*
-        $('.table').DataTable(
-          
-        );
-*/
+  
       });
 
 
@@ -765,7 +930,86 @@ console.log(rows);
   }
 
 
-</script>
+function activaCamaraModal(id){
+ 
+  nfila = document.getElementById("item"+id).value;
+  var apePar=$("#tableLista tr:eq("+nfila+") td:eq("+1+")").html();
+  var nomPar=$("#tableLista tr:eq("+nfila+") td:eq("+2+")").html();
+  var tipPar=$("#tableLista tr:eq("+nfila+") td:eq("+6+")").html();
+  var tipCre=$("#tableLista tr:eq("+nfila+") td:eq("+7+")").html();
+  apePar=apePar.trim()
+  nomPar=nomPar.trim()
+  document.getElementById('lblParticipante').innerHTML=nomPar + " "+apePar
+  document.getElementById('lblTipo').innerHTML="Tipo : "+tipPar
+  document.getElementById('lblCredencial').innerHTML="Entregar : "+tipCre
+ 
+  /*
+  const table = $('#tableLista').DataTable();
+  ape=table.cell(nfila-1,1).html();
+  console.log(ape)
+*/
+  $('#exampleModalCenter').modal({ show:true });
 
+
+
+}
+
+
+
+</script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+  function domReady(fn){
+    if(document.readyState==="complete" || document.readyState==="interactive"){
+        setTimeout(fn,1)
+       
+       
+    }else{
+      
+      document.addEventListener("DOMContentLoaded",fn)
+      
+    }
+}
+
+domReady(function(){
+    var myqr = document.getElementById('your-qr-result')
+    var lastResult, countResults=0;
+
+    // If found you QR code,
+    function onScanSuccess(decodeText,decodeResult){
+     
+      var evento = document.getElementById("id_evento").value;
+      if(evento=='0' || evento==''){
+        mensajeServer("Seleccione Evento ");
+        return false
+      }
+
+        if(decodeText!=lastResult){
+            ++countResults;
+            lastResult=decodeText;
+            //var evento = document.getElementById("id_evento").value;
+            var eventoSeleccionado = $('#id_evento option:selected').text();
+            var codigo_qr = decodeText
+            // alert you qr here
+           // alert("you Qr is:"+decodeText,decodeResult)
+
+            dialogoAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
+            // and add todo you qr in top 
+            //myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+          //}else{
+           // Swal.fire("Código recientemente leido")
+          
+        }
+
+
+    }
+ // and last render you camera QR 
+ var htmlscanner = new Html5QrcodeScanner(
+    "my-qr-reader",{fps:10,qrbox:250})
+
+  htmlscanner.render(onScanSuccess)
+})
+
+</script>  
  
 {% endblock js %}

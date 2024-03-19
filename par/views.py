@@ -13,7 +13,7 @@ from django.views.generic import *
 from .models import Participante, Tipo_Participante, Modalidad_Asistencia
 
 from .forms import BuscarParticipanteForm,ParticipanteForm,CreateForm,TipoParticipanteForm,\
-                   ModalidadAsistenciaForm,Participante_Csv,ParticipanteCsvForm,ParticipanteFormImportacion
+                   ModalidadAsistenciaForm,Participante_Csv,ParticipanteCsvForm,ParticipanteFormImportacion,ParticipanteFormImportacionSinQr
 
 
 from bases.views import SinPrivilegios,SinPrivilegiosAjax
@@ -47,6 +47,8 @@ import re
 from django.db import transaction
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+
+from django.db.models import Count
 
 
 #class ParticipanteList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -200,7 +202,8 @@ def buscarparticipante(request,participante_id=None):
             #print('json es') 
             contexto={'rpta':'OK',
                   'lispar':lispar}            
-        #print(contexto)                    
+        'educuba'
+        print(contexto)                    
     return JsonResponse(contexto)
         
     return render(request, template_name, contexto)    
@@ -334,23 +337,27 @@ def lecturaqrevento(request,participante_id=None):
 #@permission_required('par.edit_participante', raise_exception=True)
 def participanteAsistencia(request, id):
      
-    
+    print("a001")
     try:
         permission_required = 'par.change_participante'
-    
+        print("a002")
         idPar=request.POST.get("id")
         tipo=request.POST.get("tipo")
         anulAsis=request.POST.get("anularAsistencia")
+       
         anulAsis=anulAsis.upper()
         swparamValido="NO"
         nomEve=""
         medLec=""
-        if(tipo=='A'):
+        if(tipo=='A' or tipo=='QA'):
+           print("a003")
+           qrAsignado=request.POST.get("qrAsignado") 
            participante = Participante.objects.filter(pk=id).first()
            swparamValido="SI"
         else:
-    
+            print("a004")
             if(tipo=="Q"):
+               print("a005") 
                evento=request.POST.get("evento")
                codigo_qr=request.POST.get("id")
                nomEve=request.POST.get("nomEve")
@@ -364,31 +371,52 @@ def participanteAsistencia(request, id):
                    
         
         if(swparamValido=="NO"):
-    
+          print("a006")
           contexto={'rpta':'OFF',
                     'mensaje':'Parametros no validos'}          
         else:
-    
+            print("a007") 
             if request.method=="POST":
             #print("edu 02")
+                print("a008")
                 swOk="NO"
                 if participante:
+                    print("a009") 
                     if participante.asistio_evento:
-                        
+                        print("a010")
                         if (tipo=="A" and anulAsis=="TRUE"):
                             swOk="SI"
                         else:    
+                            if (tipo=="A"):
+                                msj="Participante ya esta registrado, refresque listado"
+                            else:
+                                msj="Código ya esta registrado :"+id    
                             contexto={
                                     'rpta':"OFF",
-                                    'mensaje':"Código ya esta registrado :"+id,
+                                    'mensaje':msj,
                                     'nomEve':nomEve,
                                     'medLec':medLec
                             }
-                    else:           
-                         swOk="SI"
+                    else: 
+                        # Si se asigna QR a participante
+                        if (tipo=="QA"):
+                            if (participante.codigo_qr==None or participante.codigo_qr==""):
+                                swOk="SI"
+                            else:
+                                contexto={
+                                'rpta':"OFF",
+                                'mensaje':"Ya tiene código registrado "+participante.codigo_qr,
+                                'nomEve':nomEve,
+                                'medLec':medLec
+                        }           
+                        else:             
+                            swOk="SI"
                                       
                     if swOk=="SI":
-                        participante.asistio_evento = not participante.asistio_evento
+                        if (tipo=="QA"):
+                            participante.codigo_qr=qrAsignado
+                        else:    
+                            participante.asistio_evento = not participante.asistio_evento
                         participante.save()
                         tipo_participante=participante.tipo_participante.descripcion_tipo_participante
                         tipo_identificacion_participante=participante.tipo_participante.tipo_identificacion_participante
@@ -414,7 +442,9 @@ def participanteAsistencia(request, id):
                             }      
                                             
                 else:
-                    participante=Participante
+                   
+                    #participante=Participante.objects.create(id=id,evento_id=evento)
+                    participante=None
                     contexto={
                                 'rpta':"OFF",
                                 'mensaje':"Código No existe "+id,
@@ -434,6 +464,7 @@ def participanteAsistencia(request, id):
 
             else:
                 print(contexto)
+                print("para todod")
                 return render(request, 'par/lectura_qr_resultado.html',{'conDic':contexto,'obj':participante})    
                     
   
@@ -1024,11 +1055,12 @@ def xx_ImportarCsv(request,participante_id=None):
             evento = request.POST.get("evento")
             csv_nombre =  request.FILES['csv_file'].name 
             
-            
+            print("impor 1")
             mensaje=valida_csv(request)  
-            
+            print("impor 2")
             if (mensaje["rptaServer"]=='OK'):
             #if ('OK'=='OK'):
+                print("impor 3")
                 mensaje=subir_csv(mensaje['dataValidado'],csv_file,evento,csv_nombre)
                 '''
                 if (mensaje["rptaServer"]=='OK'):
@@ -1214,7 +1246,9 @@ def valida_csv(request):
                              
                         data_dict["codigo_qr"]=fields[8]
                         
-                        form = ParticipanteFormImportacion(data_dict)
+                        #form = ParticipanteFormImportacion(data_dict)
+                        print("aquiiiiiiiiiiiiiiiiiiiiii esta")
+                        form = ParticipanteFormImportacionSinQr(data_dict)
                        
                         if not(form.is_valid()):                            
                           
@@ -1331,7 +1365,8 @@ def subir_csv(lista,archivo,evento,nombre_csv):
                 data_dict["participante_csv"]=id_csv
                 data_dict["codigo_qr"]=imp['codigo_qr']
                
-                form = ParticipanteFormImportacion(data_dict)
+                #form = ParticipanteFormImportacion(data_dict)
+                form = ParticipanteFormImportacionSinQr(data_dict)
                             
                 if form.is_valid():
                     form.save()
@@ -1824,16 +1859,25 @@ def contarasistencia(request,participante_id=None):
     #eve=Evento.objects.filter(estado=True)
     form_compras={}
     contexto={}
-    
+   #cuba
    
     evento = request.POST.get("evento")
     asistencia=Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).count()
+    lisGrupalAsistencia=list(Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).values('tipo_participante','tipo_participante__descripcion_tipo_participante','tipo_participante__background_tipo_participante').annotate(dcount=Count('tipo_participante__id')))
+    print("este es el listado")   
+    #print(lisGrupalAsistencia)
+    
+    
+    
+
+    
     #print('eduuuuuuuuuuuuuu')     
     if request.method=='POST':    
         #print('es pooooooooooossssttt')
         
         contexto={'rpta':'OK',
-                  'asistencia':asistencia}            
+                  'asistencia':asistencia,
+                  'lisGrupalAsistencia':lisGrupalAsistencia}            
         #print(contexto)                    
         return JsonResponse(contexto)
         

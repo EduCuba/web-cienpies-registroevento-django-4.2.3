@@ -223,25 +223,19 @@
       url:url,
       data:data,
       success: function(r){
-      ///
-       
-      $('#popup').html(r);
+            console.log("exitoso")
+            $('#popup').html(r);
       ///$('#errorpopup').append(rmensaje);
-  
-
-
-
-  $('#popup').modal({
-      
-    /* cambia propiedades de modal para que no se cierre */
-    backdrop:'static',
-    keyboard: false
-  })
-  $('#popup').modal('show');
-        ///
-      },
+            $('#popup').modal({
+            /* cambia propiedades de modal para que no se cierre */
+              backdrop:'static',
+              keyboard: false
+            })
+            $('#popup').modal('show');
+                  ///
+            },
       error: function(jqXHR, textStatus, errorThrow){
-        console.log("buscar_participante 417")
+        console.log("lectura_qr_evento.html 244")
         console.log(textStatus)
         console.log(jqXHR)
         /*Swal.fire(errorThrow,"","info")*/

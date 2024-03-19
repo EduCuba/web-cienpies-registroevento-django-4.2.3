@@ -698,7 +698,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     if(tipo=='N'){
       url=url.replace('0', id_evento);
     }
-    
+    console.log("url de modal "+url)
     $("#popup").load(url, function(responseTxt, statusTxt, xhr){
       console.log("679 ...index.html");
         
@@ -1146,12 +1146,17 @@ function contarAsistencia(){
   // alert(accion)
   var form = new FormData(document.getElementById('frmbuscar'));
   var inputEvento = form.get("evento")
+
+
   console.log("evento " +inputEvento);
   if (noSeleccionado(inputEvento,"Seleccione evento (fr)")){
     return false
 
   }
 
+  if (inputEvento.substring(0,1)=="*"){
+    inputEvento=inputEvento.substring(1)
+ }
   var url = "/buscar_participante/'{{obj.evento}}'/{{obj.apellido_participante}}/{{obj.nombre_participante}}/{{obj.empresa_participante}}"
   url = "buscar_participante"
   url = "/par/contar_asistencia"
@@ -1173,6 +1178,10 @@ console.log("entra ajax");
       if(r.rpta=="OK"){
         //Swal.fire("Total Asistencia :"+r.asistencia);
         refrescaDiv("totalAsistencia","Total Asistencia:"+r.asistencia)
+        refrescaGraficoAsistencia(r.lisGrupalAsistencia)
+        asistenciaTipoParticipante(r.lisGrupalAsistencia, r.asistencia)
+        $('#graficoModalCenter').modal({ show:true });
+
 
       }else{
         Swal.fire("Error Inesperado tratando de borrar registro " + r);
@@ -1187,6 +1196,133 @@ console.log("entra ajax");
 }
 
 
+
+function graficoAsistencia(){
+
+  google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+
+    
+   
+    function drawChart() {
+     /* var data = google.visualization.arrayToDataTable([
+      ['Task', 'Hours per Day'],
+        ['Work',     11],
+        ['Eat',      2],
+        ['Commute',  2],
+        ['Watch TV', 2],
+        ['Sleep',    7]      ]);
+*/
+
+var data = new google.visualization.DataTable();
+
+data.addColumn('string', 'Mes');
+data.addColumn('number', 'Faturamento Por Mes');
+
+            data.addRow(['cola', 100]);
+            data.addRow(['colb', 150]);
+      var options = {
+        title: 'My Daily Activities',
+        pieHole: 0.4,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+      chart.draw(data, options);
+    }
+
+}
+
+function xx__refrescaGraficoAsistencia(datos){
+  var rows = $.map(datos,function(value,index){
+    console.log("sssss");
+  console.log(`${value.tipo_participante__descripcion_tipo_participante}`);
+
+    });
+
+
+}
+
+ //styleRow=`${value.tipo_participante__background_tipo_participante}`;
+ 
+    
+function refrescaGraficoAsistencia(datos){
+//https://developers.google.com/chart/interactive/docs/gallery/piechart?hl=es-419#fullhtml
+  //var rows = $.map(datos,function(value,index){
+
+   // console.log(${value.tipo_participante__descripcion_tipo_participante});
+
+  //  });
+
+  console.log("aqui debe de llegar")
+  console.log(datos)
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
+ 
+  function drawChart() {
+    var totAsis=0
+    var data = new google.visualization.DataTable();
+
+            data.addColumn('string', 'Tipo');
+            data.addColumn('number', 'Cantidad');
+
+
+            var rows = $.map(datos,function(value,index){
+             
+             // data.addRow(`${value.tipo_participante__descripcion_tipo_participante}`,`${value.dcount}`);
+             desPar=`${value.tipo_participante__descripcion_tipo_participante}`
+             canAsi=`${value.dcount}`
+             canAsis=parseInt(canAsi)
+             totAsis=totAsis+canAsis
+             data.addRow([desPar+ " ("+canAsi+")",canAsis])
+              });
+        
+
+    var options = {
+      title: 'Total Asistencia '+ totAsis,
+      pieHole: 0.4,
+      /*is3D:true,*/
+      legend: { position: 'bottom' }
+    };
+
+   
+
+    var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+    chart.draw(data, options);
+  }
+
+
+  
+}
+
+function asistenciaTipoParticipante(datos,total){
+  var rows = $.map(datos,function(value,index){
+    backgroundParticipante=`${value.tipo_participante__background_tipo_participante}`
+   
+   
+  return `<div class="card" style="padding-left:3px; background:`+backgroundParticipante+`">
+  <div class="card-body" style="background:white">
+      ${value.tipo_participante__descripcion_tipo_participante} (${value.dcount})
+    </div>
+    
+  </div>
+  `
+   })
+   //document.getElementById('lblcantidadTotalAsisitencia').innerHTML="Total Asistencia:"+total
+   $('#lblcantidadTotalAsisitencia').html("Total Asistencia:"+total);
+   $('#listaCantidadAsistencia').html('');
+$('#listaCantidadAsistencia').append(rows);
+}
+
+
+
+//cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.js
+
+
+
+
+
+//
 
 </script>  
  
