@@ -6,132 +6,121 @@
     <!--<form method="POST" class="form-inline" id="frmbuscar">-->
     <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
-  
         <div class="col-xl-12 col-md-12 mb-12">
-         
+            <!-- div 3 inicio -->
             {% if obj %}
             <div class="card border-left-warning shadow h-100 py-2">
             {% else %}    
             <div class="card border-left-success shadow h-100 py-2">
             {% endif %}  
             
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
-                <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
-                <!--<i class="fa fa-search fa-1x" style="color:#252F87"></i>-->
-                <i class="fa fa-th-list fa-1x" style="color:#252F87"></i>
-                <div class="dropdown no-arrow">
-                  <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                    <div class="dropdown-header">Buscar por ..:</div>
-                    <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
-                  <!-- compras_new esta devlarado en el archivo urls.py-->
-    
-
-
-                    <a class="dropdown-item" onclick="return criterioBusqueda(1)" href="#"><i class="fa fa-address-card" ></i> Apellido Nombre</a>
-                    <a class="dropdown-item" onclick="return criterioBusqueda(2)" href="#"><i class="fa fa-suitcase" aria-hidden="true"></i> Empresa</a>
-                    
-                  </div>
-                </div>
-              </div>
-            
-              <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            
-                            <div class="dropdown-divider"></div>
-
-                            <div class="form-row">
-                              <!---
-                              <div class="form-group col-md-2">
-                                <label for="lblEvento">Evento</label>
-                              </div>  
-                              <div class="form-group col-md-10">                            
-                                
-                                {{eve.evento}}
-                              </div>-->
-
-                              <div class="form-group col-md-2">
-                                <label for="id_evento">Evento:</label>
-                              </div>
-                              <div class="form-group col-md-3">                              
-                                <select name="evento" class="form-control" required="" id="bus_id_evento">
-                                  <option value="0">Selecciona Evento</option>
-                                  {% for item in liseventos %}    
-                                              
-                                  <option value={% if item.asigna_qr_registro %}*{% endif %}{{item.id}}>{{item.nombre_evento}} </option>
-                                  <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
-                                 {% endfor%}
-                                </select>
-                              </div> 
-                              <div class="form-group col-md-2">
-                                  
-                                <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>
-                                
-                                
-                              </div>  
-                              <div class="form-group col-md-4" id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
-                            </div>
-                            <div class="form-row" id="divBusApeNom">
-                              <div class="form-group col-md-2">
-                                <label for="apellido_participante">Apellido</label>
-                              </div>  
-                              <div class="form-group col-md-3">                            
-                                
-                                <input id="bus_apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
-                                
-                                  <!-- {{eve.apellido_participante}}-->
-                              </div>
-
-                              <div class="form-group col-md-2">
-                                <label for="lblNombre">Nombre</label>
-                              </div>  
-                              <div class="form-group col-md-3">                            
-                                <input id="bus_nombre_participante" type="text" name="nombre_participante" value="{{nombre_participante }}">
-
-                                <!--{{eve.nombre_participante}}-->
-                              </div>
-                            
-                            </div>
-
-
-                            <div class="form-row" id="divBusEmpresa" hidden>
-                              <div class="form-group col-md-2">
-                                <label for="lblEmpresa">Empresa</label>
-                              </div>  
-                              <div class="form-group col-md-3">                            
-                                <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
-                                <!--{{eve.empresa_participante}}-->
-                              </div>
-                            </div>
-
-                        
-                            <div class="form-row">
-                               <div class="form-group col-md-2">
-                                  <!---
-                                    <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
-                                    <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
-                                -->
-                                    <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">B</i></button>                                    
-                                </div>    
-                                
-                                <div class="form-group col-md-2">
-                                  <!---
-                                    <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
-                                    <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
-                                -->
-                                    <button type="button" class="btn btn-info" onclick="activaCamaraModal10()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">camara</i></button>                                    
-                                </div>    
-                            </div>  
-                            
-                          
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+                      <!--<h5 class="m-0 font-weight-bold text-primary">Busqueda por</h5>-->
+                      <!--<i class="fa fa-search fa-1x" style="color:#252F87"></i>-->
+                      <i class="fa fa-th-list fa-1x" style="color:#252F87"></i>
+                      <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-left shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                              <div class="dropdown-header">Buscar por ..:</div>
+                              <!--<a class="dropdown-item" onclick="return abrir_moabrir_modaldal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus"></i> Nuevo</a>-->
+                            <!-- compras_new esta devlarado en el archivo urls.py-->
+                              <a class="dropdown-item" onclick="return criterioBusqueda(1)" href="#"><i class="fa fa-address-card" ></i> Apellido Nombre</a>
+                              <a class="dropdown-item" onclick="return criterioBusqueda(2)" href="#"><i class="fa fa-suitcase" aria-hidden="true"></i> Empresa</a>
                         </div>
-                    
+                      </div>
                     </div>
-              </div>
-            </div>
+                  
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                  
+                                  <div class="dropdown-divider"></div>
+
+                                  <div class="form-row">
+                                    <!---
+                                    <div class="form-group col-md-2">
+                                      <label for="lblEvento">Evento</label>
+                                    </div>  
+                                    <div class="form-group col-md-10">                            
+                                      
+                                      {{eve.evento}}
+                                    </div>-->
+
+                                    <div class="form-group col-md-2">
+                                      <label for="id_evento">Evento:</label>
+                                    </div>
+                                    <div class="form-group col-md-3">                              
+                                      <select name="evento" class="form-control" required="" id="bus_id_evento">
+                                        <option value="0">Selecciona Evento</option>
+                                        {% for item in liseventos %}    
+                                                    
+                                        <option value={% if item.asigna_qr_registro %}*{% endif %}{{item.id}}>{{item.nombre_evento}} </option>
+                                        <!--self.modalidad_asistencia.descripcion_modalidad_asistencia,-->
+                                      {% endfor%}
+                                      </select>
+                                    </div> 
+                                    <div class="form-group col-md-2">
+                                        
+                                      <button type="button" class="btn btn-info" onclick="contarAsistencia()" ><i class="fa fa-user-check" style="color:#252F87" aria-hidden="true"></i></button>
+                                      
+                                      
+                                    </div>  
+                                    <div class="form-group col-md-4" id="totalAsistencia" class="form-group col-md-2" style="font-size:24px "></div>
+                                  </div>
+                                  <div class="form-row" id="divBusApeNom">
+                                    <div class="form-group col-md-2">
+                                      <label for="apellido_participante">Apellido</label>
+                                    </div>  
+                                    <div class="form-group col-md-3">                            
+                                      
+                                      <input id="bus_apellido_participante" type="text" name="apellido_participante" value="{{apellido_participante }}">
+                                      
+                                        <!-- {{eve.apellido_participante}}-->
+                                    </div>
+
+                                    <div class="form-group col-md-2">
+                                      <label for="lblNombre">Nombre</label>
+                                    </div>  
+                                    <div class="form-group col-md-3">                            
+                                      <input id="bus_nombre_participante" type="text" name="nombre_participante" value="{{nombre_participante }}">
+
+                                      <!--{{eve.nombre_participante}}-->
+                                    </div>
+                                  
+                                  </div>
+
+
+                                  <div class="form-row" id="divBusEmpresa" hidden>
+                                    <div class="form-group col-md-2">
+                                      <label for="lblEmpresa">Empresa</label>
+                                    </div>  
+                                    <div class="form-group col-md-3">                            
+                                      <input id="bus_empresa_participante" type="text" name="empresa_participante" value="{{empresa_participante }}">
+                                      <!--{{eve.empresa_participante}}-->
+                                    </div>
+                                  </div>
+
+                              
+                                  <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <!---
+                                          <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span>Guardar</button>
+                                          <a href="{% url 'par:buscar_participante' %}" class="btn btn-success"><span class="fa fa-undo"></span>Cancelar</a>
+                                      -->
+                                          <button type="button" class="btn btn-info" onclick="participantesEncontrados()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">B</i></button>                                    
+                                    </div>      
+                                  </div>  
+                                  
+                                
+                            </div>
+                          </div>
+                    </div>
+
+
+            
+            </div><!-- div 3 fin -->
         </div>
     </form>
   </div>
@@ -214,36 +203,32 @@
         </div>
   </div> 
   
-  <div class="modal fade" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
+<div class="modal fade" id="exampleModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        
+      
+      <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle"> <label id="lblParticipante">...</label></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
-        <div class="modal-body">
-
-           <form method="POST" class="" id="frmbuscar">  
+      </div>
+      <div class="modal-body">
+        <form method="POST" class="" id="frmbuscar">  
            {% csrf_token %}
-           
-
-          <div class="form-row">
-            <div class="form-group">
-             
-                <label id="lblTipo">...</label>
-                <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
+            <div class="form-row">
+                <div class="form-group">
+              <!-- type="hidden"-->
+                  <label id="lblTipo">...</label>
+                  <input name="idAsignar"  class="form-control"  id="idAsignar">
+                </div>
+                <div class="fAsignarorm-row">
+                  <label id="lblCredencial">...</label>
+                </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-             
-                <label id="lblCredencial">...</label>
-             
-            </div>
-          </div>
 
+            
             <div class="form-row" id="divCodigoQr">
                 <div class="form-group col-md-1">
                   <label for="lblCodigoQr">QR</label>
@@ -257,50 +242,31 @@
                 </div>
             </div>
 
-           </form>   
-         <!-- aqui debe ir-->
-         <div id="rowdata" class="card-body">
-          <div id="your-qr-result">
-        
-          </div>
-        
-          <div style="display: flex;justify-content:center;">
-              <div id="my-qr-reader" style="width:500px;">
-              </div>     
-          </div> 
-          <div id="rowreturn" class="card-body" hidden>
-            <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
-                                          
-          </div> 
-        </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          
-        </div>
+        </form>   
+       
       </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         
+      </div>
+
+
     </div>
   </div>
-
-<!---->
-
+</div>
 
 
 
-
-  <!---->
-
-  <div class="modal fade" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
+<div class="modal fade" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle">  <label id="lblcantidadTotalAsisitencia">...</label></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
-        <div class="modal-body">
+      </div>
+      <div class="modal-body">
 
          <!--
 
@@ -321,44 +287,47 @@
 
           -->
           <div id="listaCantidadAsistencia" class="card">
-           
-          
-          
-            
-           
-            
+             
           </div>
-        
-
-        </div>
-        <div class="modal-footer">
+      </div>
+      <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
          
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow mb-4">
+  <div id="rowdata" class="card-body">
+    <div class="container d-flex justify-container-center"> 
+        <!--<div class="row">-->
+        <div class="form-row">
+            <div class="col-md-12">
+                <div id="donutchart" style="width: 900px; height: 500px;">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
   </div>
-
-  <div class="card shadow mb-4">
-
-    <div id="rowdata" class="card-body">
-
-      <div class="container d-flex justify-container-center">
-      
-          <!--<div class="row">-->
-          <div class="form-row">
-              <div class="col-md-12">
-                  <div id="donutchart" style="width: 900px; height: 500px;">
-
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
-  </div>
+</div>
  
 
+<!-- copiado -->
+<div id="rowdata" class="card-body">
+  <div id="your-qr-result">
 
+  </div>
+  <h1>QR</h1>
+  <div style="display: flex;justify-content:center;">
+      <div id="my-qr-reader" style="width:500px;">
+      </div>     
+  </div> 
+  <div id="rowreturn" class="card-body" hidden>
+    <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+                                  
+  </div> 
+</div>
 
 {% endblock content %}
 
@@ -494,8 +463,8 @@
         captionBoton="Asistio"
         classBoton="fa fa-user-check"
       }
-      console.log("index")
-      console.log(index)
+    // console.log("index")
+    //  console.log(index)
       nfila=index+1;
 
     
@@ -517,17 +486,17 @@
 
     return `<tr id=\"row_reg${value.id}"\" style="background-color:${value.tipo_participante__background_tipo_participante}">
       <td> <input readonly  type=\"hidden\" id=\"item${value.id}\" value=\"${nfila}\" class=\"form-control\" /> 
-     
+        
         ${value.id}</td>
 
 
-        <td>${value.apellido_participante}<input readonly  type=\"hidden\" id=\"apePar${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" /></td>
-        <td>${value.nombre_participante}<input readonly  type=\"hidden\" id=\"nomPar${value.id}\" value=\"${value.nombre_participante}\" class=\"form-control\" /></td>
-        <td>${value.email_participante}</td>
-        <td>${value.empresa_participante}</td>
-        <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>  
-        <td>${value.tipo_participante__descripcion_tipo_participante}<input readonly  type=\"hidden\" id=\"tipPar${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" /></td>
-        <td>${value.tipo_participante__tipo_identificacion_participante}<input readonly  type=\"hidden\" id=\"tipCre${value.id}\" value=\"${value.tipo_participante__tipo_identificacion_participante}\" class=\"form-control\" /></td> 
+      <td>${value.apellido_participante}<input readonly  type=\"hidden\" id=\"apePar${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" /></td>
+      <td>${value.nombre_participante}<input readonly  type=\"hidden\" id=\"nomPar${value.id}\" value=\"${value.nombre_participante}\" class=\"form-control\" /></td>
+      <td>${value.email_participante}</td>
+      <td>${value.empresa_participante}</td>
+      <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>  
+      <td>${value.tipo_participante__descripcion_tipo_participante}<input readonly  type=\"hidden\" id=\"tipPar${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" /></td>
+      <td>${value.tipo_participante__tipo_identificacion_participante}<input readonly  type=\"hidden\" id=\"tipCre${value.id}\" value=\"${value.tipo_participante__tipo_identificacion_participante}\" class=\"form-control\" /></td>     
       
    
     <td>
@@ -644,16 +613,16 @@
           
  
       if (inputEvento.substring(0,1)=="*"){
-       console.log("sin error 1")
+       
  
-        activaCamaraModalAsigna(id)
+        activaCamaraModal(id)
       
-        console.log("sin error 2")
+ 
 
       }else{
       
  
-        participanteAsistencia(id,tipo,inputEvento,asistio_evento,"")
+        participanteAsistencia(id,tipo,'',asistio_evento,"")
        
       }
     }
@@ -681,34 +650,23 @@
     url:url,
     data:data,
     success: function(r){
-      console.log("busca_participante 730")
       if(r.rpta==="OK"){
-        console.log("busca_participante 732")
-        
         actualiza_RowTable(r)
         Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
-        if (tipo=="QA"){
-          console.log("busca_participante 737")
-          cerrar_modal_generico("asignaCamaraModalCenter")
-        }
+        
       }else{
-        console.log("busca_participante 741")
-        if (tipo=="QA"){
-          console.log("busca_participante 737")
-          cerrar_modal_generico("asignaCamaraModalCenter")
-          
-        }
         /*
         let result = r.indexOf("no-acceso");
+        
         if (result>=0){
           Swal.fire("No tiene acceso")
         }else{
           Swal.fire("Error Inesperado al procesar registro ")
+          
         }*/
-        
         Swal.fire(r.mensaje)
         mensajeServer(r.mensaje)
-        //console.log(r.mensaje)        
+        
       }
     },
     error: function(jqXHR, textStatus, errorThrow){
@@ -951,18 +909,18 @@ console.log(rows);
     }
   }
 
-  
 
-function activaCamaraModalAsigna(id){
-
-  /*nfila = document.getElementById("item"+id).value;*/
+function activaCamaraModal(id){
+ 
+ // nfila = document.getElementById("item"+id).value;
+ // console.log("fila seleccionada")
+  //console.log(nfila)
   
- /* 
-  var apePar=$("#tableLista tr:eq("+nfila+") td:eq("+1+")").html();
+  /*var apePar=$("#tableLista tr:eq("+nfila+") td:eq("+1+")").html();
   var nomPar=$("#tableLista tr:eq("+nfila+") td:eq("+2+")").html();
   var tipPar=$("#tableLista tr:eq("+nfila+") td:eq("+6+")").html();
   var tipCre=$("#tableLista tr:eq("+nfila+") td:eq("+7+")").html();
-  */
+*/
   var apePar=document.getElementById("apePar"+id).value;
   var nomPar=document.getElementById("nomPar"+id).value;
   var tipPar=document.getElementById("tipPar"+id).value;
@@ -973,15 +931,82 @@ function activaCamaraModalAsigna(id){
   document.getElementById('lblTipo').innerHTML="Tipo : "+tipPar
   document.getElementById('lblCredencial').innerHTML="Entregar : "+tipCre
  
-  document.getElementById('idParAsignar').value=id
-  
-  $('#asignaCamaraModalCenter').modal({ show:true });
+  document.getElementById('idAsignar').value=id
+  /*
+  const table = $('#tableLista').DataTable();
+  ape=table.cell(nfila-1,1).html();
+  console.log(ape)
+*/
+  $('#exampleModalCenter').modal({ show:true });
 
 
 
 }
 
-function dialogoQrLeidoParticipante(idAsignar,codigo_qr,tipo,evento,nombreEvento){
+
+
+</script>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    //Check if dom is ready
+    function domReady(fn){
+        if(document.readyState==="complete" || document.readyState==="interactive"){
+            setTimeout(fn,1)
+           
+           
+        }else{
+          
+          document.addEventListener("DOMContentLoaded",fn)
+          
+        }
+    }
+   
+    domReady(function(){
+        var myqr = document.getElementById('your-qr-result')
+        var lastResult, countResults=0;
+
+        // If found you QR code,
+        function onScanSuccess(decodeText,decodeResult){
+         
+          var evento = document.getElementById("id_evento").value;
+          if(evento=='0' || evento==''){
+            mensajeServer("Seleccione Evento ");
+            return false
+          }
+
+            if(decodeText!=lastResult){
+                ++countResults;
+                lastResult=decodeText;
+                //var evento = document.getElementById("id_evento").value;
+                var eventoSeleccionado = $('#id_evento option:selected').text();
+                var codigo_qr = decodeText
+                // alert you qr here
+               // alert("you Qr is:"+decodeText,decodeResult)
+
+                dialogoAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
+                // and add todo you qr in top 
+                //myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
+              //}else{
+               // Swal.fire("Código recientemente leido")
+              
+            }
+
+
+        }
+     // and last render you camera QR 
+     var htmlscanner = new Html5QrcodeScanner(
+        "my-qr-reader",{fps:10,qrbox:250})
+
+      htmlscanner.render(onScanSuccess)
+    })
+    
+</script> 
+
+
+
+
+function dialogoAsistenciaQrAsigna(codigo_qr,tipo,evento,nombreEvento){
   var medio_lectura="C"
   if(evento=='0' || evento==''){
     mensajeServer("Seleccione Evento ");
@@ -990,74 +1015,11 @@ function dialogoQrLeidoParticipante(idAsignar,codigo_qr,tipo,evento,nombreEvento
 
 
    //participanteAsistencia(id,tipo,'QA',"false",codigo_qr)
-   
-   
+   var idAsignar=document.getElementById("idAsignar").value;
    participanteAsistencia(idAsignar,tipo,evento,"false",codigo_qr)
    
    //participanteAsistenciaQr(medio_lectura,codigo_qr,"QA",evento,nombreEvento)
  }
-
-</script>
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script>
-  function domReady(fn){
-    if(document.readyState==="complete" || document.readyState==="interactive"){
-        setTimeout(fn,1)
-       
-       
-    }else{
-      
-      document.addEventListener("DOMContentLoaded",fn)
-      
-    }
-}
-
-domReady(function(){
-    var myqr = document.getElementById('your-qr-result')
-    var lastResult, countResults=0;
-
-    // If found you QR code,
-    function onScanSuccess(decodeText,decodeResult){
-     
-      var evento = document.getElementById("bus_id_evento").value;
-      if(evento=='0' || evento==''){
-        mensajeServer("Seleccione Evento ");
-        return false
-      }
-      evento=extraeIdEvento(evento);
-        if(decodeText!=lastResult){
-          var eventoSeleccionado = $('#bus_id_evento option:selected').text();
-          var idAsignar=document.getElementById("idParAsignar").value;
-            ++countResults;
-            lastResult=decodeText;
-            //var evento = document.getElementById("id_evento").value;
-           
-            var codigo_qr = decodeText
-                
-               dialogoQrLeidoParticipante(idAsignar,codigo_qr,"QA",evento,eventoSeleccionado)
-
-              
-               
-            // alert you qr here
-           // alert("you Qr is:"+decodeText,decodeResult)
-               console.log("leidooooooooo")
-           // dialogoAsistenciaQr(codigo_qr,"Q",evento,eventoSeleccionado)
-            // and add todo you qr in top 
-            //myqr.innerHTML = 'you scan ${countResults} : ${countResults} '
-          //}else{
-           // Swal.fire("Código recientemente leido")
-          
-        }
-
-
-    }
- // and last render you camera QR 
- var htmlscanner = new Html5QrcodeScanner(
-    "my-qr-reader",{fps:10,qrbox:250})
-
-  htmlscanner.render(onScanSuccess)
-})
-
 </script>  
  
 {% endblock js %}

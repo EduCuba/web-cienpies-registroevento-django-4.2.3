@@ -770,13 +770,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
     return false;
   }
 
-  function cerrar_modal()
+  function cerrar_modal(viewModal)
   {
     $('#popup').modal('hide');
     $('#errorpopup').modal('hide');
+    
     return false;
   }
 
+  function cerrar_modal_generico(viewModal,tipoOrigen)
+  {
+    switch(viewModal) {
+    case 'asignaCamaraModalCenter':
+         $('#asignaCamaraModalCenter').modal('hide');
+      break;
+    case y:
+      // code block
+      break;
+    default:
+      // code block
+  
+    }
+  //tipo : BS=Bootstrap  
+  //  if (tipoOrigen=="BS"){
+      //**const modalClasses = miModal.classList;
+     //miModal.hidden=true;
+     //document.getElementById("none").style.display="none"; 
+     //document.getElementById("hide").style.visibility="hidden"; 
+
+     //miModal.style.display="none"; 
+     //miModal.style.visibility="hidden";
+   //  $('#{{salvame}}').modal('hide');
+      //**modalClasses.remove("show");
+      //**span2.textContent = classes2
+     // miModal.style.display = 'none';
+     //** moModal.aria-hidden="true"
+    //  miModal.setAttribute('aria-hidden', true);
+    //  miModal.classList.remove('show');
+      //miModal.classList.add('modal fade');
+      ///// this.$miModal.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
+   // }
+    return false;
+  }
 
   function cerrar_modal_camara()
   {
@@ -1314,6 +1349,15 @@ function asistenciaTipoParticipante(datos,total){
 $('#listaCantidadAsistencia').append(rows);
 }
 
+
+function extraeIdEvento(evento){
+  retornaEvento=evento.trim()
+  if (retornaEvento.substring(0,1)=="*"){
+    retornaEvento=retornaEvento.substring(1)
+  }
+  return retornaEvento
+  
+}
 
 
 //cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.js

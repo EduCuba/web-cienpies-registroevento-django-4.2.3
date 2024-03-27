@@ -135,8 +135,9 @@ class ParticipanteForm(forms.ModelForm):
 class ParticipanteFormImportacion(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
-        self.fields['codigo_qr'].required = False
+      
         super(ParticipanteForm, self).__init__(*args, **kwargs)
+        self.fields['codigo_qr'].required = False
    
     
     def clean(self):
@@ -148,7 +149,7 @@ class ParticipanteFormImportacion(forms.ModelForm):
         #modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         tipo_participante=cleaned_data.get("tipo_participante")
-        codigo_qr=cleaned_data.get("codigo_qr")
+        #codigo_qr=cleaned_data.get("codigo_qr")
         mensaje='Verifique ingrese de datos'
         print('uno ParticipanteForm')
         #print(codigo_qr)
@@ -156,7 +157,7 @@ class ParticipanteFormImportacion(forms.ModelForm):
         
         
         if (codigo_qr==None):
-            print("esta vacio jjjjjjjjjjjjjjjjj")
+            print("esta vacio jjjjjjjjjjjjjjjjj 160")
             cleaned_data["codigo_qr"]=None
         else:
             codigo_qr=codigo_qr.lower()
@@ -166,10 +167,7 @@ class ParticipanteFormImportacion(forms.ModelForm):
                 cleaned_data["codigo_qr"]=None
                 self.add_error("codigo_qr", ValidationError(_("Código QR es obligatorio")))
               
-           # cleaned_data["codigo_qr"]="Bingo"
-            #request.data["codigo_qr"] = None
-            
-            #form.instance.status = 'r'
+          
         if(not evento):
             print('no existe evento: ')
             print(evento)
@@ -389,7 +387,7 @@ class ParticipanteFormImportacionSinQr(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.fields['codigo_qr'].required = False
         super(ParticipanteForm, self).__init__(*args, **kwargs)
-   
+        self.fields['codigo_qr'].required = False
     
     def clean(self):
         
@@ -408,7 +406,7 @@ class ParticipanteFormImportacionSinQr(forms.ModelForm):
         
         
         if (codigo_qr==None):
-            print("esta vacio jjjjjjjjjjjjjjjjj")
+            print("esta vacio jjjjjjjjjjjjjjjjj 409")
             cleaned_data["codigo_qr"]=None
         else:
             codigo_qr=codigo_qr.lower()

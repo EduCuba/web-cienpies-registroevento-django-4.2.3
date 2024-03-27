@@ -214,7 +214,7 @@
         </div>
   </div> 
   
-  <div class="modal fade" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+  <div class="modal fade" id="xx__exampleModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -233,7 +233,7 @@
             <div class="form-group">
              
                 <label id="lblTipo">...</label>
-                <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
+             
             </div>
           </div>
           <div class="form-row">
@@ -259,25 +259,12 @@
 
            </form>   
          <!-- aqui debe ir-->
-         <div id="rowdata" class="card-body">
-          <div id="your-qr-result">
         
-          </div>
-        
-          <div style="display: flex;justify-content:center;">
-              <div id="my-qr-reader" style="width:500px;">
-              </div>     
-          </div> 
-          <div id="rowreturn" class="card-body" hidden>
-            <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
-                                          
-          </div> 
-        </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          
+          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -285,7 +272,53 @@
 
 <!---->
 
+<div class="modal fade" id="exampleModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">  <label id="lblcantidadTotalAsisitencia">...</label></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
+       <!--
+
+        <div class="form-row">
+          <div class="form-group"> 
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+          </div>
+        </div>
+
+          <div class="form-row" id="divCodigoQr">
+              <div class="form-group col-md-1">
+                <label for="lblCodigoQr">Asistecia Evento</label>
+              </div>   
+          </div>
+
+        -->
+        <div id="listaCantidadAsistencia" class="card">
+         
+        
+        
+          
+         
+          
+        </div>
+      
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -359,7 +392,20 @@
  
 
 
+<div id="rowdata" class="card-body">
+  <div id="your-qr-result">
 
+  </div>
+
+  <div style="display: flex;justify-content:center;">
+      <div id="my-qr-reader" style="width:500px;">
+      </div>     
+  </div> 
+  <div id="rowreturn" class="card-body" hidden>
+    <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+                                  
+  </div> 
+</div>
 {% endblock content %}
 
 
@@ -521,13 +567,13 @@
         ${value.id}</td>
 
 
-        <td>${value.apellido_participante}<input readonly  type=\"hidden\" id=\"apePar${value.id}\" value=\"${value.apellido_participante}\" class=\"form-control\" /></td>
-        <td>${value.nombre_participante}<input readonly  type=\"hidden\" id=\"nomPar${value.id}\" value=\"${value.nombre_participante}\" class=\"form-control\" /></td>
-        <td>${value.email_participante}</td>
-        <td>${value.empresa_participante}</td>
-        <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>  
-        <td>${value.tipo_participante__descripcion_tipo_participante}<input readonly  type=\"hidden\" id=\"tipPar${value.id}\" value=\"${value.tipo_participante__descripcion_tipo_participante}\" class=\"form-control\" /></td>
-        <td>${value.tipo_participante__tipo_identificacion_participante}<input readonly  type=\"hidden\" id=\"tipCre${value.id}\" value=\"${value.tipo_participante__tipo_identificacion_participante}\" class=\"form-control\" /></td> 
+      <td>${value.apellido_participante}</td>
+      <td>${value.nombre_participante}</td>
+      <td>${value.email_participante}</td>
+      <td>${value.empresa_participante}</td>
+      <td>${value.modalidad_asistencia__descripcion_modalidad_asistencia}</td>  
+      <td>${value.tipo_participante__descripcion_tipo_participante}</td>
+      <td>${value.tipo_participante__tipo_identificacion_participante}</td>     
       
    
     <td>
@@ -644,16 +690,16 @@
           
  
       if (inputEvento.substring(0,1)=="*"){
-       console.log("sin error 1")
+       
  
-        activaCamaraModalAsigna(id)
+        activaCamaraModal(id)
       
-        console.log("sin error 2")
+ 
 
       }else{
       
  
-        participanteAsistencia(id,tipo,inputEvento,asistio_evento,"")
+        participanteAsistencia(id,tipo,'',asistio_evento,"")
        
       }
     }
@@ -681,34 +727,23 @@
     url:url,
     data:data,
     success: function(r){
-      console.log("busca_participante 730")
       if(r.rpta==="OK"){
-        console.log("busca_participante 732")
-        
         actualiza_RowTable(r)
         Swal.fire("Asistencia de Participante actualizado a: " +  r.asistio_evento);                          
-        if (tipo=="QA"){
-          console.log("busca_participante 737")
-          cerrar_modal_generico("asignaCamaraModalCenter")
-        }
+        
       }else{
-        console.log("busca_participante 741")
-        if (tipo=="QA"){
-          console.log("busca_participante 737")
-          cerrar_modal_generico("asignaCamaraModalCenter")
-          
-        }
         /*
         let result = r.indexOf("no-acceso");
+        
         if (result>=0){
           Swal.fire("No tiene acceso")
         }else{
           Swal.fire("Error Inesperado al procesar registro ")
+          
         }*/
-        
         Swal.fire(r.mensaje)
         mensajeServer(r.mensaje)
-        //console.log(r.mensaje)        
+        
       }
     },
     error: function(jqXHR, textStatus, errorThrow){
@@ -951,51 +986,38 @@ console.log(rows);
     }
   }
 
-  
+  function activaCamaraModal10(id){
+    $('#exampleModalCenter').modal({ show:true });
 
-function activaCamaraModalAsigna(id){
 
-  /*nfila = document.getElementById("item"+id).value;*/
-  
- /* 
+
+  }
+
+function activaCamaraModal(id){
+ 
+  nfila = document.getElementById("item"+id).value;
   var apePar=$("#tableLista tr:eq("+nfila+") td:eq("+1+")").html();
   var nomPar=$("#tableLista tr:eq("+nfila+") td:eq("+2+")").html();
   var tipPar=$("#tableLista tr:eq("+nfila+") td:eq("+6+")").html();
   var tipCre=$("#tableLista tr:eq("+nfila+") td:eq("+7+")").html();
-  */
-  var apePar=document.getElementById("apePar"+id).value;
-  var nomPar=document.getElementById("nomPar"+id).value;
-  var tipPar=document.getElementById("tipPar"+id).value;
-  var tipCre=document.getElementById("tipCre"+id).value;
   apePar=apePar.trim()
   nomPar=nomPar.trim()
   document.getElementById('lblParticipante').innerHTML=nomPar + " "+apePar
   document.getElementById('lblTipo').innerHTML="Tipo : "+tipPar
   document.getElementById('lblCredencial').innerHTML="Entregar : "+tipCre
  
-  document.getElementById('idParAsignar').value=id
-  
-  $('#asignaCamaraModalCenter').modal({ show:true });
+  /*
+  const table = $('#tableLista').DataTable();
+  ape=table.cell(nfila-1,1).html();
+  console.log(ape)
+*/
+  $('#exampleModalCenter').modal({ show:true });
 
 
 
 }
 
-function dialogoQrLeidoParticipante(idAsignar,codigo_qr,tipo,evento,nombreEvento){
-  var medio_lectura="C"
-  if(evento=='0' || evento==''){
-    mensajeServer("Seleccione Evento ");
-    return false
-  }  
 
-
-   //participanteAsistencia(id,tipo,'QA',"false",codigo_qr)
-   
-   
-   participanteAsistencia(idAsignar,tipo,evento,"false",codigo_qr)
-   
-   //participanteAsistenciaQr(medio_lectura,codigo_qr,"QA",evento,nombreEvento)
- }
 
 </script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -1024,20 +1046,13 @@ domReady(function(){
         mensajeServer("Seleccione Evento ");
         return false
       }
-      evento=extraeIdEvento(evento);
+
         if(decodeText!=lastResult){
-          var eventoSeleccionado = $('#bus_id_evento option:selected').text();
-          var idAsignar=document.getElementById("idParAsignar").value;
             ++countResults;
             lastResult=decodeText;
             //var evento = document.getElementById("id_evento").value;
-           
+            var eventoSeleccionado = $('#bus_id_evento option:selected').text();
             var codigo_qr = decodeText
-                
-               dialogoQrLeidoParticipante(idAsignar,codigo_qr,"QA",evento,eventoSeleccionado)
-
-              
-               
             // alert you qr here
            // alert("you Qr is:"+decodeText,decodeResult)
                console.log("leidooooooooo")

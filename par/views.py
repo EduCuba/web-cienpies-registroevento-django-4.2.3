@@ -153,23 +153,23 @@ def buscarparticipante(request,participante_id=None):
                 else:    
                     if (len(apellido_participante) > 0 and len(nombre_participante) > 0):    
                         # Utilizar esta linea para Postgresql
-                        # lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
-                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__icontains=apellido_participante) & Q(nombre_participante__icontains=nombre_participante)).
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
+                        #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__icontains=apellido_participante) & Q(nombre_participante__icontains=nombre_participante)).
                         values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                         #print('busqueda por apellido y nombre : caso empresa vacio')
                     else:
                         if (nombre_participante == ""):
                             # Utilizar esta linea para Postgresql
-                            # lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).
-                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__icontains=apellido_participante)).
+                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__unaccent__icontains=apellido_participante)).
+                            #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(apellido_participante__icontains=apellido_participante)).
                             values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                             "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                             #print('busqueda por apellido :  empresa vacio')
                         else:
                             # Utilizar esta linea para Postgresql
-                            # lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
-                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__icontains=nombre_participante)).
+                            lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
+                            #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(nombre_participante__icontains=nombre_participante)).
                             values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                             "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                             #print('busqueda por nombre caso empresa vacia')
@@ -177,23 +177,23 @@ def buscarparticipante(request,participante_id=None):
             else:
                 if (len(apellido_participante) > 0 and len(nombre_participante) > 0):
                     # Utilizar esta linea para Postgresql    
-                    #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
-                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(apellido_participante__icontains=apellido_participante) & Q(nombre_participante__icontains=nombre_participante)).
+                    lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
+                    #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(apellido_participante__icontains=apellido_participante) & Q(nombre_participante__icontains=nombre_participante)).
                     values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                     "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                     #print('busqueda por empresa, apellido y nombre : caso 4')
                 else:    
                     if (nombre_participante == ""):
                         # Utilizar esta linea para Postgresql
-                        # lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).
-                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(apellido_participante__icontains=apellido_participante)).
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(apellido_participante__unaccent__icontains=apellido_participante)).
+                        #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(apellido_participante__icontains=apellido_participante)).
                         values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                         #print('busqueda por empresa y apellid : caso 5')
                     else:    
                         # Utilizar esta linea para Postgresql
-                        #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
-                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(nombre_participante__icontains=nombre_participante)).
+                        lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__unaccent__icontains=empresa_participante) & Q(nombre_participante__unaccent__icontains=nombre_participante)).
+                        #lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento) & Q(empresa_participante__icontains=empresa_participante) & Q(nombre_participante__icontains=nombre_participante)).
                         values("id","evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                         "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante","tipo_participante__tipo_identificacion_participante"))
                         #print('caso empresa y nombre')
@@ -344,7 +344,7 @@ def participanteAsistencia(request, id):
         idPar=request.POST.get("id")
         tipo=request.POST.get("tipo")
         anulAsis=request.POST.get("anularAsistencia")
-       
+        evento=request.POST.get("evento")
         anulAsis=anulAsis.upper()
         swparamValido="NO"
         nomEve=""
@@ -358,7 +358,7 @@ def participanteAsistencia(request, id):
             print("a004")
             if(tipo=="Q"):
                print("a005") 
-               evento=request.POST.get("evento")
+               #evento=request.POST.get("evento")
                codigo_qr=request.POST.get("id")
                nomEve=request.POST.get("nomEve")
                medLec=request.POST.get("medLec")
@@ -377,7 +377,6 @@ def participanteAsistencia(request, id):
         else:
             print("a007") 
             if request.method=="POST":
-            #print("edu 02")
                 print("a008")
                 swOk="NO"
                 if participante:
@@ -386,64 +385,101 @@ def participanteAsistencia(request, id):
                         print("a010")
                         if (tipo=="A" and anulAsis=="TRUE"):
                             swOk="SI"
+                            print("a011")
                         else:    
                             if (tipo=="A"):
                                 msj="Participante ya esta registrado, refresque listado"
+                                print("a012")
                             else:
+                                print("a013")
                                 msj="Código ya esta registrado :"+id    
+                            
                             contexto={
                                     'rpta':"OFF",
                                     'mensaje':msj,
                                     'nomEve':nomEve,
                                     'medLec':medLec
-                            }
+                                }
                     else: 
                         # Si se asigna QR a participante
+                        print("a014")
                         if (tipo=="QA"):
                             if (participante.codigo_qr==None or participante.codigo_qr==""):
                                 swOk="SI"
+                                print("a015")
                             else:
+                                print("a016")
                                 contexto={
                                 'rpta':"OFF",
                                 'mensaje':"Ya tiene código registrado "+participante.codigo_qr,
                                 'nomEve':nomEve,
                                 'medLec':medLec
-                        }           
-                        else:             
+                                }           
+                        else:
+                            print("a017")             
                             swOk="SI"
                                       
                     if swOk=="SI":
+                        print("a018")
                         if (tipo=="QA"):
-                            participante.codigo_qr=qrAsignado
+                            print("a019")
+                            # Verifica que código QR no exista
+                            print(evento)
+                            print(qrAsignado)
+                            #qrExiste=Participante.objects.filter(Q(evento_id=evento) & Q(codigo_qr=qrAsignado))
+                            qrExiste=Participante.objects.filter(evento_id=evento).filter(codigo_qr=qrAsignado).values("apellido_participante","nombre_participante")
+                            #.first()
+                          
+                            #print(qrExiste)
+                          
+                            if qrExiste: 
+                                for duplicado in qrExiste:
+                                   
+                                   grabaAsistencia=False
+                                   contexto={
+                                    'rpta':"OFF",
+                                    'mensaje':"Código :" + qrAsignado + " ya esta asignado a "+duplicado['nombre_participante'] + " "+duplicado['apellido_participante'],
+                                    'nomEve':nomEve,
+                                    'medLec':medLec
+                                    }
+                            else:
+                                grabaAsistencia=True
+                                participante.codigo_qr=qrAsignado
+                                participante.asistio_evento = not participante.asistio_evento
                         else:    
+                            print("a020")
+                            grabaAsistencia=True
                             participante.asistio_evento = not participante.asistio_evento
-                        participante.save()
-                        tipo_participante=participante.tipo_participante.descripcion_tipo_participante
-                        tipo_identificacion_participante=participante.tipo_participante.tipo_identificacion_participante
-                        modalidad_asistencia=participante.modalidad_asistencia.descripcion_modalidad_asistencia
-                        if tipo=="A":    
-                            contexto={"id": participante.id,
-                                    'asistio_evento':participante.asistio_evento,
-                                    "apellido_participante" : participante.apellido_participante,
-                                    "nombre_participante" : participante.nombre_participante,
-                                    "email_participante" : participante.email_participante, 
-                                    "empresa_participante": participante.empresa_participante, 
-                                    "modalidad_asistencia": participante.modalidad_asistencia.descripcion_modalidad_asistencia,
-                                    "tipo_participante": tipo_participante,
-                                    "tipo_identificacion_participante": tipo_identificacion_participante,
-                                    "rpta":'OK'
-                                            }
-                        else:
-                            contexto={"rpta":"OK",
-                                      "mensaje":"Bienvenido",
-                                      'nomEve':nomEve,
-                                      'medLec':medLec
-                                
-                            }      
+                        print("a021")
+                        if grabaAsistencia:
+                            participante.save()
+                            tipo_participante=participante.tipo_participante.descripcion_tipo_participante
+                            tipo_identificacion_participante=participante.tipo_participante.tipo_identificacion_participante
+                            modalidad_asistencia=participante.modalidad_asistencia.descripcion_modalidad_asistencia
+                            if (tipo=="A" or tipo=="QA"):
+                                print("a022")    
+                                contexto={"id": participante.id,
+                                        'asistio_evento':participante.asistio_evento,
+                                        "apellido_participante" : participante.apellido_participante,
+                                        "nombre_participante" : participante.nombre_participante,
+                                        "email_participante" : participante.email_participante, 
+                                        "empresa_participante": participante.empresa_participante, 
+                                        "modalidad_asistencia": participante.modalidad_asistencia.descripcion_modalidad_asistencia,
+                                        "tipo_participante": tipo_participante,
+                                        "tipo_identificacion_participante": tipo_identificacion_participante,
+                                        "rpta":'OK'}                                           
+                            else:
+                                print("a023")  
+                                contexto={"rpta":"OK",
+                                        "mensaje":"Bienvenido",
+                                        'nomEve':nomEve,
+                                        'medLec':medLec    
+                                        }      
                                             
                 else:
                    
                     #participante=Participante.objects.create(id=id,evento_id=evento)
+                    print("a024")
                     participante=None
                     contexto={
                                 'rpta':"OFF",
@@ -453,16 +489,17 @@ def participanteAsistencia(request, id):
                         }
                 
             else:
+                print("a025")
                 contexto={'rpta':"OFF",
                         'mensaje':"Metodo de solicitud no valido",
                         'nomEve':nomEve,
                         'medLec':medLec
                         }
-            if tipo=="A":
-                
+            if tipo=="A" or tipo=="QA":
+                print("a026")
                 return JsonResponse(contexto,safe=False)
-
             else:
+                print("a027")
                 print(contexto)
                 print("para todod")
                 return render(request, 'par/lectura_qr_resultado.html',{'conDic':contexto,'obj':participante})    
@@ -471,9 +508,9 @@ def participanteAsistencia(request, id):
         return JsonResponse(contexto,safe=False)      
         #return JsonResponse(contexto)     
     except ValueError as e:  
-         #mensaje=str(e)
+        mensaje=str(e)
       
-        #print(e)
+        print("try 1")
         mensaje=mensaje.replace('"','')
         mensaje=mensaje.replace("'","\\'")
         rptaServer="OFF"
@@ -482,6 +519,7 @@ def participanteAsistencia(request, id):
         return JsonResponse(contexto,safe=False)  
         
     except ObjectDoesNotExist as e:
+        print("try 2")
         if tipo=="A":
             contexto={'rpta':'OFF',
                             'mensaje':'No existe código participante '+id
@@ -494,6 +532,23 @@ def participanteAsistencia(request, id):
                     'nomEve':nomEve
                     }
             return render(request, 'par/lectura_qr_resultado.html',{'conDic':contexto,'obj':''})
+    except IntegrityError as e:
+        print("try 3")
+        if tipo=="A" or tipo=="QA":
+            contexto={'rpta':'OFF',
+                            'mensaje':'Error de integridad de datos '
+                    }
+            return JsonResponse(contexto,safe=False)  
+        else: 
+            contexto={
+                    'rpta':"ERR",
+                    'mensaje':"Error de integridad de datos  "+id,
+                    'nomEve':nomEve
+                    }
+            return render(request, 'par/lectura_qr_resultado.html',{'conDic':contexto,'obj':''})
+        
+        
+    #return render_to_response("template.html", {"message": e.message})
                         
                                 
            
@@ -1251,7 +1306,7 @@ def valida_csv(request):
                         form = ParticipanteFormImportacionSinQr(data_dict)
                        
                         if not(form.is_valid()):                            
-                          
+                            print("error en valida_csv")
                             #print(fields[5])
                             swError="SI"
                             swErrorReg="1"
@@ -1367,7 +1422,7 @@ def subir_csv(lista,archivo,evento,nombre_csv):
                
                 #form = ParticipanteFormImportacion(data_dict)
                 form = ParticipanteFormImportacionSinQr(data_dict)
-                            
+                print("esta en subir_csv")            
                 if form.is_valid():
                     form.save()
                     nsave=nsave+1 

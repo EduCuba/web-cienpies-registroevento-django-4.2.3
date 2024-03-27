@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import pymysql
+#Agregado para conectar a base remoto desde app local
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -111,12 +113,26 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #    }
 #}
 
+#Conexion a servidor RENDER
+#postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro
+
+
+#db_config = dj_database_url.config(default='')
+#db_config = dj_database_url.parse(default='postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
+db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
+
+#db_config['ATOMIC_REQUESTS'] = True
+DATABASES = {
+    'default': db_config,
+}
+
+#Local Host PostgreSql
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #        'NAME': 'db_registro',
-#        'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
+#        'HOST': 'localhost',
 #        'USER': 'postgres',
 #        'PASSWORD': 'postgresql',
 #        'PORT': 5432,
@@ -127,21 +143,24 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #'HOST': 'localhost',
          
 #Mysql
-DATABASES = {
-  'default': {
-      'ENGINE': "django.db.backends.mysql",
-      'NAME': "acreditacion$db_registro",
-      'USER': "acreditacion",
-      'PASSWORD': "mYpt#35uk%Yo",
-      'HOST': "acreditacion.mysql.pythonanywhere-services.com",
-      'PORT': "3306",
-    }
-}
+
+#DATABASES = {
+#  'default': {
+#      'ENGINE': "django.db.backends.mysql",
+#      'NAME': "acreditacion$db_registro",
+#      'USER': "acreditacion",
+#      'PASSWORD': "mYpt#35uk%Yo",
+#      'HOST': "acreditacion.mysql.pythonanywhere-services.com",
+#      'PORT': "3306",
+#    }
+#}
+# Remoto :
 #'NAME': "acreditacion$db_registro",
 #'USER': "acreditacion",
 #'HOST': "acreditacion.mysql.pythonanywhere-services.com",
 #'HOST': "acreditacion.mysql.pythonanywhere-services.com",
 
+#Local :
 #'NAME': "db_registro",
 #'USER': "root",
 #'HOST': 'localhost',
