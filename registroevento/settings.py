@@ -119,8 +119,10 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 
 #db_config = dj_database_url.config(default='')
 #db_config = dj_database_url.parse(default='postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
-db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
-
+#URL Externa
+#db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
+#URL Interna
+db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro')
 #db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
