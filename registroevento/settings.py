@@ -206,6 +206,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+#Agregado para Render
+#Esto combina la compresión automática con el comportamiento de almacenamiento en caché proporcionado por Backend ManifestStaticFilesStorage de Django. Si desea aplicar compresión pero no desea el comportamiento de almacenamiento en caché, puede usar el backend alternativo:
+#"whitenoise.storage.CompressedStaticFilesStorage"
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -214,12 +224,12 @@ STATICFILES_DIRS = [
 ]
 
 # This production code might break development mode, so we check whether we're in DEBUG mode
-#if not DEBUG:
+if not DEBUG:
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    ##STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
     # and renames the files with unique names for each version to support long-term caching
-    ##STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 #MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_ROOT = {BASE_DIR /'media'}
