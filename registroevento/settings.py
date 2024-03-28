@@ -14,7 +14,8 @@ from pathlib import Path
 import pymysql
 #Agregado para conectar a base remoto desde app local
 import dj_database_url
-
+#agregado para render
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
