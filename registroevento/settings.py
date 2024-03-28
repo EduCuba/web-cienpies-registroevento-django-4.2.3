@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-(hdas)*9g)plrw1$8n6m$^6l))qxu)z#s(54bn#mgn1mc5tpa)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 ALLOWED_HOSTS = ["*"]
 #ALLOWED_HOSTS = ['3.80.73.116','localhost', '127.0.0.1']
 #ALLOWED_HOSTS = ['acreditacion.pythonanywhere.com','localhost', '127.0.0.1']
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic", 
     'django.contrib.staticfiles',
     'debug_toolbar',
     'bases',
@@ -218,10 +218,10 @@ USE_TZ = True
 #}
 
 # Sacado de staticfile_dirs: '/var/www/static/'
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+###STATIC_URL = '/static/'
+###STATICFILES_DIRS = [BASE_DIR / "static",'/var/www/static/']
 
-STATIC_ROOT = BASE_DIR / "staticfiles" 
+###STATIC_ROOT = BASE_DIR / "staticfiles" 
 #STORAGES = {
 #    "default": {
 #        "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -236,12 +236,29 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 #STATICFILES_DIRS = [BASE_DIR / "static"]  # new
 
 # This production code might break development mode, so we check whether we're in DEBUG mode
-if DEBUG==False:
+STATIC_URL = '/static/'
+#STATICFILES_DIRS = [BASE_DIR / "static",'/var/www/static/']
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+#STATIC_ROOT = BASE_DIR / "staticfiles" 
+STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
+
+
+
+
+##if DEBUG:
+# print("s")
+  
+    
+###else:
+   
+   ### print("no debug")
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+   ### STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
     # and renames the files with unique names for each version to support long-term caching
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    ###STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+   
+ 
 
 #MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_ROOT = {BASE_DIR /'media'}
