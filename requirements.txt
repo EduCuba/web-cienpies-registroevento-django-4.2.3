@@ -1,9 +1,11 @@
 asgiref==3.7.2
 astroid==3.0.1
+Brotli==1.1.0
 cffi==1.16.0
 colorama==0.4.6
 cryptography==42.0.5
 dill==0.3.7
+#Agregado para URL render
 dj-database-url==2.1.0
 Django==4.2.7
 django-ckeditor==6.7.0
@@ -30,3 +32,5 @@ sqlparse==0.4.4
 tomlkit==0.12.2
 typing_extensions==4.10.0
 tzdata==2023.3
+#Agregado para archivos static en render
+whitenoise==6.6.0
