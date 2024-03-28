@@ -127,10 +127,11 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #URL Externa
 #db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
 #URL Interna
-db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro')
+db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro',conn_max_age=600)
 #db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
+  
 }
 
 #Local Host PostgreSql
@@ -235,7 +236,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 #STATICFILES_DIRS = [BASE_DIR / "static"]  # new
 
 # This production code might break development mode, so we check whether we're in DEBUG mode
-if DEBUG:
+if DEBUG==False:
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
