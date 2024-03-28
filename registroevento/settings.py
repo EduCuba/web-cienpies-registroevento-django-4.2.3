@@ -209,12 +209,12 @@ USE_TZ = True
 #Agregado para Render
 #Esto combina la compresión automática con el comportamiento de almacenamiento en caché proporcionado por Backend ManifestStaticFilesStorage de Django. Si desea aplicar compresión pero no desea el comportamiento de almacenamiento en caché, puede usar el backend alternativo:
 #"whitenoise.storage.CompressedStaticFilesStorage"
-STORAGES = {
+#STORAGES = {
     # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+ #   "staticfiles": {
+ #       "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+ #   },
+#}
 
 
 STATIC_URL = '/static/'
