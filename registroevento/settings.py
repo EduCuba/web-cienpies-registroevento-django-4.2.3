@@ -131,22 +131,23 @@ db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOO
 
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
-    'default': db_config,
+     'default': db_config,
 }
 
 #Local Host PostgreSql
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#ok DATABASES = {
-#ok     'default': {
-#ok         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#ok        'NAME': 'db_registro',
-#ok         'HOST': 'localhost',
-#ok         'USER': 'postgres',
-#ok         'PASSWORD': 'postgresql',
-#ok         'PORT': 5432,
-#ok     }
-#ok }
-
+''' ok local 
+DATABASES = {
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'db_registro',
+         'HOST': 'localhost',
+         'USER': 'postgres',
+         'PASSWORD': 'postgresql',
+         'PORT': 5432,
+     }
+ }
+'''
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
          
