@@ -142,6 +142,8 @@
 {% endblock content_wrapper %}
 
 {% block content %}
+<div id="cuerpo" class="card-body">
+
   <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -157,9 +159,8 @@
               </div>
           </div>
         </div>
-         <!-- Card Body -->
-  
-
+             
+        <!-- Card Body -->
         <div id="rowdata" class="card-body">
           <!--
           {% if not lispar %}
@@ -226,8 +227,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-        
+       
+        <div class="modal-body">       
           <form method="POST" class="" id="frmbuscar">  
            {% csrf_token %}
             <div class="form-row">
@@ -243,9 +244,9 @@
               </div>
             </div>
 
-              <div class="form-row" id="divCodigoQr">
+            <div class="form-row" id="divCodigoQr">
                   <div class="form-group col-md-1">
-                    <label for="lblCodigoQr">QR 15</label>
+                    <label for="lblCodigoQr">QR 1615</label>
                   </div>  
                   <div class="form-group col-md-5">                            
                     <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
@@ -253,12 +254,11 @@
                   <div class="form-group col-md-2">
                     <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>          
                   </div>
-              </div>
+            </div>
           </form>   
          <!-- aqui debe ir-->
           <div id="rowdata" class="card-body">
             <div id="your-qr-result">
-        
             </div>
             <div style="display: flex;justify-content:center;">
               <div id="my-qr-reader" style="width:500px;">
@@ -269,6 +269,7 @@
             </div> 
           </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           
@@ -277,14 +278,6 @@
     </div>
   </div>
 
-
-<!---->
-
-
-
-
-
-  <!---->
 
   <div class="modal fade" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -296,9 +289,7 @@
           </button>
         </div>
         <div class="modal-body">
-
          <!--
-
           <div class="form-row">
             <div class="form-group"> 
             </div>
@@ -313,17 +304,12 @@
                   <label for="lblCodigoQr">Asistecia Evento</label>
                 </div>   
             </div>
-
           -->
-          <div id="listaCantidadAsistencia" class="card">
-                      
+          <div id="listaCantidadAsistencia" class="card">           
           </div>
-        
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         
         </div>
       </div>
     </div>
@@ -332,7 +318,6 @@
   <div class="card shadow mb-4">
 
     <div id="rowdata" class="card-body">
-
       <div class="container d-flex justify-container-center">
       
           <!--<div class="row">-->
@@ -348,7 +333,7 @@
   </div>
  
 
-
+</div>
 
 {% endblock content %}
 
