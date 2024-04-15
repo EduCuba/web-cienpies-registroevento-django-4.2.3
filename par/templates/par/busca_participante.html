@@ -142,7 +142,7 @@
 {% endblock content_wrapper %}
 
 {% block content %}
-<div id="cuerpo" class="card-body">
+
 
   <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
@@ -221,19 +221,19 @@
   <div class="modal fade card-body" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header card-body">
           <h5 class="modal-title" id="exampleModalLongTitle"> <label id="lblParticipante">...</label></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
        
-        <div class="modal-body">       
+        <div class="modal-body card-body">       
           <form method="POST" class="" id="frmbuscar">  
            {% csrf_token %}
             <div class="form-row">
               <div class="form-group">
-                <label id="lblEdu">Edu</label>
+                
                   <label id="lblTipo">...</label>
                   <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
               </div>
@@ -246,7 +246,7 @@
 
             <div class="form-row" id="divCodigoQr">
                   <div class="form-group col-md-1">
-                    <label for="lblCodigoQr">QR 1615</label>
+                    <label for="lblCodigoQr">QR</label>
                   </div>  
                   <div class="form-group col-md-5">                            
                     <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
@@ -257,7 +257,7 @@
             </div>
           </form>   
          <!-- aqui debe ir-->
-         <!--
+         
           <div id="rowdata" class="card-body">
             <div id="your-qr-result">
             </div>
@@ -269,10 +269,10 @@
               <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                         
             </div> 
           </div>
-          -->
+          
         </div>
 
-        <div class="modal-footer">
+        <div class="modal-footer card-body">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           
         </div>
@@ -281,7 +281,12 @@
   </div>
 
 
-  <div class="modal fade" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+
+  <!-- Modal grafico -->
+	
+ 
+
+  <div class="modal fade card-body" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -291,22 +296,7 @@
           </button>
         </div>
         <div class="modal-body">
-         <!--
-          <div class="form-row">
-            <div class="form-group"> 
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-            </div>
-          </div>
-
-            <div class="form-row" id="divCodigoQr">
-                <div class="form-group col-md-1">
-                  <label for="lblCodigoQr">Asistecia Evento</label>
-                </div>   
-            </div>
-          -->
+   
           <div id="listaCantidadAsistencia" class="card">           
           </div>
         </div>
@@ -316,13 +306,13 @@
       </div>
     </div>
   </div>
-
-  <div class="card shadow mb-4">
+<!-- Esto se anulo porque no error en modal celular
+  <div class="card shadow mb-4 card-body">
 
     <div id="rowdata" class="card-body">
       <div class="container d-flex justify-container-center">
       
-          <!--<div class="row">-->
+         
           <div class="form-row">
               <div class="col-md-12">
                   <div id="donutchart" style="width: 900px; height: 500px;">
@@ -333,9 +323,9 @@
       </div>
     </div>
   </div>
- 
+ -->
 
-</div>
+
 
 {% endblock content %}
 
@@ -954,7 +944,7 @@ function activaCamaraModalAsigna(id){
   
   $('#asignaCamaraModalCenter').modal({ show:true });
 
-
+ 
 
 }
 
