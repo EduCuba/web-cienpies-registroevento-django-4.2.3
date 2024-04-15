@@ -23,6 +23,8 @@ class ParticipanteForm(forms.ModelForm):
         cleaned_data = super().clean()
         modalidad_asistencia = cleaned_data.get('modalidad_asistencia')
         evento=cleaned_data.get("evento")
+        print(cleaned_data.get("evento"))
+        print("ddddd")
         email_participante=cleaned_data.get("email_participante")
         #modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
         modalidad_asistencia=cleaned_data.get("modalidad_asistencia")
@@ -43,9 +45,9 @@ class ParticipanteForm(forms.ModelForm):
                 print('cambiando a nulo')
                 cleaned_data["codigo_qr"]=None
         '''        
-         
+        print("salvame")
         if(not evento):
-            print('no existe evento: ')
+            print('no existe evento PORQUE: ')
             print(evento)
             #mensaje=f'Error verifique f'
             # form.add_error("evento","seleccione evento")
@@ -405,6 +407,15 @@ class ParticipanteFormImportacionSinQr(forms.ModelForm):
         print("valid 11111111111111111111111111")
         
         
+       
+        if(not evento):
+            print('no existe evento: ')
+            print(evento)
+            #mensaje=f'Error verifique f'
+            # form.add_error("evento","seleccione evento")
+            self.add_error("evento", ValidationError(_("Evento no valido")))
+            requestValido="OFF"
+            
         if (codigo_qr==None):
             print("esta vacio jjjjjjjjjjjjjjjjj 409")
             cleaned_data["codigo_qr"]=None
@@ -419,14 +430,7 @@ class ParticipanteFormImportacionSinQr(forms.ModelForm):
            # cleaned_data["codigo_qr"]="Bingo"
             #request.data["codigo_qr"] = None
             
-            #form.instance.status = 'r'
-        if(not evento):
-            print('no existe evento: ')
-            print(evento)
-            #mensaje=f'Error verifique f'
-            # form.add_error("evento","seleccione evento")
-            self.add_error("evento", ValidationError(_("Evento no valido")))
-            requestValido="OFF"
+            #form.instance.status = 'r'    
                     
         #if (not email_participante):
         #    mensaje=f'Error verifique'

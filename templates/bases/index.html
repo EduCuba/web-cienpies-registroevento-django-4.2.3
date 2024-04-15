@@ -685,7 +685,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var selected = comboEvento.options[comboEvento.selectedIndex].text;
     var id_evento= comboEvento.value
     //var url = "{% url 'par:participante_new' 0 %}";
-  
+    if (id_evento.substring(0,1)=="*"){
+      id_evento=id_evento.substring(1)
+   }
  
     if (id_evento.trim()==="" || id_evento === null || id_evento === "0"){
       
@@ -694,6 +696,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
 
     console.log("686 index.html");
+    console.log(id_evento);
     url=curl
     if(tipo=='N'){
       url=url.replace('0', id_evento);

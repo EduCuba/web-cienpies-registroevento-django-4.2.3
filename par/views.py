@@ -948,8 +948,8 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
     def get_context_data(self, **kwargs):
        #print("self.tipo_participante_id")
         evento_id = self.kwargs['evento_id']
-       #print("ingesoooo context_Data")
-       #print(evento_id)
+        print("ingesoooo context_Data")
+        print(evento_id)
        
         context = super(ParticipanteAdd, self).get_context_data(**kwargs)
         #context["eventos"] = Evento.objects.all()
@@ -975,11 +975,21 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
         return context
     
     def post(self, request, *args, **kwargs):
-        #print("post views 791")
+        #self.request = kwargs.pop("request")
+        #self.fields["evento"]=456
+        print("post views 978")
         requestValido="OK"
         response=""
+       
+        idEvento=request.POST.get("evento")
+        print(idEvento)
+        #print(idEvento)
+        idEvento=idEvento.replace('*', '')
         
+        ww=request.POST.get("evento",idEvento)
+        print(ww)
         form = self.form_class(request.POST)
+        #form.instance.evento=idEvento
         try: 
             if (form.is_valid()):
                 
@@ -996,8 +1006,8 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
             else:
                 status_code = 400
                 error= form.errors 
-                
-               #print(form.errors.as_data())
+                print("no graba")
+                print(form.errors.as_data())
                #print("solo error")
                 #print(error)
                 contexto={'mensaje':"Verifique Datos",

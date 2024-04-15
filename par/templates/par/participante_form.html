@@ -41,7 +41,7 @@
 
                                 <div class="form-group">
                                     <label for="id_evento">Evento:</label>
-                                    <select disabled name="evento" class="form-control" required="" id="id_evento" >
+                                    <select name="evento" class="form-control" required="" id="id_evento" readonly>
                                         {% if obj %}
                                         <!--<option value="" selected="">Seleccione Tipo edit</option>-->
                                         {% else %} 
@@ -288,12 +288,13 @@ $(function() {
     //capturamos el valor de token este se muestra con F12
     var token = jQuery("[name=csrfmiddlewaretoken]").val();
 
-    $("form").submit(function(e){
+    $("#frmPrv").submit(function(e){
         // esto captura la acción de enviar el formulario y no lo envía
         e.preventDefault();
         // alert(token);
-        var formData = $("form").serializeArray();
-        console.log("aqui es formData");
+        var formData = $("#frmPrv").serializeArray();
+      
+        console.log(formData)
         //alert(url);
         
         $.ajax({

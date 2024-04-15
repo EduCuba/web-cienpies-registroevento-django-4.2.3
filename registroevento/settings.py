@@ -125,27 +125,27 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 #db_config = dj_database_url.config(default='')
 #db_config = dj_database_url.parse(default='postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
 #URL Externa
-#db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
+# ok db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
 #URL Interna
 db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro',conn_max_age=600)
-#db_config['ATOMIC_REQUESTS'] = True
+
+db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
-  
 }
 
 #Local Host PostgreSql
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'db_registro',
-#        'HOST': 'localhost',
-#        'USER': 'postgres',
-#        'PASSWORD': 'postgresql',
-#        'PORT': 5432,
-#    }
-#}
+#ok DATABASES = {
+#ok     'default': {
+#ok         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#ok        'NAME': 'db_registro',
+#ok         'HOST': 'localhost',
+#ok         'USER': 'postgres',
+#ok         'PASSWORD': 'postgresql',
+#ok         'PORT': 5432,
+#ok     }
+#ok }
 
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
