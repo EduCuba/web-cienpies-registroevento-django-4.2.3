@@ -216,8 +216,8 @@
         </div>
   </div> 
 
-  <div id="rowdata" class="card-body">
-  <div class="modal fade" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
+  
+  <div class="modal fade card-body" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -228,55 +228,46 @@
         </div>
         <div class="modal-body">
 
-           <form method="POST" class="" id="frmbuscar">  
+          <form method="POST" class="" id="frmbuscar">  
            {% csrf_token %}
-           
-
-          <div class="form-row">
-            <div class="form-group">
-             
-                <label id="lblTipo">...</label>
-                <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
+            <div class="form-row">
+              <div class="form-group">
+              
+                  <label id="lblTipo">...</label>
+                  <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-             
-                <label id="lblCredencial">...</label>
-             
-            </div>
-          </div>
-
-            <div class="form-row" id="divCodigoQr">
-                <div class="form-group col-md-1">
-                  <label for="lblCodigoQr">QR</label>
-                </div>  
-                <div class="form-group col-md-5">                            
-                  <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
-                
-                </div>
-                <div class="form-group col-md-2">
-                  <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>          
-                </div>
+            <div class="form-row">
+              <div class="form-group">
+                  <label id="lblCredencial">...</label>
+              </div>
             </div>
 
-           </form>   
+              <div class="form-row" id="divCodigoQr">
+                  <div class="form-group col-md-1">
+                    <label for="lblCodigoQr">QR 15</label>
+                  </div>  
+                  <div class="form-group col-md-5">                            
+                    <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
+                  </div>
+                  <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>          
+                  </div>
+              </div>
+          </form>   
          <!-- aqui debe ir-->
-         <div id="rowdata" class="card-body">
-          <div id="your-qr-result">
+          <div id="rowdata" class="card-body">
+            <div id="your-qr-result">
         
-          </div>
-        
-          <div style="display: flex;justify-content:center;">
+            </div>
+            <div style="display: flex;justify-content:center;">
               <div id="my-qr-reader" style="width:500px;">
               </div>     
-          </div> 
-          <div id="rowreturn" class="card-body" hidden>
-            <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
-                                          
-          </div> 
-        </div>
-
+            </div> 
+            <div id="rowreturn" class="card-body" hidden>
+              <button type="button" class="btn btn-info" onclick="stopCamara()" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                         
+            </div> 
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -285,7 +276,7 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <!---->
 
@@ -325,12 +316,7 @@
 
           -->
           <div id="listaCantidadAsistencia" class="card">
-           
-          
-          
-            
-           
-            
+                      
           </div>
         
 
