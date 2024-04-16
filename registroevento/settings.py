@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import pymysql
+#import pymysql
 #Agregado para conectar a base remoto desde app local
 import dj_database_url
 #agregado para render
