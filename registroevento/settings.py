@@ -128,18 +128,18 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 # ok db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
 #URL Interna
 
- 
+'''
 db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro',conn_max_age=600)
 
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
      'default': db_config,
 }
-
+'''
 #Local Host PostgreSql
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-'''
+
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -150,7 +150,7 @@ DATABASES = {
          'PORT': 5432,
      }
  }
-'''
+
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
          

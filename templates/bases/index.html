@@ -1373,6 +1373,51 @@ function extraeIdEvento(evento){
 }
 
 
+
+function activaCamaraAsigna(){
+  /*esto se agrego por que se oculta el div de la camara al inicio*/
+   if ($("#html5-qrcode-button-camera-stop").length && !$('#qr-reader').is(':visible')) 
+       $("#html5-qrcode-button-camera-stop").trigger("click");
+/* Para obtener el valor */
+var evento = document.getElementById("bus_id_evento").value;
+
+if(evento=='0' || evento==''){
+ mensajeServer("Seleccione Evento ");
+ return false
+}
+
+
+/* Para obtener el texto
+var combo = document.getElementById("id_evento");
+var selected = combo.options[combo.selectedIndex].text;
+alert(selected);
+*/
+
+  
+       hiddenDiv(document.getElementById('oc_1'))
+       hiddenDiv(document.getElementById('oc_2'))
+       showDiv(document.getElementById('rowdataQr'))
+       showDiv(document.getElementById('rowreturnQr'))
+       
+       $("#html5-qrcode-button-camera-start").trigger("click");
+         
+       hiddenDiv(document.getElementById('html5-qrcode-button-camera-stop'))
+ }
+
+
+ function stopCamaraAsigna(tipo){
+  /*
+  if (tipo=="C")
+    if ($("#html5-qrcode-button-camera-stop").length && !$('#qr-reader').is(':visible')) 
+       $("#html5-qrcode-button-camera-stop").trigger("click");
+*/
+      
+  showDiv(document.getElementById('oc_1'))
+  showDiv(document.getElementById('oc_2'))
+  hiddenDiv(document.getElementById('rowdataQr'))
+  hiddenDiv(document.getElementById('rowreturnQr'))
+}
+
 //cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.js
 
 

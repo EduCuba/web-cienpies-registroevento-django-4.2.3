@@ -2,7 +2,7 @@
 
 {% block content_wrapper %}
 
-  <div class="card-body"> 
+  <div class="card-body" id="oc_1"> 
     <!--<form method="POST" class="form-inline" id="frmbuscar">-->
     <form method="POST" class="" id="frmbuscar">  
         {% csrf_token %}
@@ -144,7 +144,7 @@
 {% block content %}
 
 
-  <div class="card shadow mb-4">
+  <div class="card shadow mb-4" id="oc_2">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Participantes</h6>
@@ -218,11 +218,12 @@
   </div> 
 
   
+  <!-- Modal Camara - inicio 
   <div class="modal fade card-body" id="asignaCamaraModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header card-body">
-          <h5 class="modal-title" id="exampleModalLongTitle"> <label id="lblParticipante">...</label></h5>
+          <h5 class="modal-title" id="exampleModalLongTitle"> <label id="xx_lblParticipante">...</label></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -234,7 +235,7 @@
             <div class="form-row">
               <div class="form-group">
                 
-                  <label id="lblTipo">...</label>
+                  <label id="xx_lblTipo">...</label>
                   <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
               </div>
             </div>
@@ -256,8 +257,7 @@
                   </div>
             </div>
           </form>   
-         <!-- aqui debe ir-->
-         
+        
           <div id="rowdata" class="card-body">
             <div id="your-qr-result">
             </div>
@@ -279,12 +279,66 @@
       </div>
     </div>
   </div>
+-->
+
+  <!-- en proyecto inicio -->
+  
+<div id="rowdataQr" class="card-body" hidden>
+    <!--<div class="modal-content">-->
+      <div class="modal-header card-body">
+        <h5 class="modal-title" id="exampleModalLongTitle"> <label id="lblParticipante">...</label></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" class="" id="frmbuscar">  
+      {% csrf_token %}
+       <div class="form-row">
+         <div class="form-group">
+           
+             <label id="lblTipo">...</label>
+             <input name="idParAsignar"  class="form-control"  id="idParAsignar" readonly>
+         </div>
+       </div>
+       <div class="form-row">
+         <div class="form-group">
+             <label id="lblCredencial">...</label>
+         </div>
+       </div>
+
+       <div class="form-row" id="divCodigoQr">
+             <div class="form-group col-md-1">
+               <label for="lblCodigoQr">QR</label>
+             </div>  
+             <div class="form-group col-md-5">                            
+               <input id="id_codigo_qr" type="text" name="codigo_qr" value="{{codigo_qr}}">
+             </div>
+             <div class="form-group col-md-2">
+               <button type="button" class="btn btn-info" onclick="dialogoAsistenciaQrManual()" ><i class="fa fa-search fa-1x" style="color:#252F87" aria-hidden="true">.</i></button>          
+             </div>
+       </div>
+     </form>  
 
 
+
+    <div id="your-qr-result">
+
+    </div>
+    <h1>QR_aqui</h1>
+    <div style="display: flex;justify-content:center;">
+        <div id="my-qr-reader" style="width:500px;">
+        </div>     
+    </div> 
+    <div id="rowreturnQr" class="card-body" hidden>
+      <button type="button" class="btn btn-info" onclick="stopCamaraAsigna('R')" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Retornar</i></button>                                    
+      <button type="button" class="btn btn-info" onclick="stopCamaraAsigna('C')" id="muestraHeader" ><i class="fa fa-search" aria-hidden="true">Cierra Camara</i></button>                                    
+                              
+    </div> 
+</div>
+
+  <!-- en proyecto final  -->
 
   <!-- Modal grafico -->
-	
- 
 
   <div class="modal fade card-body" id="graficoModalCenter" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">  
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -920,7 +974,7 @@ console.log(rows);
 
   
 
-function activaCamaraModalAsigna(id){
+function xx_activaCamaraModalAsigna(id){
 
   /*nfila = document.getElementById("item"+id).value;*/
   
@@ -943,6 +997,43 @@ function activaCamaraModalAsigna(id){
   document.getElementById('idParAsignar').value=id
   
   $('#asignaCamaraModalCenter').modal({ show:true });
+  hiddenDiv(document.getElementById('oc_1'))
+  hiddenDiv(document.getElementById('oc_2'))
+
+ 
+
+}
+
+
+function activaCamaraModalAsigna(id){
+
+  /*nfila = document.getElementById("item"+id).value;*/
+  
+ 
+
+  if ($("#html5-qrcode-button-camera-stop").length && !$('#qr-reader').is(':visible')) 
+     $("#html5-qrcode-button-camera-stop").trigger("click");
+
+  var apePar=document.getElementById("apePar"+id).value;
+  var nomPar=document.getElementById("nomPar"+id).value;
+  var tipPar=document.getElementById("tipPar"+id).value;
+  var tipCre=document.getElementById("tipCre"+id).value;
+  apePar=apePar.trim()
+  nomPar=nomPar.trim()
+  document.getElementById('lblParticipante').innerHTML=nomPar + " "+apePar
+  document.getElementById('lblTipo').innerHTML="Tipo : "+tipPar
+  document.getElementById('lblCredencial').innerHTML="Entregar : "+tipCre
+ 
+  document.getElementById('idParAsignar').value=id
+  
+  hiddenDiv(document.getElementById('oc_1'))
+  hiddenDiv(document.getElementById('oc_2'))
+  showDiv(document.getElementById('rowdataQr'))
+  showDiv(document.getElementById('rowreturnQr'))
+  
+  $("#html5-qrcode-button-camera-start").trigger("click");
+    
+  hiddenDiv(document.getElementById('html5-qrcode-button-camera-stop'))
 
  
 
