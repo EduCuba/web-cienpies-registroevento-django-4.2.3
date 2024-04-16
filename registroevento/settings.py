@@ -29,8 +29,8 @@ SECRET_KEY = 'django-insecure-(hdas)*9g)plrw1$8n6m$^6l))qxu)z#s(54bn#mgn1mc5tpa)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ["*"]
-#ALLOWED_HOSTS = ['3.80.73.116','localhost', '127.0.0.1']
+# activar para RENDER ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['107.20.32.77 ','localhost', '127.0.0.1']
 #ALLOWED_HOSTS = ['acreditacion.pythonanywhere.com','localhost', '127.0.0.1']
 
 #i-0e58ae49ce9e01355
@@ -128,29 +128,29 @@ WSGI_APPLICATION = 'registroevento.wsgi.application'
 # ok db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a.oregon-postgres.render.com/db_registro')
 #URL Interna
 
-
+'''
 db_config = dj_database_url.parse('postgres://db_registro_user:IucxPCOSyWJgoqeOOo1hhzuDn4JAHX5c@dpg-cntgp1sf7o1s73f43iu0-a/db_registro',conn_max_age=600)
 
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
      'default': db_config,
 }
-
+'''
 #Local Host PostgreSql
 #'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-'''
+
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_registro',
-         'HOST': 'localhost',
+         'HOST': 'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
          'USER': 'postgres',
          'PASSWORD': 'postgresql',
          'PORT': 5432,
      }
  }
-'''
+
 #'HOST':'registro-db.cmpbm7wydymj.us-east-1.rds.amazonaws.com',
 #'HOST': 'localhost',
          
