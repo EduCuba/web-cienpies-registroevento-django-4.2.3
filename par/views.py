@@ -90,18 +90,18 @@ def buscarparticipante(request,participante_id=None):
     par_evento_id=0
     nombre=''
     apellido =''
-    evento=0,
-    lisparb=""
-    #print('eduuuuuuuuuuuuuu')
+    evento=0
+    #lisparb=""
+    print('edu 01')
     pkUser=request.user.pk
   
     if request.method=='GET':
         #print('es geeeeeeeeetttttttttttttt')
         #Formulario creado en forms.py
         form_buscar=BuscarParticipanteForm()
-        
+        #print('edu 02')
         lisEventos = lista_Eventos_Por_Acceso(pkUser,request.user.is_staff,"O")
-        
+        #print('edu 03')
         
         '''if request.user.is_staff:
            lisEventos = Evento.objects.all().only('id','estado','nombre_evento')
@@ -948,8 +948,8 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
     def get_context_data(self, **kwargs):
        #print("self.tipo_participante_id")
         evento_id = self.kwargs['evento_id']
-        print("ingesoooo context_Data")
-        print(evento_id)
+        # print("ingesoooo context_Data")
+        # print(evento_id)
        
         context = super(ParticipanteAdd, self).get_context_data(**kwargs)
         #context["eventos"] = Evento.objects.all()
@@ -977,17 +977,17 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
     def post(self, request, *args, **kwargs):
         #self.request = kwargs.pop("request")
         #self.fields["evento"]=456
-        print("post views 978")
+        #print("post views 978")
         requestValido="OK"
         response=""
        
         idEvento=request.POST.get("evento")
-        print(idEvento)
+        #print(idEvento)
         #print(idEvento)
         idEvento=idEvento.replace('*', '')
         
         ww=request.POST.get("evento",idEvento)
-        print(ww)
+        #print(ww)
         form = self.form_class(request.POST)
         #form.instance.evento=idEvento
         try: 
@@ -1006,8 +1006,8 @@ class ParticipanteAdd(SuccessMessageMixin, SinPrivilegiosAjax, generic.CreateVie
             else:
                 status_code = 400
                 error= form.errors 
-                print("no graba")
-                print(form.errors.as_data())
+                #print("no graba")
+                #print(form.errors.as_data())
                #print("solo error")
                 #print(error)
                 contexto={'mensaje':"Verifique Datos",
@@ -1047,10 +1047,10 @@ def DetailForm(request):
     if request.method == "POST":  
         form = CreateForm(request.POST)
        
-        if form.is_valid():
+        #if form.is_valid():
             #print('First Name:', form.cleaned_data['apellido_participante'])
             #print('Last Name:', form.cleaned_data['nombre_participante'])
-            print('Email:', form.cleaned_data['Email'])
+            #print('Email:', form.cleaned_data['Email'])
    
     return redirect('par/participante_form.html')
 
@@ -1128,14 +1128,14 @@ def xx_ImportarCsv(request,participante_id=None):
                 mensaje=subir_csv(mensaje['dataValidado'],csv_file,evento,csv_nombre)
                 '''
                 if (mensaje["rptaServer"]=='OK'):
-                    print('es pooooooooooossssttt cargo csv')
+                    #print('es pooooooooooossssttt cargo csv')
                     evento = request.POST.get("evento")
-                    print(evento)  
+                    #print(evento)  
             
                     lispar=list(Participante.objects.select_related("modalidad_asistencia","tipo_participante").filter(Q(evento_id=evento)).values("id",
                     "evento_id","modalidad_asistencia_id","modalidad_asistencia__descripcion_modalidad_asistencia","apellido_participante","nombre_participante",
                     "email_participante","empresa_participante","asistio_evento","tipo_participante__descripcion_tipo_participante","tipo_participante__background_tipo_participante"))
-                    print('busqueda solo por evento')
+                    #print('busqueda solo por evento')
                 '''
         else:
             mensaje={
@@ -1761,12 +1761,12 @@ class TipoParticipanteDelete(SuccessMessageMixin,SinPrivilegios, generic.DeleteV
     def form_valid(self, form, *args, **kwargs):
         print('VIEWSSS')
        #imprime url
-        print(self.request)
+       #print(self.request)
       
-        print('VIEWSSS 3333')
+        #print('VIEWSSS 3333')
         #imprime datos configurados en _self
-        print(self.get_object())
-        print('VIEWSSS 4444')
+        #print(self.get_object())
+        #print('VIEWSSS 4444')
         if Participante.objects.filter(tipo_participante_id= 3).exists():
             raise Exception('Tipo de Participante se esta utilizando VISTA')  # or you can throw your custom exception here.
         super(Tipo_Participante, self).delete(*args, **kwargs)  
@@ -1928,7 +1928,7 @@ def contarasistencia(request,participante_id=None):
     evento = request.POST.get("evento")
     asistencia=Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).count()
     lisGrupalAsistencia=list(Participante.objects.filter(Q(evento_id=evento) & Q(asistio_evento=True)).values('tipo_participante','tipo_participante__descripcion_tipo_participante','tipo_participante__background_tipo_participante').annotate(dcount=Count('tipo_participante__id')))
-    print("este es el listado")   
+    #print("este es el listado")   
     #print(lisGrupalAsistencia)
     
     
@@ -2164,8 +2164,8 @@ def x__lecturaqr(request,participante_id=None):
                 contexto={'rpta':'OFF',
                   'lispar':'',
                   'mensaje':'Seleccione Evento'}  
-            else:    
-                print('Actualiza')
+            #else:    
+                #print('Actualiza')
                    
                 
            
