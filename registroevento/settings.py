@@ -42,6 +42,23 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'debug_toolbar',
+    'bases',
+    'eve',
+    'par',
+    'django_userforeignkey',
+    'django.contrib.postgres',
+    'registroevento',
+]
+
+''' para render
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     "whitenoise.runserver_nostatic", 
     'django.contrib.staticfiles',
     'debug_toolbar',
@@ -52,6 +69,8 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'registroevento',
 ]
+'''
+
 
 #MIDDLEWARE = [
 #    'django.middleware.security.SecurityMiddleware',
