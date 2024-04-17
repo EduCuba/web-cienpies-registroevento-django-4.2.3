@@ -1,3 +1,3 @@
-#agregado para mysql las dos lineas
-import pymysql
-pymysql.install_as_MySQLdb()
+#agregado para mysql las dos lineas para phytonanywhere
+#import pymysql
+#pymysql.install_as_MySQLdb()
